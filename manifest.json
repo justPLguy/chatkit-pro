@@ -1,0 +1,55 @@
+{
+  "manifest_version": 3,
+  "name": "ChatKit Pro by JustPLGuy",
+  "short_name": "ChatKit Pro",
+  "version": "1.0.0",
+  "description": "Bulk delete & archive chats, clean the Library, folders, stars, export, prompt library, minimap, bookmarks, notes, full-text search. Free & open source.",
+  "permissions": [
+    "storage",
+    "downloads",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://chatgpt.com/*",
+    "https://chat.openai.com/*"
+  ],
+  "action": {
+    "default_title": "ChatKit Pro by JustPLGuy",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*"
+      ],
+      "js": [
+        "src/core.js",
+        "src/i18n.js",
+        "src/dom.js",
+        "src/export.js",
+        "src/timestamps.js",
+        "src/theme.js",
+        "src/sidebar.js",
+        "src/search.js",
+        "src/panel.js",
+        "src/prompts.js",
+        "src/minimap.js",
+        "src/tabs-extra.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}
