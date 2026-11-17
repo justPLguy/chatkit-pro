@@ -1,5 +1,13 @@
 # Changelog
 
+## Firefox v1.1.0 — 2026-11-17
+### English
+- First Firefox version — the same features as Chrome v1.1.0
+- Firefox-specific: ChatGPT requests run in the page context, the toolbar icon is pinned by default, search highlighting no longer uses innerHTML
+### Polski
+- Pierwsza wersja na Firefoksa — te same funkcje co Chrome v1.1.0
+- Specyficzne dla Firefoksa: zapytania do ChatGPT idą z kontekstu strony, ikona jest od razu przypięta na pasku, podświetlanie wyników wyszukiwania bez innerHTML
+
 ## v1.1.0 — 2026-11-17
 ### English
 - Welcome card after installing — 5 quick tips to get started

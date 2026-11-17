@@ -1,5 +1,5 @@
-// ChatKit Pro — service worker.
-// 1) Kliknięcie ikony na pasku Chrome otwiera/zamyka panel na stronie ChatGPT.
+// ChatKit Pro — skrypt tła (Firefox).
+// 1) Kliknięcie ikony na pasku przeglądarki otwiera/zamyka panel na stronie ChatGPT.
 //    Karta otwarta przed instalacją nie ma jeszcze skryptów — wtedy ją przeładowujemy i panel otwiera się sam.
 // 2) Zapis plików z Biblioteki przez chrome.downloads (omija ograniczenia CORS).
 // 3) Sprawdzanie aktualizacji: raz na dobę publiczne API GitHub Releases (bez wysyłania jakichkolwiek danych).
@@ -34,7 +34,7 @@ chrome.runtime.onMessage.addListener((msg, _sender, reply) => {
 
 // ===================== Aktualizacje =====================
 const REPO = "justPLguy/chatkit-pro";
-const TAG_PREFIX = "chrome-v";          // wydania Chrome; Firefox będzie miał własny prefiks
+const TAG_PREFIX = "firefox-v";         // wydania Firefoksa na GitHubie
 const DAY = 24 * 60 * 60 * 1000;
 
 const cmpVersion = (a, b) => {
@@ -43,7 +43,7 @@ const cmpVersion = (a, b) => {
   return 0;
 };
 
-// Wersja ze Chrome Web Store aktualizuje się sama — sprawdzamy GitHub tylko przy instalacji z ZIP-a (tryb dewelopera).
+// Wersja z Firefox Add-ons (AMO) aktualizuje się sama — sprawdzamy GitHub tylko przy instalacji z ZIP-a (tryb dewelopera).
 async function isStoreInstall() {
   try { return (await chrome.management.getSelf()).installType === "normal"; } catch { return false; }
 }

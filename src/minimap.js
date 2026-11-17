@@ -77,17 +77,12 @@
     for (const [k, v] of Object.entries(props)) {
       if (v == null) continue;
       if (k === "class") e.className = v; else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
-      else if (k === "html") e.innerHTML = v; else if (k in e) e[k] = v; else e.setAttribute(k, v);
+      else if (k in e) e[k] = v; else e.setAttribute(k, v);
     }
     return e;
   }
 
-  function highlight(text, query) {
-    const s = esc(text);
-    if (!query) return s;
-    const terms = query.toLowerCase().split(/\s+/).filter(Boolean).map(w => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
-    return terms.length ? s.replace(new RegExp("(" + terms.join("|") + ")", "gi"), "<mark>$1</mark>") : s;
-  }
+  const highlight = (text, query) => CK.highlight(text, query, "mark");
 
   async function load(force = false) {
     const id = CK.dom.convId();
@@ -119,7 +114,7 @@
     const bk = isBk(m.id);
     return el("div", { class: "e" + (m.role === "assistant" ? " a" : ""), onclick: () => CK.dom.scrollToMessage(m.id, order) },
       el("span", { class: "n" }, m.role === "user" ? (i + 1) + "." : "↳"),
-      el("span", { class: "s", html: highlight(snippet(m.text, 220), q) }),
+      el("span", { class: "s" }, highlight(snippet(m.text, 220), q)),
       el("span", { class: "act" },
         el("span", { class: bk ? "on" : "", title: t("mm.bookmark"), onclick: e => { e.stopPropagation(); toggleBookmark(m); } }, bk ? "🔖" : "🏷"),
         m.role === "user" ? el("span", { title: t("mm.savePrompt"), onclick: e => { e.stopPropagation(); CK.prompts.addFromText(m.text); } }, "💾") : null));

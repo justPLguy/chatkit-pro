@@ -3,11 +3,11 @@ const fs = require("fs"), path = require("path"), vm = require("vm");
 const store = {}, badge = {}, listeners = {};
 const ev = name => ({ addListener: fn => { listeners[name] = fn; } });
 let releases = [
-  { tag_name: "chrome-v1.0.0", html_url: "https://github.com/x/y/releases/tag/chrome-v1.0.0", draft: false, prerelease: false },
-  { tag_name: "chrome-v1.1.0", html_url: "https://github.com/x/y/releases/tag/chrome-v1.1.0", draft: false, prerelease: false },
-  { tag_name: "firefox-v2.0.0", html_url: "f", draft: false, prerelease: false },
-  { tag_name: "chrome-v9.0.0", html_url: "d", draft: true, prerelease: false },
-  { tag_name: "chrome-v1.2.0-beta", html_url: "p", draft: false, prerelease: true }
+  { tag_name: "firefox-v1.0.0", html_url: "https://github.com/x/y/releases/tag/firefox-v1.0.0", draft: false, prerelease: false },
+  { tag_name: "firefox-v1.1.0", html_url: "https://github.com/x/y/releases/tag/firefox-v1.1.0", draft: false, prerelease: false },
+  { tag_name: "chrome-v2.0.0", html_url: "f", draft: false, prerelease: false },
+  { tag_name: "firefox-v9.0.0", html_url: "d", draft: true, prerelease: false },
+  { tag_name: "firefox-v1.2.0-beta", html_url: "p", draft: false, prerelease: true }
 ];
 let fetchCalls = 0;
 const ctx = {
@@ -37,7 +37,7 @@ const ask = force => new Promise(res => { const r = listeners.msg.map(fn => fn({
   const before = fetchCalls;
   await ask(false);
   assert(fetchCalls === before, "bez wymuszenia: korzysta z wyniku z ostatnich 24 h");
-  releases = releases.filter(r => r.tag_name !== "chrome-v1.1.0");
+  releases = releases.filter(r => r.tag_name !== "firefox-v1.1.0");
   const r = await ask(true);
   assert(fetchCalls === before + 1 && r.latest === "1.0.0" && r.available === false && badge.text === "", "wymuszone sprawdzenie: aktualna wersja → brak plakietki");
   ctx.fetch = async () => ({ ok: false, status: 403, json: async () => ({}) });

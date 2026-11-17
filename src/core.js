@@ -12,12 +12,23 @@
     return m ? decodeURIComponent(m[1]) : null;
   };
 
+  // Firefox: zapytania z kontekstu strony (content.fetch), żeby ChatGPT widział je jak własne.
+  // Odpowiedź przepisujemy na zwykły Response, żeby reszta kodu działała bez zmian. W Chrome — zwykły fetch.
+  CK.fetch = async (url, opts = {}) => {
+    const pf = typeof content !== "undefined" && content && typeof content.fetch === "function" ? content.fetch : null;
+    if (!pf) return fetch(url, opts);
+    const o = typeof cloneInto === "function" ? cloneInto(opts, content) : opts;
+    const r = await pf.call(content, new URL(url, location.href).href, o);
+    const body = [204, 205, 304].includes(r.status) ? null : await r.text();
+    return new Response(body, { status: r.status, statusText: r.statusText, headers: { "content-type": r.headers.get("content-type") || "application/json" } });
+  };
+
   // ---------- API ----------
   let token = null, accountId = null, tokenAt = 0;
 
   CK.getToken = async () => {
     if (token && Date.now() - tokenAt < 10 * 60 * 1000) return token;
-    const r = await fetch("/api/auth/session", { credentials: "include" });
+    const r = await CK.fetch("/api/auth/session", { credentials: "include" });
     if (!r.ok) throw new Error(CK.t("err.session", { s: r.status }));
     const j = await r.json();
     if (!j.accessToken) throw Object.assign(new Error(CK.t("err.noToken")), { code: "NOAUTH" });
@@ -35,7 +46,7 @@
     const did = CK.cookie("oai-did");
     if (did) { headers["oai-device-id"] = did; headers["oai-did"] = did; }
     if (accountId) headers["chatgpt-account-id"] = accountId;
-    const r = await fetch("/backend-api" + path, { cache: "no-store", ...opts, headers, credentials: "include" });
+    const r = await CK.fetch("/backend-api" + path, { cache: "no-store", ...opts, headers, credentials: "include" });
     if (r.status === 401) token = null;
     return r;
   };
@@ -118,6 +129,23 @@
   };
   CK.esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   CK.safeName = s => String(s || "export").replace(/[\\/:*?"<>|]+/g, "_").slice(0, 80).trim() || "export";
+
+  // Podświetlanie fraz bez innerHTML: zwraca DocumentFragment z tekstem i elementami <tag> dla trafień.
+  CK.highlight = (text, query, tag = "mark", cls = "") => {
+    const frag = document.createDocumentFragment(), s = String(text);
+    const terms = String(query || "").toLowerCase().split(/\s+/).filter(w => w.length > 0).map(w => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+    if (!terms.length) { frag.append(s); return frag; }
+    const re = new RegExp("(" + terms.join("|") + ")", "gi");
+    let last = 0, m;
+    while ((m = re.exec(s))) {
+      if (!m[0]) { re.lastIndex++; continue; }
+      if (m.index > last) frag.append(s.slice(last, m.index));
+      const h = document.createElement(tag); if (cls) h.className = cls; h.textContent = m[0]; frag.append(h);
+      last = m.index + m[0].length;
+    }
+    if (last < s.length) frag.append(s.slice(last));
+    return frag;
+  };
 
   CK.download = (name, text, mime = "text/plain") => {
     const url = URL.createObjectURL(new Blob([text], { type: mime + ";charset=utf-8" }));
