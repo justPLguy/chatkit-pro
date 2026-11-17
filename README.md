@@ -3,7 +3,7 @@
 <h1 align="center">ChatKit Pro by JustPLGuy — Chrome</h1>
 
 <p align="center">
-<b>v1.0.0</b> · Chrome / Edge / Brave / Opera · MIT<br>
+<b>v1.1.0</b> · Chrome / Edge / Brave / Opera · MIT<br>
 Free, open-source power tools for ChatGPT.<br>
 <a href="#-english">🇬🇧 English</a> · <a href="#-polski">🇵🇱 Polski</a>
 </p>
@@ -16,7 +16,7 @@ Free, open-source power tools for ChatGPT.<br>
 ## 🇬🇧 English
 
 ### Install (2 minutes)
-1. Download **`ChatKit-Pro-Chrome-v1.0.0.zip`** from **[Releases](../../releases)** (not “Code → Download ZIP”) and unzip it.
+1. Download **`ChatKit-Pro-Chrome-v1.1.0.zip`** from **[Releases](../../releases)** (not “Code → Download ZIP”) and unzip it.
 2. Open `chrome://extensions` and switch on **Developer mode** (top-right).
 3. Click **Load unpacked** and pick the unzipped folder (the one that contains `manifest.json`).
 4. Pin the extension: 🧩 → 📌 next to **ChatKit Pro by JustPLGuy**.
@@ -97,7 +97,7 @@ Adding a language: add an object to `DICT` in `src/i18n.js` and an option in the
 ## 🇵🇱 Polski
 
 ### Instalacja (2 minuty)
-1. Pobierz **`ChatKit-Pro-Chrome-v1.0.0.zip`** z **[Releases](../../releases)** (nie „Code → Download ZIP”) i rozpakuj.
+1. Pobierz **`ChatKit-Pro-Chrome-v1.1.0.zip`** z **[Releases](../../releases)** (nie „Code → Download ZIP”) i rozpakuj.
 2. Otwórz `chrome://extensions` i włącz **Tryb dewelopera** (prawy górny róg).
 3. Kliknij **Załaduj rozpakowane** i wskaż rozpakowany folder (ten z plikiem `manifest.json`).
 4. Przypnij wtyczkę: 🧩 → 📌 przy **ChatKit Pro by JustPLGuy**.
