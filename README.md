@@ -7,8 +7,10 @@
 Bulk delete · Library cleanup · Folders · Export · Prompts · Minimap · Full-text search<br><br>
 <a href="../../releases"><b>⬇ Download (Releases)</b></a> ·
 <a href="https://justplguy.github.io/chatkit-pro/"><b>🌐 Website</b></a> ·
-<a href="../../tree/chrome"><b>🧩 Chrome source</b></a> ·
-<a href="../../issues"><b>🐞 Report an issue</b></a>
+<a href="../../tree/chrome"><b>🧩 Chrome</b></a> ·
+<a href="../../tree/firefox"><b>🦊 Firefox</b></a> ·
+<a href="../../issues"><b>🐞 Report an issue</b></a> ·
+<a href="mailto:justplguy@gmail.com"><b>✉ Contact</b></a>
 </p>
 
 <p align="center"><a href="#-english">🇬🇧 English</a> · <a href="#-polski">🇵🇱 Polski</a></p>
@@ -27,9 +29,10 @@ This repository uses **one branch per browser**:
 |---|---|---|
 | **`main`** *(you are here)* | project overview, website (`index.html`), license | — |
 | **[`chrome`](../../tree/chrome)** | extension for Chrome, Edge, Brave, Opera | ✅ **v1.1.0** |
-| `firefox` | extension for Firefox | 🔜 planned |
+| **[`firefox`](../../tree/firefox)** | extension for Firefox 140+ | ✅ **v1.1.0** |
 
-**Downloads are published only in [Releases](../../releases)** — one release per browser and version (e.g. `chrome-v1.1.0`).
+**Downloads are published only in [Releases](../../releases)** — one release per browser and version (e.g. `chrome-v1.1.0`, `firefox-v1.1.0`).
+**Store listings:** Chrome Web Store and Firefox Add-ons — ⏳ in review, links coming soon.
 Please don't use “Code → Download ZIP” on `main`: it doesn't contain the extension.
 
 ### Features
@@ -52,15 +55,21 @@ Please don't use “Code → Download ZIP” on `main`: it doesn't contain the e
 
 Full guide: [`chrome` branch README](../../tree/chrome#readme).
 
+### Install (Firefox)
+Firefox Add-ons listing is in review. Until then you can test it: download **`ChatKit-Pro-Firefox-v1.1.0.zip`** from [Releases](../../releases), unzip, open `about:debugging#/runtime/this-firefox` → **Load Temporary Add-on…** → pick `manifest.json` (temporary — removed when Firefox restarts). Details: [`firefox` branch README](../../tree/firefox#readme).
+
 ### Privacy
 No servers of our own, no analytics, no account. Your chats are handled only on chatgpt.com with your existing session; all your data (folders, prompts, notes…) stays in your browser. Once a day the extension anonymously checks GitHub Releases for a new version and shows a notice in the panel.
 
 ### Roadmap
 - [x] Chrome v1.1.0
-- [ ] Firefox branch
-- [ ] Chrome Web Store listing
+- [x] Firefox v1.1.0
+- [ ] Chrome Web Store & Firefox Add-ons listings (in review)
 - [ ] Move chats to Projects in bulk, empty the Library trash
 - [ ] More languages
+
+### Contact
+Bug reports, ideas, questions: **[GitHub Issues](../../issues)** or **[justplguy@gmail.com](mailto:justplguy@gmail.com)**.
 
 ---
 
@@ -76,9 +85,10 @@ Repozytorium ma **osobną gałąź dla każdej przeglądarki**:
 |---|---|---|
 | **`main`** *(tutaj jesteś)* | opis projektu, strona (`index.html`), licencja | — |
 | **[`chrome`](../../tree/chrome)** | wtyczka dla Chrome, Edge, Brave, Opery | ✅ **v1.1.0** |
-| `firefox` | wtyczka dla Firefoksa | 🔜 w planach |
+| **[`firefox`](../../tree/firefox)** | wtyczka dla Firefoksa 140+ | ✅ **v1.1.0** |
 
-**Pliki do pobrania są wyłącznie w [Releases](../../releases)** — osobne wydanie dla każdej przeglądarki i wersji (np. `chrome-v1.1.0`).
+**Pliki do pobrania są wyłącznie w [Releases](../../releases)** — osobne wydanie dla każdej przeglądarki i wersji (np. `chrome-v1.1.0`, `firefox-v1.1.0`).
+**Sklepy:** Chrome Web Store i Firefox Add-ons — ⏳ w recenzji, linki wkrótce.
 Nie używaj „Code → Download ZIP” na gałęzi `main` — nie ma tu wtyczki.
 
 ### Funkcje
@@ -101,8 +111,14 @@ Nie używaj „Code → Download ZIP” na gałęzi `main` — nie ma tu wtyczki
 
 Pełna instrukcja: [README gałęzi `chrome`](../../tree/chrome#readme).
 
+### Instalacja (Firefox)
+Wtyczka czeka na recenzję w Firefox Add-ons. Do tego czasu możesz ją przetestować: pobierz **`ChatKit-Pro-Firefox-v1.1.0.zip`** z [Releases](../../releases), rozpakuj, otwórz `about:debugging#/runtime/this-firefox` → **Załaduj tymczasowy dodatek…** → wskaż `manifest.json` (tymczasowo — znika po restarcie Firefoksa). Szczegóły: [README gałęzi `firefox`](../../tree/firefox#readme).
+
 ### Prywatność
 Bez własnych serwerów, analityki i konta. Twoje czaty obsługiwane są tylko na chatgpt.com z Twojej sesji; wszystkie dane (foldery, prompty, notatki…) zostają w przeglądarce. Raz dziennie wtyczka anonimowo sprawdza GitHub Releases i pokazuje w panelu informację o nowej wersji.
+
+### Kontakt
+Błędy, pomysły, pytania: **[GitHub Issues](../../issues)** albo **[justplguy@gmail.com](mailto:justplguy@gmail.com)**.
 
 ---
 
