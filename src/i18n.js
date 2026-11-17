@@ -57,7 +57,7 @@
       "set.exportData": "Eksportuj dane (JSON)", "set.importData": "Importuj dane", "set.selections": "Zaznaczenia", "set.clearSel": "Wyczyść wszystkie zaznaczenia",
       "set.shortcuts": "Skróty",
       "set.shortcutsText": "Ikona wtyczki lub Alt+Shift+K — panel · Alt+Shift+P albo „//” w polu wiadomości — szybki prompt · Alt+Shift+M — minimapa · Esc — zamknij · Shift+klik — zaznacz zakres · przeciągnij czat na folder — przenieś",
-      "set.about": "O wtyczce", "set.aboutText": "ChatKit Pro by JustPLGuy v{v} — darmowe, open source. Nie jest powiązana z OpenAI. Dane nie opuszczają Twojej przeglądarki (poza zapytaniami do chatgpt.com).",
+      "set.about": "O wtyczce", "set.aboutText": "ChatKit Pro by JustPLGuy v{v} — darmowe, open source. Nie jest powiązana z OpenAI. Dane nie opuszczają Twojej przeglądarki (poza zapytaniami do chatgpt.com i codziennym sprawdzeniem wersji na GitHubie).",
       "pr.untitled": "Prompt", "pr.catSaved": "Zapisane z czatu", "pr.savedMsg": "Zapisano jako prompt (zakładka Prompty).", "pr.fillTitle": "Uzupełnij: {title}",
       "pr.insert": "Wstaw", "pr.copiedNoComposer": "Nie znaleziono pola wiadomości — skopiowano prompt do schowka.", "pr.edit": "Edytuj prompt", "pr.new": "Nowy prompt",
       "pr.fTitle": "Tytuł", "pr.fCat": "Kategoria", "pr.fText": "Treść", "pr.varsHint": "Zmienne: {{nazwa}} albo {{nazwa|wartość domyślna}} — przy wstawianiu pojawi się formularz.",
@@ -90,7 +90,8 @@
       "st.countAll": "Policz wszystko", "st.counted": "Policzono.", "st.complete": "Dane pełne.", "st.partial": "Dane częściowe — kliknij „Policz wszystko”.",
       "st.chats": "czatów", "st.archived": "w archiwum", "st.starred": "z gwiazdką", "st.folders": "folderów", "st.files": "plików w Bibliotece",
       "st.libSize": "rozmiar Biblioteki", "st.aiSize": "w tym obrazki AI", "st.prompts": "promptów", "st.marksNotes": "zakładek / notatek",
-      "st.perMonth": "Nowe czaty — ostatnie 12 miesięcy", "st.biggest": "Największe pliki", "st.byFolder": "Czaty w folderach"
+      "st.perMonth": "Nowe czaty — ostatnie 12 miesięcy", "st.biggest": "Największe pliki", "st.byFolder": "Czaty w folderach",
+      "set.updates": "Aktualizacje", "upd.available": "Dostępna nowa wersja {v}", "upd.download": "Pobierz", "upd.dismiss": "Ukryj do następnej wersji", "upd.current": "Twoja wersja: {v}", "upd.latest": "najnowsza na GitHubie: {v}", "upd.lastCheck": "Ostatnio sprawdzono: {d}", "upd.never": "jeszcze nie", "upd.error": "nie udało się sprawdzić ({e})", "upd.upToDate": "Masz najnowszą wersję.", "upd.checkNow": "Sprawdź teraz", "upd.checking": "Sprawdzanie aktualizacji…", "upd.howTo": "Wtyczka sama sprawdza GitHub Releases raz dziennie (nic nie wysyła). Aktualizacja: pobierz nowy ZIP, podmień pliki w folderze wtyczki i kliknij ↻ na chrome://extensions — dane zostają."
     },
 
     en: {
@@ -145,7 +146,7 @@
       "set.exportData": "Export data (JSON)", "set.importData": "Import data", "set.selections": "Selections", "set.clearSel": "Clear all selections",
       "set.shortcuts": "Shortcuts",
       "set.shortcutsText": "Extension icon or Alt+Shift+K — panel · Alt+Shift+P or “//” in the message box — quick prompt · Alt+Shift+M — minimap · Esc — close · Shift+click — select range · drag a chat onto a folder — move",
-      "set.about": "About", "set.aboutText": "ChatKit Pro by JustPLGuy v{v} — free and open source. Not affiliated with OpenAI. Your data never leaves your browser (except requests to chatgpt.com).",
+      "set.about": "About", "set.aboutText": "ChatKit Pro by JustPLGuy v{v} — free and open source. Not affiliated with OpenAI. Your data never leaves your browser (except requests to chatgpt.com and a daily version check on GitHub).",
       "pr.untitled": "Prompt", "pr.catSaved": "Saved from chat", "pr.savedMsg": "Saved as a prompt (Prompts tab).", "pr.fillTitle": "Fill in: {title}",
       "pr.insert": "Insert", "pr.copiedNoComposer": "Message box not found — prompt copied to the clipboard.", "pr.edit": "Edit prompt", "pr.new": "New prompt",
       "pr.fTitle": "Title", "pr.fCat": "Category", "pr.fText": "Text", "pr.varsHint": "Variables: {{name}} or {{name|default value}} — a form appears when inserting.",
@@ -178,7 +179,8 @@
       "st.countAll": "Count everything", "st.counted": "Counted.", "st.complete": "Complete data.", "st.partial": "Partial data — click “Count everything”.",
       "st.chats": "chats", "st.archived": "archived", "st.starred": "starred", "st.folders": "folders", "st.files": "Library files",
       "st.libSize": "Library size", "st.aiSize": "of which AI images", "st.prompts": "prompts", "st.marksNotes": "bookmarks / notes",
-      "st.perMonth": "New chats — last 12 months", "st.biggest": "Largest files", "st.byFolder": "Chats in folders"
+      "st.perMonth": "New chats — last 12 months", "st.biggest": "Largest files", "st.byFolder": "Chats in folders",
+      "set.updates": "Updates", "upd.available": "New version {v} is available", "upd.download": "Download", "upd.dismiss": "Hide until the next version", "upd.current": "Your version: {v}", "upd.latest": "latest on GitHub: {v}", "upd.lastCheck": "Last checked: {d}", "upd.never": "not yet", "upd.error": "check failed ({e})", "upd.upToDate": "You have the latest version.", "upd.checkNow": "Check now", "upd.checking": "Checking for updates…", "upd.howTo": "The extension checks GitHub Releases once a day (it sends nothing). To update: download the new ZIP, replace the files in the extension folder and click ↻ in chrome://extensions — your data stays."
     },
 
     fr: {
@@ -233,7 +235,7 @@
       "set.exportData": "Exporter les données (JSON)", "set.importData": "Importer les données", "set.selections": "Sélections", "set.clearSel": "Effacer toutes les sélections",
       "set.shortcuts": "Raccourcis",
       "set.shortcutsText": "Icône de l'extension ou Alt+Maj+K — panneau · Alt+Maj+P ou « // » dans le champ de message — prompt rapide · Alt+Maj+M — minicarte · Échap — fermer · Maj+clic — sélectionner une plage · glisser une discussion sur un dossier — déplacer",
-      "set.about": "À propos", "set.aboutText": "ChatKit Pro by JustPLGuy v{v} — gratuit et open source. Non affilié à OpenAI. Vos données ne quittent pas votre navigateur (hors requêtes vers chatgpt.com).",
+      "set.about": "À propos", "set.aboutText": "ChatKit Pro by JustPLGuy v{v} — gratuit et open source. Non affilié à OpenAI. Vos données ne quittent pas votre navigateur (hors requêtes vers chatgpt.com et une vérification quotidienne de version sur GitHub).",
       "pr.untitled": "Prompt", "pr.catSaved": "Enregistré depuis la discussion", "pr.savedMsg": "Enregistré comme prompt (onglet Prompts).", "pr.fillTitle": "Compléter : {title}",
       "pr.insert": "Insérer", "pr.copiedNoComposer": "Champ de message introuvable — prompt copié dans le presse-papiers.", "pr.edit": "Modifier le prompt", "pr.new": "Nouveau prompt",
       "pr.fTitle": "Titre", "pr.fCat": "Catégorie", "pr.fText": "Texte", "pr.varsHint": "Variables : {{nom}} ou {{nom|valeur par défaut}} — un formulaire s'affiche à l'insertion.",
@@ -266,7 +268,8 @@
       "st.countAll": "Tout compter", "st.counted": "Compté.", "st.complete": "Données complètes.", "st.partial": "Données partielles — cliquez sur « Tout compter ».",
       "st.chats": "discussions", "st.archived": "archivées", "st.starred": "étoilées", "st.folders": "dossiers", "st.files": "fichiers dans la Bibliothèque",
       "st.libSize": "taille de la Bibliothèque", "st.aiSize": "dont images IA", "st.prompts": "prompts", "st.marksNotes": "signets / notes",
-      "st.perMonth": "Nouvelles discussions — 12 derniers mois", "st.biggest": "Plus gros fichiers", "st.byFolder": "Discussions par dossier"
+      "st.perMonth": "Nouvelles discussions — 12 derniers mois", "st.biggest": "Plus gros fichiers", "st.byFolder": "Discussions par dossier",
+      "set.updates": "Mises à jour", "upd.available": "La nouvelle version {v} est disponible", "upd.download": "Télécharger", "upd.dismiss": "Masquer jusqu'à la prochaine version", "upd.current": "Votre version : {v}", "upd.latest": "dernière sur GitHub : {v}", "upd.lastCheck": "Dernière vérification : {d}", "upd.never": "pas encore", "upd.error": "échec de la vérification ({e})", "upd.upToDate": "Vous avez la dernière version.", "upd.checkNow": "Vérifier maintenant", "upd.checking": "Recherche de mises à jour…", "upd.howTo": "L'extension vérifie GitHub Releases une fois par jour (elle n'envoie rien). Pour mettre à jour : téléchargez le nouveau ZIP, remplacez les fichiers du dossier de l'extension et cliquez sur ↻ dans chrome://extensions — vos données restent."
     },
 
     de: {
@@ -321,7 +324,7 @@
       "set.exportData": "Daten exportieren (JSON)", "set.importData": "Daten importieren", "set.selections": "Auswahlen", "set.clearSel": "Alle Auswahlen löschen",
       "set.shortcuts": "Tastenkürzel",
       "set.shortcutsText": "Erweiterungssymbol oder Alt+Umschalt+K — Panel · Alt+Umschalt+P oder „//“ im Nachrichtenfeld — Schnell-Prompt · Alt+Umschalt+M — Minimap · Esc — schließen · Umschalt+Klick — Bereich auswählen · Chat auf Ordner ziehen — verschieben",
-      "set.about": "Über", "set.aboutText": "ChatKit Pro by JustPLGuy v{v} — kostenlos und Open Source. Nicht mit OpenAI verbunden. Deine Daten verlassen den Browser nicht (außer Anfragen an chatgpt.com).",
+      "set.about": "Über", "set.aboutText": "ChatKit Pro by JustPLGuy v{v} — kostenlos und Open Source. Nicht mit OpenAI verbunden. Deine Daten verlassen den Browser nicht (außer Anfragen an chatgpt.com und einer täglichen Versionsprüfung auf GitHub).",
       "pr.untitled": "Prompt", "pr.catSaved": "Aus Chat gespeichert", "pr.savedMsg": "Als Prompt gespeichert (Tab Prompts).", "pr.fillTitle": "Ausfüllen: {title}",
       "pr.insert": "Einfügen", "pr.copiedNoComposer": "Nachrichtenfeld nicht gefunden — Prompt in die Zwischenablage kopiert.", "pr.edit": "Prompt bearbeiten", "pr.new": "Neuer Prompt",
       "pr.fTitle": "Titel", "pr.fCat": "Kategorie", "pr.fText": "Text", "pr.varsHint": "Variablen: {{name}} oder {{name|Standardwert}} — beim Einfügen erscheint ein Formular.",
@@ -354,7 +357,8 @@
       "st.countAll": "Alles zählen", "st.counted": "Gezählt.", "st.complete": "Vollständige Daten.", "st.partial": "Unvollständige Daten — klicke auf „Alles zählen“.",
       "st.chats": "Chats", "st.archived": "archiviert", "st.starred": "mit Stern", "st.folders": "Ordner", "st.files": "Dateien in der Bibliothek",
       "st.libSize": "Größe der Bibliothek", "st.aiSize": "davon KI-Bilder", "st.prompts": "Prompts", "st.marksNotes": "Lesezeichen / Notizen",
-      "st.perMonth": "Neue Chats — letzte 12 Monate", "st.biggest": "Größte Dateien", "st.byFolder": "Chats in Ordnern"
+      "st.perMonth": "Neue Chats — letzte 12 Monate", "st.biggest": "Größte Dateien", "st.byFolder": "Chats in Ordnern",
+      "set.updates": "Updates", "upd.available": "Neue Version {v} verfügbar", "upd.download": "Herunterladen", "upd.dismiss": "Bis zur nächsten Version ausblenden", "upd.current": "Deine Version: {v}", "upd.latest": "neueste auf GitHub: {v}", "upd.lastCheck": "Zuletzt geprüft: {d}", "upd.never": "noch nicht", "upd.error": "Prüfung fehlgeschlagen ({e})", "upd.upToDate": "Du hast die neueste Version.", "upd.checkNow": "Jetzt prüfen", "upd.checking": "Suche nach Updates…", "upd.howTo": "Die Erweiterung prüft einmal täglich GitHub Releases (sie sendet nichts). Update: neues ZIP herunterladen, Dateien im Erweiterungsordner ersetzen und in chrome://extensions auf ↻ klicken — deine Daten bleiben."
     }
   };
 

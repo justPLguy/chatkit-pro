@@ -49,7 +49,8 @@ Free, open-source power tools for ChatGPT.<br>
 | `Esc` | close |
 
 ### Privacy
-- Talks **only to chatgpt.com**, using your existing session — exactly like the website itself.
+- Your chats and files are handled **only on chatgpt.com**, using your existing session — exactly like the website itself.
+- Once a day it asks the public GitHub API whether a newer release exists (no data about you is sent).
 - No external servers, no analytics, no tracking, no account.
 - Folders, stars, prompts, notes and settings are stored locally (`chrome.storage.local`); the search index lives in IndexedDB in your browser.
 - Details: [PRIVACY.md](PRIVACY.md)
@@ -60,7 +61,11 @@ Free, open-source power tools for ChatGPT.<br>
 | `storage` | save folders, stars, prompts, notes, settings |
 | `downloads` | save Library files to your Downloads folder |
 | `scripting` | open the panel from the toolbar icon in a tab that was open before installing |
+| `alarms` | check for a new version once a day |
 | `chatgpt.com` | the extension works only there |
+
+### Updates
+The extension checks GitHub Releases once a day. When a new version is out you'll see a green bar in the panel and a “1” badge on the icon. Download the ZIP, replace the files, click ↻ in `chrome://extensions` — your data stays.
 
 ### Known limitations
 - Uses ChatGPT's unofficial internal API — changes on OpenAI's side may require an update.
@@ -126,7 +131,10 @@ Adding a language: add an object to `DICT` in `src/i18n.js` and an option in the
 | `Esc` | zamknij |
 
 ### Prywatność
-Wtyczka łączy się **wyłącznie z chatgpt.com** z Twojej zalogowanej sesji. Żadnych zewnętrznych serwerów, analityki ani kont. Wszystkie dane są przechowywane lokalnie w przeglądarce. Szczegóły: [PRIVACY.md](PRIVACY.md).
+Twoje czaty i pliki obsługiwane są **wyłącznie na chatgpt.com** z Twojej zalogowanej sesji. Raz dziennie wtyczka pyta publiczne API GitHuba, czy jest nowsza wersja (nic o Tobie nie wysyła). Żadnych własnych serwerów, analityki ani kont. Szczegóły: [PRIVACY.md](PRIVACY.md).
+
+### Aktualizacje
+Wtyczka sama sprawdza GitHub Releases raz dziennie. Gdy wyjdzie nowa wersja, zobaczysz zielony pasek w panelu i plakietkę „1” na ikonie. Pobierz ZIP, podmień pliki, kliknij ↻ na `chrome://extensions` — dane zostają.
 
 ### Ograniczenia
 - Korzysta z nieoficjalnego, wewnętrznego API ChatGPT — zmiany po stronie OpenAI mogą wymagać aktualizacji.

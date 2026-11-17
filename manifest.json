@@ -7,7 +7,8 @@
   "permissions": [
     "storage",
     "downloads",
-    "scripting"
+    "scripting",
+    "alarms"
   ],
   "host_permissions": [
     "https://chatgpt.com/*",

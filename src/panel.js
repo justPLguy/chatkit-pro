@@ -156,6 +156,9 @@
     .tab { background: none !important; border: none !important; border-bottom: 2px solid transparent !important; border-radius: 0 !important; padding: 6px 7px !important; font-size: 12.5px !important; color: #bbb !important; }
     .tab.active { border-bottom-color: #ef4444 !important; font-weight: 600; color: #fff !important; }
     .sp { flex: 1; }
+    #upd { margin: 6px 10px 0; padding: 7px 10px; border-radius: 8px; background: rgba(34,197,94,.12); border: 1px solid rgba(34,197,94,.45); color: #bbf7d0; display: flex; align-items: center; gap: 8px; font-size: 12.5px; }
+    #upd a { background: #16a34a; color: #fff; border-radius: 6px; padding: 4px 10px; text-decoration: none; font-weight: 600; font-size: 12px; }
+    #upd a:hover { background: #15803d; }
     #viewctl { display: none; align-items: center; gap: 6px; color: #aaa; font-size: 12px; }
     #panel.big.lib #viewctl { display: flex; }
     #viewctl input { width: 110px; }
@@ -252,6 +255,7 @@
       <button id="bigbtn"></button>
       <button class="x" id="close">×</button>
     </header>
+    <div id="upd" style="display:none"></div>
     <div id="tabs"></div>
     <div class="filters" id="filters"></div>
     <div id="body"><div id="folders"></div><div id="list"></div></div>
@@ -736,6 +740,29 @@
     copy(txt, t("msg.diagCopied"));
   }
 
+  // ---------- aktualizacje ----------
+  const cmpV = (a, b) => {
+    const pa = String(a).split(".").map(n => parseInt(n, 10) || 0), pb = String(b).split(".").map(n => parseInt(n, 10) || 0);
+    for (let i = 0; i < 3; i++) { const d = (pa[i] || 0) - (pb[i] || 0); if (d) return d > 0 ? 1 : -1; }
+    return 0;
+  };
+  let upd = null;
+  const updAvailable = () => !!(upd && upd.latest && cmpV(upd.latest, CK.VERSION) > 0);
+  function renderUpdate() {
+    const box = $("#upd"); box.replaceChildren();
+    const show = updAvailable() && ls.get("updDismissed", "") !== upd.latest;
+    box.style.display = show ? "flex" : "none";
+    if (!show) return;
+    box.append(el("span", {}, "🎉 " + t("upd.available", { v: upd.latest })), el("span", { class: "sp" }),
+      el("a", { href: upd.url, target: "_blank", rel: "noopener" }, "⬇ " + t("upd.download")),
+      el("span", { class: "ic", title: t("upd.dismiss"), onclick: () => { ls.set("updDismissed", upd.latest); renderUpdate(); } }, "×"));
+  }
+  async function loadUpdate() { try { upd = (await chrome.storage.local.get("update")).update || null; } catch {} renderUpdate(); }
+  const askUpdate = force => chrome.runtime.sendMessage({ type: "ck-check-update", force }).catch(e => ({ error: e.message }));
+  chrome.storage.onChanged.addListener((ch, area) => {
+    if (area === "local" && ch.update) { upd = ch.update.newValue || null; renderUpdate(); if (current === "settings") renderList(); }
+  });
+
   // ---------- ustawienia ----------
   function renderSettings() {
     const d = CK.store.data, S = d.settings;
@@ -763,6 +790,20 @@
       chk("classicDark", t("set.classicDark"), false),
       chk("sidebarMarks", t("set.sidebarMarks"), true),
       chk("showFab", t("set.showFab"), true),
+      el("h3", {}, t("set.updates")),
+      el("p", {}, t("upd.current", { v: CK.VERSION }) + (upd && upd.latest ? " · " + t("upd.latest", { v: upd.latest }) : "")),
+      el("p", {}, t("upd.lastCheck", { d: upd && upd.checkedAt ? CK.fmtDate(upd.checkedAt, true) : t("upd.never") }) + (upd && upd.error ? " · " + t("upd.error", { e: upd.error }) : "")),
+      el("p", { style: "color:" + (updAvailable() ? "#86efac" : "#999") }, updAvailable() ? "🎉 " + t("upd.available", { v: upd.latest }) : (upd && upd.latest ? "✓ " + t("upd.upToDate") : "")),
+      el("div", { class: "rowb" },
+        button(t("upd.checkNow"), async () => {
+          setMsg(t("upd.checking"));
+          const r = await askUpdate(true);
+          if (r && !r.error) upd = r;
+          renderUpdate(); renderList();
+          setMsg(r && r.error ? t("upd.error", { e: r.error }) : updAvailable() ? t("upd.available", { v: upd.latest }) : t("upd.upToDate"));
+        }),
+        updAvailable() ? el("a", { href: upd.url, target: "_blank", rel: "noopener", style: "color:#86efac;font-size:12px" }, "⬇ " + t("upd.download") + " v" + upd.latest) : null),
+      el("p", {}, t("upd.howTo")),
       el("h3", {}, t("set.backup")),
       el("p", {}, t("set.backupInfo")),
       el("div", { class: "rowb" },
@@ -791,6 +832,7 @@
   function togglePanel(force) {
     const open = force ?? !panel.classList.contains("open");
     panel.classList.toggle("open", open);
+    if (open) askUpdate(false); // raz na dobę (cache w tle)
     if (open && LIST_TABS.includes(current)) { if (!sources[current].items.length && !sources[current].done) loadOne(); else quietRefresh(); }
   }
 
@@ -832,6 +874,7 @@
 
   CK.ready.then(async () => {
     applyFab();
+    loadUpdate();
     CK.store.onChange(applyFab);
     try {
       const { openPanelAt } = await chrome.storage.local.get("openPanelAt");

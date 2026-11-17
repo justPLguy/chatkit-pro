@@ -57,6 +57,7 @@ w.chrome = {
   }, onChanged: { addListener() {} } }
 };
 w.__sent = [];
+storage.update = { checkedAt: Date.now(), current: "1.0.0", latest: "1.1.0", url: "https://github.com/justPLguy/chatkit-pro/releases/tag/chrome-v1.1.0", available: true };
 w.confirm = () => true;
 w.prompt = () => "Folder Test";
 const downloads = [];
@@ -97,6 +98,9 @@ const assert = (c, m) => { if (!c) { console.error("FAIL:", m); process.exitCode
   // ikona na pasku Chrome → wiadomość ck-toggle otwiera panel
   w.__onMsg({ type: "ck-toggle" }); await sleep(300);
   assert($("#panel").classList.contains("open"), "kliknięcie ikony wtyczki otwiera panel");
+  assert($("#upd").style.display === "flex" && $("#upd").textContent.includes("1.1.0") && $("#upd a").href.endsWith("chrome-v1.1.0"), "pasek: dostępna nowa wersja 1.1.0 z linkiem");
+  $("#upd .ic").click();
+  assert($("#upd").style.display === "none", "pasek można ukryć do następnej wersji");
   let rows = $$("#list .item");
   assert(rows.length === 3, "3 czaty na liście: " + rows.length);
   assert(rows[0].textContent.includes("Nowy czat"), "sortowanie: najnowszy pierwszy");
@@ -169,6 +173,7 @@ const assert = (c, m) => { if (!c) { console.error("FAIL:", m); process.exitCode
   btn("Zaznacz widoczne").click();
   assert($("#status").textContent.includes("zaznaczono 3"), "zaznacz widoczne: " + $("#status").textContent);
   btn("⬇ Pobierz zaznaczone").click(); await sleep(1500);
+  w.__sent = w.__sent.filter(m => m.type === "ck-download");
   assert(w.__sent.length === 3 && w.__sent[0].url.startsWith("https://files.oaiusercontent.com") && /^ChatGPT-Library-\d{4}-\d\d-\d\d\/a\.png$/.test(w.__sent.find(m => m.filename.endsWith("a.png")).filename), "pobieranie zaznaczonych: " + JSON.stringify(w.__sent[0]));
   const b2 = calls.length;
   btn("Usuń zaznaczone").click(); await sleep(800);

@@ -16,6 +16,7 @@
 - **Cleanup rules** with preview · **Statistics** · **Classic dark mode**
 - **Languages:** English, Polish, French, German
 - Toolbar icon opens the panel; backup/import of all local data
+- Daily update check on GitHub Releases — green bar in the panel and a badge on the icon when a new version is out
 
 ### Polski
 - **Masowe operacje na czatach** — usuwanie, archiwizacja, gwiazdki, foldery (Shift+klik = zakres)
@@ -31,3 +32,4 @@
 - **Reguły sprzątania** z podglądem · **Statystyki** · **Klasyczny tryb ciemny**
 - **Języki:** angielski, polski, francuski, niemiecki
 - Ikona na pasku otwiera panel; kopia zapasowa i import wszystkich danych
+- Codzienne sprawdzanie aktualizacji w GitHub Releases — zielony pasek w panelu i plakietka na ikonie przy nowej wersji
