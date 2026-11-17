@@ -36,6 +36,9 @@ Same features as the Chrome version: bulk delete / archive / restore chats, Libr
 
 No servers, no analytics, no tracking. See **[PRIVACY.md](PRIVACY.md)**.
 
+### Contact
+Bug reports, ideas, questions: **[GitHub Issues](../../issues)** or **[justplguy@gmail.com](mailto:justplguy@gmail.com)**.
+
 ---
 
 ## 🇵🇱 Polski
@@ -60,6 +63,9 @@ To samo co w wersji na Chrome: masowe usuwanie, archiwizacja i przywracanie czat
 | `chatgpt.com`, `chat.openai.com` | panel działa tylko na ChatGPT |
 
 Bez serwerów, analityki i śledzenia. Szczegóły: **[PRIVACY.md](PRIVACY.md)**.
+
+### Kontakt
+Błędy, pomysły, pytania: **[GitHub Issues](../../issues)** albo **[justplguy@gmail.com](mailto:justplguy@gmail.com)**.
 
 ---
 
