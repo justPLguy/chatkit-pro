@@ -125,7 +125,7 @@
     archive: { q: "", sort: "new", star: false, older: "" },
     lib: { q: "", sort: "new", type: "all", proj: "all", older: "" }
   };
-  let current = "chats", busy = false, lastClicked = null, visibleNow = [];
+  let current = "chats", busy = false, lastClicked = null, visibleNow = [], notLoggedIn = false;
   const view = { big: false, size: 180, ...ls.get("view", {}) };
   const extraTabs = []; // {id, icon, label(), render(container, ui), footer?(actions, ui)}
 
@@ -213,7 +213,9 @@
     #list.grid .item input { position: absolute; top: 10px; left: 10px; width: 18px; height: 18px; z-index: 1; }
     #list.grid img.th, #list.grid .ph { width: 100%; height: var(--sz, 180px); object-fit: contain; background: #111; border-radius: 6px; }
     #list.grid .t { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    #list.grid .meta { display: flex; justify-content: space-between; }
+    #list.grid .meta { display: flex; justify-content: space-between; gap: 8px; white-space: nowrap; }
+    #list.grid .bdg { position: absolute; top: 10px; right: 10px; display: flex; gap: 3px; }
+    #list.grid .bdg .badge { background: rgba(0,0,0,.65); color: #eee; margin: 0; }
     .empty { padding: 30px; text-align: center; color: #777; line-height: 1.6; }
     footer { padding: 6px 10px 8px; border-top: 1px solid #333; }
     #actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
@@ -253,6 +255,7 @@
       <span class="sp"></span>
       <span id="viewctl"><span id="sizelbl"></span> <input type="range" id="size" min="100" max="420" step="20"></span>
       <button id="bigbtn"></button>
+      <button id="setbtn" class="x" style="font-size:16px">⚙</button>
       <button class="x" id="close">×</button>
     </header>
     <div id="upd" style="display:none"></div>
@@ -327,13 +330,13 @@
 
   const allTabs = () => [
     { id: "chats", label: t("tab.chats") }, { id: "archive", label: t("tab.archive") }, { id: "lib", label: t("tab.library") },
-    ...extraTabs.map(x => ({ id: x.id, label: x.label() })),
-    { id: "settings", label: "⚙", title: t("tab.settings") }
+    ...extraTabs.map(x => ({ id: x.id, label: x.label() }))
   ];
 
   function renderTabs() {
     const box = $("#tabs"); box.replaceChildren();
     for (const x of allTabs()) box.append(button(x.label, () => { if (!busy) switchTab(x.id); }, { class: "tab" + (current === x.id ? " active" : ""), title: x.title || "" }));
+    const sb = $("#setbtn"); sb.title = t("tab.settings"); sb.style.color = current === "settings" ? "#f87171" : "";
   }
 
   // ---------- filtry ----------
@@ -365,7 +368,6 @@
       box.append(
         select([["all", t("lib.allOrigins")], ["gen", t("lib.generated")], ["up", t("lib.uploaded")]], f.type, v => { f.type = v; rerender(); }),
         select([["all", t("lib.projAll")], ["in", t("lib.projIn")], ["out", t("lib.projOut")]], f.proj, v => { f.proj = v; rerender(); }),
-        select([["image", t("lib.images")], ["all", t("lib.allFiles")]], src.cat, v => { src.cat = v; src.reset(); renderList(); loadOne(); }, { title: t("lib.catTip") })
       );
     }
   }
@@ -457,7 +459,8 @@
       el("span", { class: "t" }, it.title, fo ? el("span", { class: "tag", style: `--c:${fo.color}` }, fo.name) : null),
       el("span", { class: "d", title: t("ui.created") + ": " + CK.fmtDate(it.created, true) }, CK.fmtDate(it.date, true)),
       el("span", { class: "ic", title: t("ui.copyLink"), onclick: e => { e.stopPropagation(); copy("https://chatgpt.com/c/" + it.key, t("msg.linkCopied")); } }, "🔗"),
-      el("span", { class: "ic", title: t("ui.open"), onclick: e => { e.stopPropagation(); location.href = "/c/" + it.key; } }, "↗")
+      el("span", { class: "ic", title: t("ui.openTip"), onclick: e => { e.stopPropagation(); CK.openChat(it.key, e); },
+        onauxclick: e => { if (e.button === 1) { e.preventDefault(); e.stopPropagation(); CK.openChat(it.key, e); } } }, "↗")
     );
     r.addEventListener("click", e => onRowClick(it.key, e));
     r.addEventListener("dragstart", e => {
@@ -481,8 +484,8 @@
     const badges = [it.generated ? el("span", { class: "badge" }, "AI") : null, it.project ? el("span", { class: "badge" }, t("lib.project")) : null];
     const cb = el("input", { type: "checkbox", checked: s.has(it.key), tabIndex: -1 });
     const r = grid
-      ? el("div", { class: "item" + (s.has(it.key) ? " sel" : "") }, cb, thumb, el("span", { class: "t", title: it.title }, it.title),
-          el("div", { class: "meta" }, el("span", { class: "d" }, CK.fmtDate(it.date)), el("span", { class: "d" }, CK.fmtSize(it.size), ...badges, " ", dlIcon(it))))
+      ? el("div", { class: "item" + (s.has(it.key) ? " sel" : "") }, cb, thumb, el("div", { class: "bdg" }, ...badges), el("span", { class: "t", title: it.title }, it.title),
+          el("div", { class: "meta" }, el("span", { class: "d" }, CK.fmtDate(it.date)), el("span", { class: "d" }, CK.fmtSize(it.size), " ", dlIcon(it))))
       : el("div", { class: "item" + (s.has(it.key) ? " sel" : "") }, cb, thumb, el("span", { class: "t" }, it.title, ...badges),
           el("span", { class: "sz" }, CK.fmtSize(it.size)), el("span", { class: "d" }, CK.fmtDate(it.date, true)), dlIcon(it));
     r.addEventListener("click", e => onRowClick(it.key, e));
@@ -507,7 +510,9 @@
     const frag = document.createDocumentFragment();
     if (!vis.length) {
       const src = sources[current];
-      frag.append(el("div", { class: "empty" }, src.items.length ? t("ui.noResults") : busy ? t("ui.loading") : t("ui.emptyLoad")));
+      if (notLoggedIn && !src.items.length) frag.append(el("div", { class: "empty" }, "🔒 " + t("ui.loginNeeded"), el("br"), el("br"),
+        el("a", { href: "https://chatgpt.com/auth/login", style: "color:#f87171" }, t("ui.loginBtn"))));
+      else frag.append(el("div", { class: "empty" }, src.items.length ? t("ui.noResults") : busy ? t("ui.loading") : t("ui.emptyLoad")));
     }
     for (const it of vis) { const r = current === "lib" ? libRow(it) : chatRow(it); rowEls.set(it.key, r); frag.append(r); }
     list.replaceChildren(frag);
@@ -599,8 +604,11 @@
   async function safe(fn) {
     if (busy) return;
     busy = true; updateStatus();
-    try { await fn(); }
-    catch (e) { console.error("[ChatKit Pro]", e); setMsg(t("msg.error", { e: e.message })); }
+    try { await fn(); notLoggedIn = false; }
+    catch (e) {
+      if (e.code === "NOAUTH") { notLoggedIn = true; setMsg(""); }
+      else { console.error("[ChatKit Pro]", e); setMsg(t("msg.error", { e: e.message })); }
+    }
     finally { busy = false; prog.style.display = "none"; renderList(); }
   }
 
@@ -791,6 +799,7 @@
       chk("sidebarMarks", t("set.sidebarMarks"), true),
       chk("showFab", t("set.showFab"), true),
       el("h3", {}, t("set.updates")),
+      ...(upd && upd.store ? [el("p", {}, t("upd.current", { v: CK.VERSION })), el("p", { style: "color:#86efac" }, "✓ " + t("upd.store"))] : [
       el("p", {}, t("upd.current", { v: CK.VERSION }) + (upd && upd.latest ? " · " + t("upd.latest", { v: upd.latest }) : "")),
       el("p", {}, t("upd.lastCheck", { d: upd && upd.checkedAt ? CK.fmtDate(upd.checkedAt, true) : t("upd.never") }) + (upd && upd.error ? " · " + t("upd.error", { e: upd.error }) : "")),
       el("p", { style: "color:" + (updAvailable() ? "#86efac" : "#999") }, updAvailable() ? "🎉 " + t("upd.available", { v: upd.latest }) : (upd && upd.latest ? "✓ " + t("upd.upToDate") : "")),
@@ -803,7 +812,7 @@
           setMsg(r && r.error ? t("upd.error", { e: r.error }) : updAvailable() ? t("upd.available", { v: upd.latest }) : t("upd.upToDate"));
         }),
         updAvailable() ? el("a", { href: upd.url, target: "_blank", rel: "noopener", style: "color:#86efac;font-size:12px" }, "⬇ " + t("upd.download") + " v" + upd.latest) : null),
-      el("p", {}, t("upd.howTo")),
+      el("p", {}, t("upd.howTo"))]),
       el("h3", {}, t("set.backup")),
       el("p", {}, t("set.backupInfo")),
       el("div", { class: "rowb" },
@@ -829,11 +838,63 @@
     if (LIST_TABS.includes(id)) { if (!sources[id].items.length && !sources[id].done) loadOne(); else quietRefresh(); }
   }
 
+  async function welcome() {
+    try {
+      const { welcomeSeen } = await chrome.storage.local.get("welcomeSeen");
+      if (welcomeSeen) return;
+      await chrome.storage.local.set({ welcomeSeen: Date.now() });
+    } catch { return; }
+    const tip = (icon, txt) => el("div", { style: "display:flex;gap:10px;margin:9px 0;align-items:flex-start" }, el("span", { style: "font-size:18px" }, icon), el("span", {}, txt));
+    await modal("👋 " + t("wel.title"), () => el("div", {},
+      tip("🧩", t("wel.t1")), tip("☑️", t("wel.t2")), tip("🖼️", t("wel.t3")), tip("☰", t("wel.t4")), tip("📚", t("wel.t5")),
+      el("p", { class: "muted", style: "margin-top:12px" }, t("wel.privacy"))),
+      [{ label: t("wel.ok"), cls: "primary", result: true }]);
+  }
+
   function togglePanel(force) {
     const open = force ?? !panel.classList.contains("open");
     panel.classList.toggle("open", open);
+    if (open) welcome();
     if (open) askUpdate(false); // raz na dobę (cache w tle)
     if (open && LIST_TABS.includes(current)) { if (!sources[current].items.length && !sources[current].done) loadOne(); else quietRefresh(); }
+  }
+
+  // ---------- otwieranie czatu bez gubienia listy ----------
+  const RESTORE_KEY = "ckp.restore";
+  const pickSrc = s => ({ items: s.items, offset: s.offset, total: s.total, done: s.done });
+  function saveRestore() {
+    try {
+      sessionStorage.setItem(RESTORE_KEY, JSON.stringify({
+        at: Date.now(), tab: current, scroll: list.scrollTop, open: panel.classList.contains("open"),
+        filters, sources: { chats: pickSrc(sources.chats), archive: pickSrc(sources.archive) }
+      }));
+    } catch (e) { console.warn("[ChatKit Pro] restore save", e); }
+  }
+  // Zwraca "tab" | "spa" | "reload"
+  CK.openChat = (id, e) => {
+    const url = "/c/" + id;
+    if (e && (e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1)) { window.open(url, "_blank", "noopener"); return "tab"; }
+    if (CK.dom.convId() === id) return "spa";
+    saveRestore(); // na wypadek pełnego przeładowania
+    const link = document.querySelector(`nav a[href$="${url}"], a[href="${url}"]:not(#chatkit-pro-host *)`);
+    if (link) {
+      // link z paska bocznego ChatGPT = nawigacja bez przeładowania; jeśli strona jednak się przeładuje, stan wróci
+      link.click();
+      setTimeout(() => { try { sessionStorage.removeItem(RESTORE_KEY); } catch {} }, 4000);
+      return "spa";
+    }
+    location.href = url;
+    return "reload";
+  };
+  function takeRestore() {
+    try {
+      const r = JSON.parse(sessionStorage.getItem(RESTORE_KEY) || "null");
+      sessionStorage.removeItem(RESTORE_KEY);
+      if (!r || Date.now() - r.at > 15 * 60 * 1000) return null;
+      for (const k of ["chats", "archive"]) if (r.sources && r.sources[k]) Object.assign(sources[k], r.sources[k]);
+      for (const k of Object.keys(filters)) if (r.filters && r.filters[k]) Object.assign(filters[k], r.filters[k]);
+      return r;
+    } catch { return null; }
   }
 
   // API dla modułów z dodatkowymi zakładkami
@@ -849,6 +910,7 @@
   // ---------- zdarzenia ----------
   $("#fab").addEventListener("click", () => togglePanel());
   $("#close").addEventListener("click", () => togglePanel(false));
+  $("#setbtn").addEventListener("click", () => { if (!busy) switchTab(current === "settings" ? "chats" : "settings"); });
   $("#bigbtn").addEventListener("click", () => { view.big = !view.big; renderList(); });
   $("#size").addEventListener("input", e => { view.size = +e.target.value; applyView(); });
   zoom.addEventListener("click", () => { zoom.style.display = "none"; });
@@ -884,6 +946,12 @@
       if (current === "chats") renderFolders();
       if (current !== "lib" && !root.querySelector(".modal") && !root.activeElement?.matches?.("textarea, input[type=text], input[type=search]")) { renderFooter(); renderList(); }
     });
-    switchTab("chats");
+    const restored = takeRestore();
+    switchTab(restored && restored.tab ? restored.tab : "chats");
+    if (restored && restored.open) {
+      togglePanel(true);
+      const back = () => { list.scrollTop = restored.scroll || 0; };
+      back(); setTimeout(back, 50); setTimeout(back, 400);
+    }
   });
 })();

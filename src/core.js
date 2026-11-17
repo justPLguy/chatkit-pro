@@ -20,7 +20,7 @@
     const r = await fetch("/api/auth/session", { credentials: "include" });
     if (!r.ok) throw new Error(CK.t("err.session", { s: r.status }));
     const j = await r.json();
-    if (!j.accessToken) throw new Error(CK.t("err.noToken"));
+    if (!j.accessToken) throw Object.assign(new Error(CK.t("err.noToken")), { code: "NOAUTH" });
     token = j.accessToken; tokenAt = Date.now();
     accountId = (j.account && (j.account.id || j.account.account_id)) || CK.cookie("_account") || null;
     return token;

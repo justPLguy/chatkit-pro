@@ -60,7 +60,6 @@ Free, open-source power tools for ChatGPT.<br>
 |---|---|
 | `storage` | save folders, stars, prompts, notes, settings |
 | `downloads` | save Library files to your Downloads folder |
-| `scripting` | open the panel from the toolbar icon in a tab that was open before installing |
 | `alarms` | check for a new version once a day |
 | `chatgpt.com` | the extension works only there |
 

@@ -1,9 +1,9 @@
 // ChatKit Pro — service worker.
 // 1) Kliknięcie ikony na pasku Chrome otwiera/zamyka panel na stronie ChatGPT.
+//    Karta otwarta przed instalacją nie ma jeszcze skryptów — wtedy ją przeładowujemy i panel otwiera się sam.
 // 2) Zapis plików z Biblioteki przez chrome.downloads (omija ograniczenia CORS).
 // 3) Sprawdzanie aktualizacji: raz na dobę publiczne API GitHub Releases (bez wysyłania jakichkolwiek danych).
 
-const CONTENT_FILES = ["src/core.js", "src/i18n.js", "src/dom.js", "src/export.js", "src/timestamps.js", "src/theme.js", "src/sidebar.js", "src/search.js", "src/panel.js", "src/prompts.js", "src/minimap.js", "src/tabs-extra.js"];
 const isChatGPT = url => /^https:\/\/(chatgpt\.com|chat\.openai\.com)(\/|$)/.test(url || "");
 
 chrome.action.onClicked.addListener(async tab => {
@@ -16,14 +16,9 @@ chrome.action.onClicked.addListener(async tab => {
   try {
     await chrome.tabs.sendMessage(tab.id, { type: "ck-toggle" });
   } catch {
-    // Karta była otwarta przed instalacją/aktualizacją wtyczki — wstrzyknij skrypty teraz.
-    try {
-      await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: CONTENT_FILES });
-      await chrome.tabs.sendMessage(tab.id, { type: "ck-toggle", open: true });
-    } catch (e) {
-      console.warn("[ChatKit Pro] nie udało się otworzyć panelu:", e);
-      chrome.tabs.reload(tab.id);
-    }
+    // Karta była otwarta przed instalacją/aktualizacją — przeładuj ją, panel otworzy się po załadowaniu.
+    await chrome.storage.local.set({ openPanelAt: Date.now() });
+    chrome.tabs.reload(tab.id);
   }
 });
 
@@ -48,8 +43,19 @@ const cmpVersion = (a, b) => {
   return 0;
 };
 
+// Wersja ze Chrome Web Store aktualizuje się sama — sprawdzamy GitHub tylko przy instalacji z ZIP-a (tryb dewelopera).
+async function isStoreInstall() {
+  try { return (await chrome.management.getSelf()).installType === "normal"; } catch { return false; }
+}
+
 async function checkUpdate(force = false) {
   const current = chrome.runtime.getManifest().version;
+  if (await isStoreInstall()) {
+    const res = { checkedAt: Date.now(), current, latest: null, url: null, store: true, available: false };
+    await chrome.storage.local.set({ update: res });
+    try { await chrome.action.setBadgeText({ text: "" }); } catch {}
+    return res;
+  }
   const { update: prev } = await chrome.storage.local.get("update");
   if (!force && prev && prev.current === current && Date.now() - prev.checkedAt < DAY) return prev;
   let res = { checkedAt: Date.now(), current, latest: null, url: null, date: null, error: null };
@@ -76,12 +82,18 @@ async function checkUpdate(force = false) {
   return res;
 }
 
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.alarms.create("ck-update", { periodInMinutes: 24 * 60 });
+chrome.runtime.onInstalled.addListener(async ({ reason } = {}) => {
+  // Pierwsza instalacja: otwórz ChatGPT z panelem i kartą powitalną.
+  if (reason === "install") {
+    await chrome.storage.local.set({ openPanelAt: Date.now() });
+    chrome.tabs.create({ url: "https://chatgpt.com/" });
+  }
+  if (chrome.alarms && !(await isStoreInstall())) chrome.alarms.create("ck-update", { periodInMinutes: 24 * 60 });
   checkUpdate(true);
 });
 chrome.runtime.onStartup.addListener(() => checkUpdate());
-chrome.alarms.onAlarm.addListener(a => { if (a.name === "ck-update") checkUpdate(true); });
+// Wersja do Chrome Web Store nie ma uprawnienia "alarms" (aktualizuje ją Chrome) — wtedy tego nie rejestrujemy.
+if (chrome.alarms) chrome.alarms.onAlarm.addListener(a => { if (a.name === "ck-update") checkUpdate(true); });
 chrome.runtime.onMessage.addListener((msg, _sender, reply) => {
   if (msg && msg.type === "ck-check-update") { checkUpdate(!!msg.force).then(reply, e => reply({ error: e.message })); return true; }
 });

@@ -1,0 +1,11 @@
+{
+  "appName": {
+    "message": "ChatKit Pro by JustPLGuy"
+  },
+  "appShortName": {
+    "message": "ChatKit Pro"
+  },
+  "appDesc": {
+    "message": "Bulk delete & archive ChatGPT chats, clean up the Library, folders, export, prompts, minimap and search. Free, no account."
+  }
+}

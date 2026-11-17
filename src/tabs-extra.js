@@ -4,10 +4,16 @@
   const t = (...a) => CK.t(...a);
 
   // Otwórz czat i przewiń do wiadomości (po przeładowaniu obsłuży to minimapa).
-  CK.goto = (conv, msg) => {
+  CK.goto = async (conv, msg) => {
+    if (CK.dom.convId() === conv) { if (msg) CK.dom.scrollToMessage(msg); return; }
     try { localStorage.setItem("ckp.goto", JSON.stringify({ conv, msg, at: Date.now() })); } catch {}
-    if (CK.dom.convId() === conv && msg) { CK.dom.scrollToMessage(msg); return; }
-    location.href = "/c/" + conv;
+    const how = CK.openChat(conv);
+    if (how === "spa" && msg) {
+      // bez przeładowania: poczekaj, aż ChatGPT pokaże rozmowę, i przewiń do wiadomości
+      for (let i = 0; i < 30 && (CK.dom.convId() !== conv || !CK.dom.messages().length); i++) await CK.sleep(300);
+      localStorage.removeItem("ckp.goto");
+      CK.dom.scrollToMessage(msg);
+    }
   };
 
   // =================== Zakładki i notatki ===================

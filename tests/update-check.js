@@ -18,7 +18,8 @@ const ctx = {
     action: { onClicked: ev("clicked"), setBadgeText: async o => { badge.text = o.text; }, setBadgeBackgroundColor: async () => {}, setTitle: async o => { badge.title = o.title; } },
     alarms: { create: (n, o) => { store.__alarm = o.periodInMinutes; }, onAlarm: ev("alarm") },
     storage: { local: { get: async k => ({ [k]: store[k] }), set: async o => Object.assign(store, JSON.parse(JSON.stringify(o))) } },
-    tabs: {}, scripting: {}, downloads: {}
+    tabs: { create: () => { ctx.__tabOpened = true; } }, downloads: {},
+    management: { getSelf: async () => ({ installType: ctx.__installType || "development" }) }
   }
 };
 vm.createContext(ctx);
@@ -29,6 +30,8 @@ const ask = force => new Promise(res => { const r = listeners.msg.map(fn => fn({
   listeners.installed();
   await new Promise(r => setTimeout(r, 50));
   assert(store.__alarm === 1440, "alarm co 24 h");
+  listeners.installed({ reason: "install" }); await new Promise(r => setTimeout(r, 50));
+  assert(ctx.__tabOpened && store.openPanelAt, "pierwsza instalacja: otwiera ChatGPT z panelem");
   assert(store.update && store.update.latest === "1.1.0", "najnowsza wersja Chrome = 1.1.0 (pomija Firefox, szkice, beta): " + store.update?.latest);
   assert(store.update.available === true && badge.text === "1", "plakietka na ikonie przy nowej wersji");
   const before = fetchCalls;
@@ -40,4 +43,8 @@ const ask = force => new Promise(res => { const r = listeners.msg.map(fn => fn({
   ctx.fetch = async () => ({ ok: false, status: 403, json: async () => ({}) });
   const e = await ask(true);
   assert(e.error === "HTTP 403" && e.latest === "1.0.0", "błąd API nie kasuje ostatniej znanej wersji");
+  ctx.__installType = "normal"; let fetched = false;
+  ctx.fetch = async () => { fetched = true; return { ok: true, json: async () => [] }; };
+  const st = await ask(true);
+  assert(st.store === true && !st.available && !fetched && badge.text === "", "wersja ze sklepu: nie pyta GitHuba i nie pokazuje paska");
 })();

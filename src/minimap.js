@@ -50,6 +50,7 @@
     #selbtn { position: fixed; z-index: 2147483642; display: none; gap: 4px; background: #1f1f1f; border: 1px solid #444; border-radius: 8px; padding: 3px; box-shadow: 0 4px 14px rgba(0,0,0,.4); }
     #selbtn button { background: #2f2f2f; color: #eee; border: 1px solid #444; border-radius: 6px; padding: 4px 8px; cursor: pointer; font-size: 12px; }
     #selbtn button:hover { background: #3a3a3a; }
+    #toast { position: fixed; z-index: 2147483643; display: none; background: #16a34a; color: #fff; border-radius: 8px; padding: 6px 12px; font-size: 12.5px; font-weight: 600; box-shadow: 0 4px 14px rgba(0,0,0,.4); }
   </style>
   <div id="tab"></div>
   <div id="mm">
@@ -58,7 +59,8 @@
     <div class="tools" id="tools"></div>
     <div id="body"></div>
   </div>
-  <div id="selbtn"><button id="selnote"></button><button id="selcopy"></button></div>`;
+  <div id="selbtn"><button id="selnote"></button><button id="selcopy"></button></div>
+  <div id="toast"></div>`;
 
   const $ = s => root.querySelector(s);
   const mm = $("#mm"), body = $("#body"), tools = $("#tools");
@@ -126,8 +128,6 @@
   function render() {
     $("#title").textContent = conv?.title || t("mm.title");
     root.querySelectorAll(".tabs button").forEach(b => { b.classList.toggle("on", b.dataset.v === viewMode); b.textContent = t("mm.view." + b.dataset.v); });
-    $("#selnote").textContent = "📝 " + t("mm.addNote");
-    $("#selcopy").textContent = "🔖 " + t("mm.bookmarkSel");
     tools.replaceChildren();
     body.replaceChildren();
     if (!convId) { body.append(el("div", { class: "muted" }, t("mm.noChat"))); return; }
@@ -185,21 +185,38 @@
   }
 
   // ---------- notatka / zakładka z zaznaczenia ----------
-  let selInfo = null;
+  let selInfo = null, selRect = null;
+  // Napisy ustawiamy od razu (wcześniej dopiero po otwarciu minimapy — przyciski były puste).
+  function labelSel() {
+    $("#selnote").textContent = "📝 " + t("mm.addNote");
+    $("#selcopy").textContent = "🔖 " + t("mm.bookmarkSel");
+  }
+  function toast(msg) {
+    const el = $("#toast");
+    el.textContent = "✓ " + msg;
+    const r = selRect || { left: window.innerWidth / 2, bottom: 80, width: 0 };
+    el.style.left = Math.max(8, Math.min(window.innerWidth - 220, r.left + r.width / 2 - 60)) + "px";
+    el.style.top = Math.min(window.innerHeight - 50, r.bottom + 10) + "px";
+    el.style.display = "block";
+    clearTimeout(toast._t); toast._t = setTimeout(() => { el.style.display = "none"; }, 1800);
+  }
   function onSelection() {
     const btn = $("#selbtn");
     const s = document.getSelection();
-    if (!s || s.isCollapsed || !convId) { btn.style.display = "none"; return; }
+    if (!s || s.isCollapsed || !CK.dom.convId()) { btn.style.display = "none"; return; }
     const text = s.toString().trim();
     if (text.length < 3) { btn.style.display = "none"; return; }
     const node = s.anchorNode && (s.anchorNode.nodeType === 1 ? s.anchorNode : s.anchorNode.parentElement);
     const msg = node && CK.dom.messages().find(m => m.el.contains(node));
     if (!msg) { btn.style.display = "none"; return; }
-    const r = s.getRangeAt(0).getBoundingClientRect();
+    const r = selRect = s.getRangeAt(0).getBoundingClientRect();
     selInfo = { text: text.slice(0, 1200), msg: msg.ids.find(id => order.has(id)) || msg.id, role: msg.role };
+    if (!convId || convId !== CK.dom.convId()) load(); // dociągnij rozmowę, jeśli minimapa jeszcze jej nie ma
     btn.style.display = "flex";
-    btn.style.left = Math.max(8, Math.min(window.innerWidth - 230, r.left + r.width / 2 - 100)) + "px";
-    btn.style.top = Math.max(8, r.top - 40) + "px";
+    // POD zaznaczeniem — nad nim ChatGPT pokazuje własne okienko „Zapytaj ChatGPT”.
+    const below = r.bottom + 10, fitsBelow = below + 44 < window.innerHeight;
+    btn.style.left = Math.max(8, Math.min(window.innerWidth - 240, r.left + r.width / 2 - 100)) + "px";
+    btn.style.top = (fitsBelow ? below : Math.max(8, r.top - 90)) + "px";
   }
   document.addEventListener("mouseup", () => setTimeout(onSelection, 10));
   document.addEventListener("scroll", () => { $("#selbtn").style.display = "none"; }, true);
@@ -215,15 +232,19 @@
     const text = await ui.modal(t("mm.addNote"), () => ui.el("div", { class: "form" }, ui.el("div", { class: "quote" }, "„" + info.text.slice(0, 400) + "”"), ta),
       [{ label: t("ui.cancel"), result: null }, { label: t("ui.save"), cls: "primary", value: () => ta.value.trim() || false }]);
     if (!text) return;
-    CK.store.data.notes.unshift({ id: CK.uid("n"), conv: convId, convTitle: conv?.title || "", msg: info.msg, quote: info.text, text, added: Date.now() });
+    await load();
+    CK.store.data.notes.unshift({ id: CK.uid("n"), conv: convId || CK.dom.convId(), convTitle: conv?.title || "", msg: info.msg, quote: info.text, text, added: Date.now() });
     await CK.store.save("notes");
-    CK.ui.setMsg(t("mm.noteSaved"));
+    toast(t("mm.noteSaved"));
   });
   $("#selcopy").addEventListener("click", async () => {
     $("#selbtn").style.display = "none";
     if (!selInfo) return;
-    const m = msgs.find(x => x.id === selInfo.msg) || { id: selInfo.msg, text: selInfo.text, role: selInfo.role };
+    const info = selInfo;
+    await load();
+    const m = msgs.find(x => x.id === info.msg) || { id: info.msg, text: info.text, role: info.role };
     if (!isBk(m.id)) await toggleBookmark(m);
+    toast(t("mm.bookmarkSaved"));
   });
 
   // ---------- sterowanie ----------
@@ -248,6 +269,8 @@
 
   let lastPath = location.pathname;
   CK.ready.then(() => {
+    labelSel();
+    CK.store.onChange(labelSel);
     applyVisibility();
     CK.convBus.add(c => { const id = CK.dom.convId(); if (id && (id === convId || !conv)) setConv(id, c); });
     CK.store.onChange(() => { applyVisibility(); if (mm.classList.contains("open") && !root.activeElement?.matches?.("textarea, input")) render(); });

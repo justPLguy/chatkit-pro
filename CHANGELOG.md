@@ -1,5 +1,37 @@
 # Changelog
 
+## v1.1.0 — 2026-11-17
+### English
+- Welcome card after installing — 5 quick tips to get started
+- Clear “Log in to ChatGPT” message instead of an error when you're logged out
+- Fewer permissions: `scripting` removed — a ChatGPT tab opened before installing is simply reloaded and the panel opens
+- Removed the experimental “All files” Library filter
+- Minimum Chrome version declared (111)
+- Fixed: note/bookmark buttons for selected text were empty until the minimap was opened, and overlapped ChatGPT's own “Ask ChatGPT” popup — now labeled and shown below the selection, with a confirmation
+- Opening a chat from the list no longer resets the panel: it navigates without a reload when possible, otherwise the loaded list, filters and scroll position are restored; Ctrl+click / middle-click opens a new tab
+
+### Polski
+- Karta powitalna po instalacji — 5 wskazówek na start
+- Czytelny komunikat „Zaloguj się do ChatGPT” zamiast błędu, gdy nie jesteś zalogowany
+- Mniej uprawnień: usunięte `scripting` — karta ChatGPT otwarta przed instalacją jest przeładowywana i panel otwiera się sam
+- Usunięty eksperymentalny filtr „Wszystkie pliki” w Bibliotece
+- Zadeklarowana minimalna wersja Chrome (111)
+- Naprawione: przyciski notatki/zakładki przy zaznaczonym tekście były puste, dopóki nie otworzyło się minimapy, i nachodziły na okienko „Zapytaj ChatGPT” — teraz mają napisy, są pod zaznaczeniem i pokazują potwierdzenie
+- Otwarcie czatu z listy nie resetuje już panelu: jeśli się da, przejście bez przeładowania; w przeciwnym razie wczytana lista, filtry i miejsce przewinięcia wracają; Ctrl+klik / środkowy przycisk = nowa karta
+
+## v1.0.1 — 2026-11-17
+### English
+- Ready for the Chrome Web Store: the store version updates through Chrome and skips the GitHub check
+- Store listing translations (name and short description in EN / PL / FR / DE)
+- Settings (⚙) moved to the panel header — tabs fit on one line in every language
+- Library grid: AI / project badges on the thumbnail corner, cleaner captions
+
+### Polski
+- Gotowe pod Chrome Web Store: wersja ze sklepu aktualizuje się przez Chrome i nie sprawdza GitHuba
+- Tłumaczenia nazwy i krótkiego opisu (PL / EN / FR / DE)
+- Ustawienia (⚙) przeniesione do nagłówka panelu — zakładki mieszczą się w jednej linii w każdym języku
+- Siatka Biblioteki: plakietki AI / projekt na rogu miniatury, czytelniejsze podpisy
+
 ## v1.0.0 — 2026-11-17 — first public release / pierwsze wydanie
 
 ### English

@@ -98,6 +98,9 @@ const assert = (c, m) => { if (!c) { console.error("FAIL:", m); process.exitCode
   // ikona na pasku Chrome → wiadomość ck-toggle otwiera panel
   w.__onMsg({ type: "ck-toggle" }); await sleep(300);
   assert($("#panel").classList.contains("open"), "kliknięcie ikony wtyczki otwiera panel");
+  assert($(".modal") && $(".modal").textContent.includes("Witaj w ChatKit Pro"), "karta powitalna przy pierwszym otwarciu");
+  btn("Zaczynamy").click(); await sleep(100);
+  assert(!$(".modal") && storage.welcomeSeen, "powitanie zamknięte i zapamiętane");
   assert($("#upd").style.display === "flex" && $("#upd").textContent.includes("1.1.0") && $("#upd a").href.endsWith("chrome-v1.1.0"), "pasek: dostępna nowa wersja 1.1.0 z linkiem");
   $("#upd .ic").click();
   assert($("#upd").style.display === "none", "pasek można ukryć do następnej wersji");
@@ -202,6 +205,13 @@ const assert = (c, m) => { if (!c) { console.error("FAIL:", m); process.exitCode
   assert(w.document.getElementById("prompt-textarea").value.includes("w 5 punktach") && w.document.getElementById("prompt-textarea").value.includes("Ala ma kota"), "prompt wstawiony do pola wiadomości");
   assert(w.CK.prompts.vars("a {{x}} b {{y|dom}} {{x}}").length === 2, "parsowanie zmiennych bez duplikatów");
 
+  // przyciski zaznaczenia mają napisy od razu (bez otwierania minimapy)
+  const mmRoot = w.document.getElementById("chatkit-pro-minimap").shadowRoot;
+  assert(mmRoot.querySelector("#selnote").textContent.includes("Notatka") && mmRoot.querySelector("#selcopy").textContent.includes("Zakładka"), "przyciski notatki/zakładki z napisami bez otwierania minimapy");
+  // Ctrl+klik „otwórz” = nowa karta, panel zostaje
+  let opened = null; w.open = u => { opened = u; };
+  assert(w.CK.openChat("abc", { ctrlKey: true }) === "tab" && opened === "/c/abc", "Ctrl+klik otwiera czat w nowej karcie");
+
   // minimapa + zakładka na wiadomości
   await w.CK.minimap.open(); await sleep(300);
   const mm = w.document.getElementById("chatkit-pro-minimap").shadowRoot;
@@ -229,11 +239,19 @@ const assert = (c, m) => { if (!c) { console.error("FAIL:", m); process.exitCode
   assert(w.document.getElementById("chatkit-pro-classic-dark").textContent.includes("--main-surface-primary"), "klasyczny tryb ciemny włączony");
 
   // ustawienia + zmiana języka
-  tab("⚙").click(); await sleep(100);
+  $("#setbtn").click(); await sleep(100);
   assert($(".pane select"), "ustawienia renderują się");
   const langSel = $(".pane select"); langSel.value = "de"; langSel.dispatchEvent(new w.Event("change")); await sleep(200);
   assert(tab("Archiv") && tab("Bibliothek"), "przełączenie języka na niemiecki");
   langSel.value = "fr"; langSel.dispatchEvent(new w.Event("change")); await sleep(200);
   assert($$("#tabs button").some(b => b.textContent === "Discussions"), "przełączenie języka na francuski");
+
+  // niezalogowany: czytelny komunikat zamiast błędu
+  const realFetch = w.fetch;
+  w.fetch = (url, o) => String(url).includes("/api/auth/session") ? Promise.resolve({ ok: true, status: 200, json: async () => ({}) }) : realFetch(url, o);
+  w.CK.getToken = (orig => async () => { const r = await w.fetch("/api/auth/session"); const j = await r.json(); if (!j.accessToken) throw Object.assign(new Error("x"), { code: "NOAUTH" }); return j.accessToken; })(w.CK.getToken);
+  w.CK.sources.archive.reset();
+  tab("Archives").click(); await sleep(400);
+  assert($("#list .empty") && $("#list .empty a") && $("#list .empty a").href.includes("/auth/login"), "niezalogowany: komunikat z linkiem do logowania");
   console.log("\nheaders sample:", JSON.stringify(calls.find(c => c.url.includes("delete-batch")).headers));
 })().catch(e => { console.error(e); process.exitCode = 1; }).finally(() => setTimeout(() => process.exit(), 50));

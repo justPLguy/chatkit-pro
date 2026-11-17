@@ -13,7 +13,7 @@
       "ui.searchName": "Szukaj po nazwie…", "ui.selectVisible": "Zaznacz widoczne", "ui.deselect": "Odznacz",
       "ui.olderThan": "starsze niż", "ui.olderTip": "Pokaż tylko starsze niż X dni", "ui.days": "dni", "ui.onlyStar": "tylko ★",
       "ui.star": "Gwiazdka", "ui.starSelected": "Gwiazdka dla zaznaczonych (przełącz)", "ui.created": "Utworzono", "ui.copyLink": "Kopiuj link",
-      "ui.open": "Otwórz", "ui.noResults": "Brak wyników dla wybranych filtrów.", "ui.loading": "Wczytywanie…", "ui.loadingN": "Wczytywanie… ({n})",
+      "ui.open": "Otwórz", "ui.openTip": "Otwórz czat (Ctrl+klik = nowa karta)", "ui.noResults": "Brak wyników dla wybranych filtrów.", "ui.loading": "Wczytywanie…", "ui.loadingN": "Wczytywanie… ({n})",
       "ui.emptyLoad": "Pusto. Kliknij „Wczytaj więcej”.", "ui.refreshTip": "Odśwież — dociągnij nowe elementy", "ui.loadMore": "Wczytaj więcej",
       "ui.loadAll": "Wczytaj wszystkie", "ui.export": "Eksport", "ui.archive": "Archiwizuj", "ui.restore": "Przywróć", "ui.delete": "Usuń",
       "ui.deleteSelected": "Usuń zaznaczone", "ui.diagnostics": "Diagnostyka", "ui.diagTip": "Kopiuje odpowiedź serwera do schowka (do zgłaszania błędów)",
@@ -71,7 +71,7 @@
       "mm.chatNote": "Notatka do całego czatu (zapisuje się sama):", "mm.chatNotePh": "Twoje notatki…",
       "mm.selNotes": "Notatki do fragmentów:", "mm.selHint": "Zaznacz fragment wiadomości, aby dodać do niego notatkę lub zakładkę.",
       "mm.onlyAnswers": "Brak pytań — zaznacz „odpowiedzi”.", "mm.found": "Znaleziono: {n}", "mm.addNote": "Notatka", "mm.bookmarkSel": "Zakładka",
-      "mm.noteSaved": "Zapisano notatkę.",
+      "mm.noteSaved": "Zapisano notatkę.", "mm.bookmarkSaved": "Dodano zakładkę.",
       "nt.bookmarks": "Zakładki", "nt.notes": "Notatki", "nt.chatNotes": "Notatki do czatów", "nt.noBookmarks": "Brak zakładek.", "nt.noNotes": "Brak notatek.",
       "nt.noChatNotes": "Brak notatek do czatów.", "nt.howTo": "Zakładki i notatki dodajesz w minimapie (☰ Spis przy prawej krawędzi czatu) albo zaznaczając tekst w odpowiedzi.",
       "se.placeholder": "Szukaj w treści wszystkich czatów…", "se.search": "Szukaj", "se.stats": "Zindeksowane czaty: {n} · ostatnio: {date}",
@@ -91,7 +91,8 @@
       "st.chats": "czatów", "st.archived": "w archiwum", "st.starred": "z gwiazdką", "st.folders": "folderów", "st.files": "plików w Bibliotece",
       "st.libSize": "rozmiar Biblioteki", "st.aiSize": "w tym obrazki AI", "st.prompts": "promptów", "st.marksNotes": "zakładek / notatek",
       "st.perMonth": "Nowe czaty — ostatnie 12 miesięcy", "st.biggest": "Największe pliki", "st.byFolder": "Czaty w folderach",
-      "set.updates": "Aktualizacje", "upd.available": "Dostępna nowa wersja {v}", "upd.download": "Pobierz", "upd.dismiss": "Ukryj do następnej wersji", "upd.current": "Twoja wersja: {v}", "upd.latest": "najnowsza na GitHubie: {v}", "upd.lastCheck": "Ostatnio sprawdzono: {d}", "upd.never": "jeszcze nie", "upd.error": "nie udało się sprawdzić ({e})", "upd.upToDate": "Masz najnowszą wersję.", "upd.checkNow": "Sprawdź teraz", "upd.checking": "Sprawdzanie aktualizacji…", "upd.howTo": "Wtyczka sama sprawdza GitHub Releases raz dziennie (nic nie wysyła). Aktualizacja: pobierz nowy ZIP, podmień pliki w folderze wtyczki i kliknij ↻ na chrome://extensions — dane zostają."
+      "ui.loginNeeded": "Zaloguj się do ChatGPT, żeby zobaczyć swoje czaty i pliki.", "ui.loginBtn": "Zaloguj się →", "wel.title": "Witaj w ChatKit Pro!", "wel.t1": "Panel otwierasz ikoną wtyczki na pasku Chrome albo skrótem Alt+Shift+K.", "wel.t2": "Zaznacz czaty (Shift+klik = zakres) i usuń, zarchiwizuj albo przenieś je do folderu.", "wel.t3": "Zakładka Biblioteka: zdjęcia i pliki, których ChatGPT nie usuwa razem z czatem.", "wel.t4": "W otwartym czacie kliknij ☰ przy prawej krawędzi (Alt+Shift+M): spis treści, zakładki, notatki.", "wel.t5": "Wpisz // w pustym polu wiadomości, żeby wstawić zapisany prompt.", "wel.privacy": "Wszystko dzieje się w Twojej przeglądarce — wtyczka nie ma żadnego serwera.", "wel.ok": "Zaczynamy",
+      "set.updates": "Aktualizacje", "upd.available": "Dostępna nowa wersja {v}", "upd.download": "Pobierz", "upd.dismiss": "Ukryj do następnej wersji", "upd.current": "Twoja wersja: {v}", "upd.latest": "najnowsza na GitHubie: {v}", "upd.lastCheck": "Ostatnio sprawdzono: {d}", "upd.never": "jeszcze nie", "upd.error": "nie udało się sprawdzić ({e})", "upd.upToDate": "Masz najnowszą wersję.", "upd.checkNow": "Sprawdź teraz", "upd.checking": "Sprawdzanie aktualizacji…", "upd.store": "Masz wersję z Chrome Web Store — aktualizuje się automatycznie.", "upd.howTo": "Wtyczka sama sprawdza GitHub Releases raz dziennie (nic nie wysyła). Aktualizacja: pobierz nowy ZIP, podmień pliki w folderze wtyczki i kliknij ↻ na chrome://extensions — dane zostają."
     },
 
     en: {
@@ -102,7 +103,7 @@
       "ui.searchName": "Search by name…", "ui.selectVisible": "Select visible", "ui.deselect": "Deselect",
       "ui.olderThan": "older than", "ui.olderTip": "Show only items older than X days", "ui.days": "days", "ui.onlyStar": "only ★",
       "ui.star": "Star", "ui.starSelected": "Star selected (toggle)", "ui.created": "Created", "ui.copyLink": "Copy link",
-      "ui.open": "Open", "ui.noResults": "No results for the selected filters.", "ui.loading": "Loading…", "ui.loadingN": "Loading… ({n})",
+      "ui.open": "Open", "ui.openTip": "Open chat (Ctrl+click = new tab)", "ui.noResults": "No results for the selected filters.", "ui.loading": "Loading…", "ui.loadingN": "Loading… ({n})",
       "ui.emptyLoad": "Empty. Click “Load more”.", "ui.refreshTip": "Refresh — fetch new items", "ui.loadMore": "Load more",
       "ui.loadAll": "Load all", "ui.export": "Export", "ui.archive": "Archive", "ui.restore": "Restore", "ui.delete": "Delete",
       "ui.deleteSelected": "Delete selected", "ui.diagnostics": "Diagnostics", "ui.diagTip": "Copies the server response to the clipboard (for bug reports)",
@@ -160,7 +161,7 @@
       "mm.chatNote": "Note for the whole chat (saves automatically):", "mm.chatNotePh": "Your notes…",
       "mm.selNotes": "Notes on excerpts:", "mm.selHint": "Select part of a message to add a note or bookmark to it.",
       "mm.onlyAnswers": "No questions — tick “answers”.", "mm.found": "Found: {n}", "mm.addNote": "Note", "mm.bookmarkSel": "Bookmark",
-      "mm.noteSaved": "Note saved.",
+      "mm.noteSaved": "Note saved.", "mm.bookmarkSaved": "Bookmark added.",
       "nt.bookmarks": "Bookmarks", "nt.notes": "Notes", "nt.chatNotes": "Chat notes", "nt.noBookmarks": "No bookmarks.", "nt.noNotes": "No notes.",
       "nt.noChatNotes": "No chat notes.", "nt.howTo": "Add bookmarks and notes in the minimap (☰ Outline on the right edge of a chat) or by selecting text in a reply.",
       "se.placeholder": "Search inside all chats…", "se.search": "Search", "se.stats": "Indexed chats: {n} · last: {date}",
@@ -180,7 +181,8 @@
       "st.chats": "chats", "st.archived": "archived", "st.starred": "starred", "st.folders": "folders", "st.files": "Library files",
       "st.libSize": "Library size", "st.aiSize": "of which AI images", "st.prompts": "prompts", "st.marksNotes": "bookmarks / notes",
       "st.perMonth": "New chats — last 12 months", "st.biggest": "Largest files", "st.byFolder": "Chats in folders",
-      "set.updates": "Updates", "upd.available": "New version {v} is available", "upd.download": "Download", "upd.dismiss": "Hide until the next version", "upd.current": "Your version: {v}", "upd.latest": "latest on GitHub: {v}", "upd.lastCheck": "Last checked: {d}", "upd.never": "not yet", "upd.error": "check failed ({e})", "upd.upToDate": "You have the latest version.", "upd.checkNow": "Check now", "upd.checking": "Checking for updates…", "upd.howTo": "The extension checks GitHub Releases once a day (it sends nothing). To update: download the new ZIP, replace the files in the extension folder and click ↻ in chrome://extensions — your data stays."
+      "ui.loginNeeded": "Log in to ChatGPT to see your chats and files.", "ui.loginBtn": "Log in →", "wel.title": "Welcome to ChatKit Pro!", "wel.t1": "Open the panel with the extension icon in the Chrome toolbar or Alt+Shift+K.", "wel.t2": "Select chats (Shift+click for a range) and delete, archive or move them to a folder.", "wel.t3": "Library tab: images and files that ChatGPT doesn't delete together with a chat.", "wel.t4": "In an open chat, click ☰ on the right edge (Alt+Shift+M): outline, bookmarks, notes.", "wel.t5": "Type // in an empty message box to insert a saved prompt.", "wel.privacy": "Everything happens in your browser — the extension has no server.", "wel.ok": "Let's go",
+      "set.updates": "Updates", "upd.available": "New version {v} is available", "upd.download": "Download", "upd.dismiss": "Hide until the next version", "upd.current": "Your version: {v}", "upd.latest": "latest on GitHub: {v}", "upd.lastCheck": "Last checked: {d}", "upd.never": "not yet", "upd.error": "check failed ({e})", "upd.upToDate": "You have the latest version.", "upd.checkNow": "Check now", "upd.checking": "Checking for updates…", "upd.store": "Installed from the Chrome Web Store — updates automatically.", "upd.howTo": "The extension checks GitHub Releases once a day (it sends nothing). To update: download the new ZIP, replace the files in the extension folder and click ↻ in chrome://extensions — your data stays."
     },
 
     fr: {
@@ -191,7 +193,7 @@
       "ui.searchName": "Rechercher par nom…", "ui.selectVisible": "Sélectionner visibles", "ui.deselect": "Désélectionner",
       "ui.olderThan": "plus ancien que", "ui.olderTip": "Afficher uniquement les éléments de plus de X jours", "ui.days": "jours", "ui.onlyStar": "seulement ★",
       "ui.star": "Étoile", "ui.starSelected": "Étoile pour la sélection (basculer)", "ui.created": "Créé", "ui.copyLink": "Copier le lien",
-      "ui.open": "Ouvrir", "ui.noResults": "Aucun résultat pour ces filtres.", "ui.loading": "Chargement…", "ui.loadingN": "Chargement… ({n})",
+      "ui.open": "Ouvrir", "ui.openTip": "Ouvrir (Ctrl+clic = nouvel onglet)", "ui.noResults": "Aucun résultat pour ces filtres.", "ui.loading": "Chargement…", "ui.loadingN": "Chargement… ({n})",
       "ui.emptyLoad": "Vide. Cliquez sur « Charger plus ».", "ui.refreshTip": "Actualiser — récupérer les nouveaux éléments", "ui.loadMore": "Charger plus",
       "ui.loadAll": "Tout charger", "ui.export": "Exporter", "ui.archive": "Archiver", "ui.restore": "Restaurer", "ui.delete": "Supprimer",
       "ui.deleteSelected": "Supprimer la sélection", "ui.diagnostics": "Diagnostic", "ui.diagTip": "Copie la réponse du serveur dans le presse-papiers (pour signaler un bug)",
@@ -249,7 +251,7 @@
       "mm.chatNote": "Note pour toute la discussion (enregistrement auto) :", "mm.chatNotePh": "Vos notes…",
       "mm.selNotes": "Notes sur des extraits :", "mm.selHint": "Sélectionnez une partie d'un message pour y ajouter une note ou un signet.",
       "mm.onlyAnswers": "Aucune question — cochez « réponses ».", "mm.found": "Trouvé : {n}", "mm.addNote": "Note", "mm.bookmarkSel": "Signet",
-      "mm.noteSaved": "Note enregistrée.",
+      "mm.noteSaved": "Note enregistrée.", "mm.bookmarkSaved": "Signet ajouté.",
       "nt.bookmarks": "Signets", "nt.notes": "Notes", "nt.chatNotes": "Notes de discussion", "nt.noBookmarks": "Aucun signet.", "nt.noNotes": "Aucune note.",
       "nt.noChatNotes": "Aucune note de discussion.", "nt.howTo": "Ajoutez signets et notes dans la minicarte (☰ Sommaire au bord droit) ou en sélectionnant du texte dans une réponse.",
       "se.placeholder": "Rechercher dans toutes les discussions…", "se.search": "Rechercher", "se.stats": "Discussions indexées : {n} · dernière fois : {date}",
@@ -269,7 +271,8 @@
       "st.chats": "discussions", "st.archived": "archivées", "st.starred": "étoilées", "st.folders": "dossiers", "st.files": "fichiers dans la Bibliothèque",
       "st.libSize": "taille de la Bibliothèque", "st.aiSize": "dont images IA", "st.prompts": "prompts", "st.marksNotes": "signets / notes",
       "st.perMonth": "Nouvelles discussions — 12 derniers mois", "st.biggest": "Plus gros fichiers", "st.byFolder": "Discussions par dossier",
-      "set.updates": "Mises à jour", "upd.available": "La nouvelle version {v} est disponible", "upd.download": "Télécharger", "upd.dismiss": "Masquer jusqu'à la prochaine version", "upd.current": "Votre version : {v}", "upd.latest": "dernière sur GitHub : {v}", "upd.lastCheck": "Dernière vérification : {d}", "upd.never": "pas encore", "upd.error": "échec de la vérification ({e})", "upd.upToDate": "Vous avez la dernière version.", "upd.checkNow": "Vérifier maintenant", "upd.checking": "Recherche de mises à jour…", "upd.howTo": "L'extension vérifie GitHub Releases une fois par jour (elle n'envoie rien). Pour mettre à jour : téléchargez le nouveau ZIP, remplacez les fichiers du dossier de l'extension et cliquez sur ↻ dans chrome://extensions — vos données restent."
+      "ui.loginNeeded": "Connectez-vous à ChatGPT pour voir vos discussions et fichiers.", "ui.loginBtn": "Se connecter →", "wel.title": "Bienvenue dans ChatKit Pro !", "wel.t1": "Ouvrez le panneau avec l'icône de l'extension dans la barre de Chrome ou Alt+Maj+K.", "wel.t2": "Sélectionnez des discussions (Maj+clic pour une plage) et supprimez, archivez ou déplacez-les dans un dossier.", "wel.t3": "Onglet Bibliothèque : images et fichiers que ChatGPT ne supprime pas avec la discussion.", "wel.t4": "Dans une discussion, cliquez sur ☰ au bord droit (Alt+Maj+M) : sommaire, signets, notes.", "wel.t5": "Tapez // dans un champ de message vide pour insérer un prompt enregistré.", "wel.privacy": "Tout se passe dans votre navigateur — l'extension n'a aucun serveur.", "wel.ok": "C'est parti",
+      "set.updates": "Mises à jour", "upd.available": "La nouvelle version {v} est disponible", "upd.download": "Télécharger", "upd.dismiss": "Masquer jusqu'à la prochaine version", "upd.current": "Votre version : {v}", "upd.latest": "dernière sur GitHub : {v}", "upd.lastCheck": "Dernière vérification : {d}", "upd.never": "pas encore", "upd.error": "échec de la vérification ({e})", "upd.upToDate": "Vous avez la dernière version.", "upd.checkNow": "Vérifier maintenant", "upd.checking": "Recherche de mises à jour…", "upd.store": "Installée depuis le Chrome Web Store — mises à jour automatiques.", "upd.howTo": "L'extension vérifie GitHub Releases une fois par jour (elle n'envoie rien). Pour mettre à jour : téléchargez le nouveau ZIP, remplacez les fichiers du dossier de l'extension et cliquez sur ↻ dans chrome://extensions — vos données restent."
     },
 
     de: {
@@ -280,7 +283,7 @@
       "ui.searchName": "Nach Namen suchen…", "ui.selectVisible": "Sichtbare auswählen", "ui.deselect": "Auswahl aufheben",
       "ui.olderThan": "älter als", "ui.olderTip": "Nur Einträge älter als X Tage anzeigen", "ui.days": "Tage", "ui.onlyStar": "nur ★",
       "ui.star": "Stern", "ui.starSelected": "Stern für Auswahl (umschalten)", "ui.created": "Erstellt", "ui.copyLink": "Link kopieren",
-      "ui.open": "Öffnen", "ui.noResults": "Keine Ergebnisse für diese Filter.", "ui.loading": "Wird geladen…", "ui.loadingN": "Wird geladen… ({n})",
+      "ui.open": "Öffnen", "ui.openTip": "Chat öffnen (Strg+Klick = neuer Tab)", "ui.noResults": "Keine Ergebnisse für diese Filter.", "ui.loading": "Wird geladen…", "ui.loadingN": "Wird geladen… ({n})",
       "ui.emptyLoad": "Leer. Klicke auf „Mehr laden“.", "ui.refreshTip": "Aktualisieren — neue Einträge holen", "ui.loadMore": "Mehr laden",
       "ui.loadAll": "Alle laden", "ui.export": "Export", "ui.archive": "Archivieren", "ui.restore": "Wiederherstellen", "ui.delete": "Löschen",
       "ui.deleteSelected": "Auswahl löschen", "ui.diagnostics": "Diagnose", "ui.diagTip": "Kopiert die Serverantwort in die Zwischenablage (für Fehlerberichte)",
@@ -338,7 +341,7 @@
       "mm.chatNote": "Notiz zum ganzen Chat (speichert automatisch):", "mm.chatNotePh": "Deine Notizen…",
       "mm.selNotes": "Notizen zu Ausschnitten:", "mm.selHint": "Markiere einen Teil einer Nachricht, um eine Notiz oder ein Lesezeichen hinzuzufügen.",
       "mm.onlyAnswers": "Keine Fragen — aktiviere „Antworten“.", "mm.found": "Gefunden: {n}", "mm.addNote": "Notiz", "mm.bookmarkSel": "Lesezeichen",
-      "mm.noteSaved": "Notiz gespeichert.",
+      "mm.noteSaved": "Notiz gespeichert.", "mm.bookmarkSaved": "Lesezeichen hinzugefügt.",
       "nt.bookmarks": "Lesezeichen", "nt.notes": "Notizen", "nt.chatNotes": "Chat-Notizen", "nt.noBookmarks": "Keine Lesezeichen.", "nt.noNotes": "Keine Notizen.",
       "nt.noChatNotes": "Keine Chat-Notizen.", "nt.howTo": "Lesezeichen und Notizen fügst du in der Minimap hinzu (☰ Inhalt am rechten Rand) oder durch Markieren von Text in einer Antwort.",
       "se.placeholder": "In allen Chats suchen…", "se.search": "Suchen", "se.stats": "Indexierte Chats: {n} · zuletzt: {date}",
@@ -358,7 +361,8 @@
       "st.chats": "Chats", "st.archived": "archiviert", "st.starred": "mit Stern", "st.folders": "Ordner", "st.files": "Dateien in der Bibliothek",
       "st.libSize": "Größe der Bibliothek", "st.aiSize": "davon KI-Bilder", "st.prompts": "Prompts", "st.marksNotes": "Lesezeichen / Notizen",
       "st.perMonth": "Neue Chats — letzte 12 Monate", "st.biggest": "Größte Dateien", "st.byFolder": "Chats in Ordnern",
-      "set.updates": "Updates", "upd.available": "Neue Version {v} verfügbar", "upd.download": "Herunterladen", "upd.dismiss": "Bis zur nächsten Version ausblenden", "upd.current": "Deine Version: {v}", "upd.latest": "neueste auf GitHub: {v}", "upd.lastCheck": "Zuletzt geprüft: {d}", "upd.never": "noch nicht", "upd.error": "Prüfung fehlgeschlagen ({e})", "upd.upToDate": "Du hast die neueste Version.", "upd.checkNow": "Jetzt prüfen", "upd.checking": "Suche nach Updates…", "upd.howTo": "Die Erweiterung prüft einmal täglich GitHub Releases (sie sendet nichts). Update: neues ZIP herunterladen, Dateien im Erweiterungsordner ersetzen und in chrome://extensions auf ↻ klicken — deine Daten bleiben."
+      "ui.loginNeeded": "Melde dich bei ChatGPT an, um deine Chats und Dateien zu sehen.", "ui.loginBtn": "Anmelden →", "wel.title": "Willkommen bei ChatKit Pro!", "wel.t1": "Öffne das Panel über das Erweiterungssymbol in der Chrome-Leiste oder mit Alt+Umschalt+K.", "wel.t2": "Wähle Chats aus (Umschalt+Klick für einen Bereich) und lösche, archiviere oder verschiebe sie in einen Ordner.", "wel.t3": "Tab Bibliothek: Bilder und Dateien, die ChatGPT beim Löschen eines Chats nicht entfernt.", "wel.t4": "Klicke in einem Chat auf ☰ am rechten Rand (Alt+Umschalt+M): Inhalt, Lesezeichen, Notizen.", "wel.t5": "Tippe // in ein leeres Nachrichtenfeld, um einen gespeicherten Prompt einzufügen.", "wel.privacy": "Alles passiert in deinem Browser — die Erweiterung hat keinen Server.", "wel.ok": "Los geht's",
+      "set.updates": "Updates", "upd.available": "Neue Version {v} verfügbar", "upd.download": "Herunterladen", "upd.dismiss": "Bis zur nächsten Version ausblenden", "upd.current": "Deine Version: {v}", "upd.latest": "neueste auf GitHub: {v}", "upd.lastCheck": "Zuletzt geprüft: {d}", "upd.never": "noch nicht", "upd.error": "Prüfung fehlgeschlagen ({e})", "upd.upToDate": "Du hast die neueste Version.", "upd.checkNow": "Jetzt prüfen", "upd.checking": "Suche nach Updates…", "upd.store": "Aus dem Chrome Web Store installiert — wird automatisch aktualisiert.", "upd.howTo": "Die Erweiterung prüft einmal täglich GitHub Releases (sie sendet nichts). Update: neues ZIP herunterladen, Dateien im Erweiterungsordner ersetzen und in chrome://extensions auf ↻ klicken — deine Daten bleiben."
     }
   };
 

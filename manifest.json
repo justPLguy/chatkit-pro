@@ -1,13 +1,14 @@
 {
   "manifest_version": 3,
-  "name": "ChatKit Pro by JustPLGuy",
-  "short_name": "ChatKit Pro",
-  "version": "1.0.0",
-  "description": "Bulk delete & archive chats, clean the Library, folders, stars, export, prompt library, minimap, bookmarks, notes, full-text search. Free & open source.",
+  "name": "__MSG_appName__",
+  "short_name": "__MSG_appShortName__",
+  "version": "1.1.0",
+  "description": "__MSG_appDesc__",
+  "default_locale": "en",
+  "minimum_chrome_version": "111",
   "permissions": [
     "storage",
     "downloads",
-    "scripting",
     "alarms"
   ],
   "host_permissions": [
