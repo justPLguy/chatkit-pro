@@ -6,7 +6,7 @@
 <b>Free, open-source power tools for ChatGPT.</b><br>
 Bulk delete · Library cleanup · Folders · Export · Prompts · Minimap · Full-text search<br><br>
 <a href="../../releases"><b>⬇ Download (Releases)</b></a> ·
-<a href="https://justplguy.github.io/chatkit-pro/"><b>🌐 Website</b></a> ·
+<a href="https://justplguy.github.io/ChatKit-Pro/"><b>🌐 Website</b></a> ·
 <a href="../../tree/chrome"><b>🧩 Chrome source</b></a> ·
 <a href="../../issues"><b>🐞 Report an issue</b></a>
 </p>
@@ -26,10 +26,10 @@ This repository uses **one branch per browser**:
 | Branch | Contents | Status |
 |---|---|---|
 | **`main`** *(you are here)* | project overview, website (`index.html`), license | — |
-| **[`chrome`](../../tree/chrome)** | extension for Chrome, Edge, Brave, Opera | ✅ **v1.0.0** |
+| **[`chrome`](../../tree/chrome)** | extension for Chrome, Edge, Brave, Opera | ✅ **v1.1.0** |
 | `firefox` | extension for Firefox | 🔜 planned |
 
-**Downloads are published only in [Releases](../../releases)** — one release per browser and version (e.g. `chrome-v1.0.0`).
+**Downloads are published only in [Releases](../../releases)** — one release per browser and version (e.g. `chrome-v1.1.0`).
 Please don't use “Code → Download ZIP” on `main`: it doesn't contain the extension.
 
 ### Features
@@ -45,7 +45,7 @@ Please don't use “Code → Download ZIP” on `main`: it doesn't contain the e
 - 🌐 **English, Polish, French, German**
 
 ### Install (Chrome)
-1. Download **`ChatKit-Pro-Chrome-v1.0.0.zip`** from [Releases](../../releases) and unzip it.
+1. Download **`ChatKit-Pro-Chrome-v1.1.0.zip`** from [Releases](../../releases) and unzip it.
 2. Open `chrome://extensions`, switch on **Developer mode**.
 3. **Load unpacked** → choose the unzipped folder.
 4. Pin the extension and click its icon on [chatgpt.com](https://chatgpt.com).
@@ -56,7 +56,7 @@ Full guide: [`chrome` branch README](../../tree/chrome#readme).
 No servers of our own, no analytics, no account. Your chats are handled only on chatgpt.com with your existing session; all your data (folders, prompts, notes…) stays in your browser. Once a day the extension anonymously checks GitHub Releases for a new version and shows a notice in the panel.
 
 ### Roadmap
-- [x] Chrome v1.0.0
+- [x] Chrome v1.1.0
 - [ ] Firefox branch
 - [ ] Chrome Web Store listing
 - [ ] Move chats to Projects in bulk, empty the Library trash
@@ -75,10 +75,10 @@ Repozytorium ma **osobną gałąź dla każdej przeglądarki**:
 | Gałąź | Zawartość | Status |
 |---|---|---|
 | **`main`** *(tutaj jesteś)* | opis projektu, strona (`index.html`), licencja | — |
-| **[`chrome`](../../tree/chrome)** | wtyczka dla Chrome, Edge, Brave, Opery | ✅ **v1.0.0** |
+| **[`chrome`](../../tree/chrome)** | wtyczka dla Chrome, Edge, Brave, Opery | ✅ **v1.1.0** |
 | `firefox` | wtyczka dla Firefoksa | 🔜 w planach |
 
-**Pliki do pobrania są wyłącznie w [Releases](../../releases)** — osobne wydanie dla każdej przeglądarki i wersji (np. `chrome-v1.0.0`).
+**Pliki do pobrania są wyłącznie w [Releases](../../releases)** — osobne wydanie dla każdej przeglądarki i wersji (np. `chrome-v1.1.0`).
 Nie używaj „Code → Download ZIP” na gałęzi `main` — nie ma tu wtyczki.
 
 ### Funkcje
@@ -94,7 +94,7 @@ Nie używaj „Code → Download ZIP” na gałęzi `main` — nie ma tu wtyczki
 - 🌐 **Polski, angielski, francuski, niemiecki**
 
 ### Instalacja (Chrome)
-1. Pobierz **`ChatKit-Pro-Chrome-v1.0.0.zip`** z [Releases](../../releases) i rozpakuj.
+1. Pobierz **`ChatKit-Pro-Chrome-v1.1.0.zip`** z [Releases](../../releases) i rozpakuj.
 2. Otwórz `chrome://extensions`, włącz **Tryb dewelopera**.
 3. **Załaduj rozpakowane** → wskaż rozpakowany folder.
 4. Przypnij wtyczkę i kliknij jej ikonę na [chatgpt.com](https://chatgpt.com).
