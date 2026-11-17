@@ -6,7 +6,7 @@
 <b>Free, open-source power tools for ChatGPT.</b><br>
 Bulk delete · Library cleanup · Folders · Export · Prompts · Minimap · Full-text search<br><br>
 <a href="../../releases"><b>⬇ Download (Releases)</b></a> ·
-<a href="https://justplguy.github.io/ChatKit-Pro/"><b>🌐 Website</b></a> ·
+<a href="https://justplguy.github.io/chatkit-pro/"><b>🌐 Website</b></a> ·
 <a href="../../tree/chrome"><b>🧩 Chrome source</b></a> ·
 <a href="../../issues"><b>🐞 Report an issue</b></a>
 </p>
