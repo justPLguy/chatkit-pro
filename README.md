@@ -6,7 +6,7 @@
 <b>Free, open-source power tools for ChatGPT.</b><br>
 Bulk delete · Library cleanup · Folders · Export · Prompts · Minimap · Full-text search<br><br>
 <a href="../../releases"><b>⬇ Download (Releases)</b></a> ·
-<a href="https://justplguy.github.io/chatkit-pro/"><b>🌐 Website</b></a> ·
+<a href="https://justplguy.github.io/ChatKit-Pro/"><b>🌐 Website</b></a> ·
 <a href="../../tree/chrome"><b>🧩 Chrome source</b></a> ·
 <a href="../../issues"><b>🐞 Report an issue</b></a>
 </p>
@@ -53,7 +53,7 @@ Please don't use “Code → Download ZIP” on `main`: it doesn't contain the e
 Full guide: [`chrome` branch README](../../tree/chrome#readme).
 
 ### Privacy
-No servers, no analytics, no account. The extension talks only to chatgpt.com with your existing session; all your data (folders, prompts, notes…) stays in your browser.
+No servers of our own, no analytics, no account. Your chats are handled only on chatgpt.com with your existing session; all your data (folders, prompts, notes…) stays in your browser. Once a day the extension anonymously checks GitHub Releases for a new version and shows a notice in the panel.
 
 ### Roadmap
 - [x] Chrome v1.0.0
@@ -102,7 +102,7 @@ Nie używaj „Code → Download ZIP” na gałęzi `main` — nie ma tu wtyczki
 Pełna instrukcja: [README gałęzi `chrome`](../../tree/chrome#readme).
 
 ### Prywatność
-Bez serwerów, analityki i konta. Wtyczka łączy się tylko z chatgpt.com z Twojej sesji; wszystkie dane (foldery, prompty, notatki…) zostają w przeglądarce.
+Bez własnych serwerów, analityki i konta. Twoje czaty obsługiwane są tylko na chatgpt.com z Twojej sesji; wszystkie dane (foldery, prompty, notatki…) zostają w przeglądarce. Raz dziennie wtyczka anonimowo sprawdza GitHub Releases i pokazuje w panelu informację o nowej wersji.
 
 ---
 

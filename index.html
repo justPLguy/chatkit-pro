@@ -79,7 +79,8 @@
   .row .t { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .row .d { color: #888; font-size: 11px; }
   .tag { font-size: 10px; padding: 1px 6px; border-radius: 8px; border: 1px solid; margin-left: 6px; }
-  .mock .foot { display: flex; gap: 6px; padding: 9px 10px; border-top: 1px solid #333; align-items: center; flex-wrap: wrap; }
+  .mock .foot { display: flex; gap: 6px; padding: 9px 10px; border-top: 1px solid #333; align-items: center; flex-wrap: nowrap; }
+  .mock .foot .mb { white-space: nowrap; }
   .mb { background: #2f2f2f; border: 1px solid #444; border-radius: 6px; padding: 4px 9px; font-size: 11.5px; color: #eee; }
   .mb.red { background: #b91c1c; border-color: #b91c1c; }
   .mock .status { padding: 0 10px 9px; font-size: 11.5px; color: #aaa; }
@@ -243,22 +244,22 @@
       <div class="body">
         <div class="fold">
           <div class="on" data-i18n="m.all">All chats</div>
-          <div><span class="dot" style="background:#ef4444"></span>Work</div>
-          <div style="padding-left:24px"><span class="dot" style="background:#f59e0b"></span>Clients</div>
-          <div><span class="dot" style="background:#3b82f6"></span>Coding</div>
-          <div><span class="dot" style="background:#10b981"></span>Recipes</div>
+          <div><span class="dot" style="background:#ef4444"></span><span data-i18n="m.f1">Work</span></div>
+          <div style="padding-left:24px"><span class="dot" style="background:#f59e0b"></span><span data-i18n="m.f2">Clients</span></div>
+          <div><span class="dot" style="background:#3b82f6"></span><span data-i18n="m.f3">Coding</span></div>
+          <div><span class="dot" style="background:#10b981"></span><span data-i18n="m.f4">Recipes</span></div>
         </div>
         <div>
           <div class="row"><span class="cb"></span><span class="st on">★</span><span class="t" data-i18n="m.r1">Q4 marketing plan</span><span class="d">17.11 08:36</span></div>
           <div class="row sel"><span class="cb"></span><span class="st">☆</span><span class="t" data-i18n="m.r2">Random image test</span><span class="d">17.11 08:18</span></div>
           <div class="row sel"><span class="cb"></span><span class="st">☆</span><span class="t" data-i18n="m.r3">What's 17% of 240?</span><span class="d">16.11 18:48</span></div>
           <div class="row sel"><span class="cb"></span><span class="st">☆</span><span class="t" data-i18n="m.r4">Untitled chat</span><span class="d">16.11 13:56</span></div>
-          <div class="row"><span class="cb"></span><span class="st on">★</span><span class="t">Discord bot setup<span class="tag" style="border-color:#3b82f6;color:#93c5fd">Coding</span></span><span class="d">15.11 22:23</span></div>
-          <div class="row"><span class="cb"></span><span class="st">☆</span><span class="t" data-i18n="m.r6">Carrot cream soup</span><span class="d">01.11 21:07</span></div>
+          <div class="row"><span class="cb"></span><span class="st on">★</span><span class="t"><span data-i18n="m.r5">Learning Python</span><span class="tag" style="border-color:#3b82f6;color:#93c5fd" data-i18n="m.f3">Coding</span></span><span class="d">15.11 22:23</span></div>
+          <div class="row"><span class="cb"></span><span class="st">☆</span><span class="t" data-i18n="m.r6">Weekend trip ideas</span><span class="d">01.11 21:07</span></div>
           <div class="row sel"><span class="cb"></span><span class="st">☆</span><span class="t" data-i18n="m.r7">test 2</span><span class="d">30.10 17:33</span></div>
         </div>
       </div>
-      <div class="foot"><span class="mb">↻</span><span class="mb" data-i18n="m.loadAll">Load all</span><span style="flex:1"></span><span class="mb">★</span><span class="mb" data-i18n="m.move">📁 Move to…</span><span class="mb" data-i18n="m.export">⬇ Export</span><span class="mb" data-i18n="m.archiveBtn">Archive</span><span class="mb red" data-i18n="m.delete">Delete (4)</span></div>
+      <div class="foot"><span class="mb">↻</span><span style="flex:1"></span><span class="mb">★</span><span class="mb" data-i18n="m.move">📁 Move to…</span><span class="mb" data-i18n="m.export">⬇ Export</span><span class="mb" data-i18n="m.archiveBtn">Archive</span><span class="mb red" data-i18n="m.delete">Delete (4)</span></div>
       <div class="status" data-i18n="m.status">Loaded 412 of 412 chats · selected 4</div>
     </div>
   </div>
@@ -268,7 +269,7 @@
   <div class="numbers">
     <div><b>12+</b><span data-i18n="num.1">tools in one panel</span></div>
     <div><b>0 €</b><span data-i18n="num.2">price, forever</span></div>
-    <div><b>0</b><span data-i18n="num.3">external servers</span></div>
+    <div><b>0</b><span data-i18n="num.3">servers of our own</span></div>
     <div><b>4</b><span data-i18n="num.4">languages</span></div>
   </div>
 </div>
@@ -450,9 +451,9 @@ Keep key numbers and names.
   <div class="wrap">
     <p class="kicker" data-i18n="p.k">Privacy</p>
     <h2 data-i18n="p.h">Your chats stay yours.</h2>
-    <p class="sub" data-i18n="p.sub">ChatKit Pro has no servers. It talks only to chatgpt.com, using the session you're already logged in with — exactly like the website itself.</p>
+    <p class="sub" data-i18n="p.sub">ChatKit Pro has no servers. Your chats and files are handled only on chatgpt.com, using the session you're already logged in with — exactly like the website itself. The only other request is an anonymous daily version check on GitHub.</p>
     <div class="privacy">
-      <div class="card"><div class="ic">🚫</div><h3 data-i18n="p1.h">No servers</h3><p data-i18n="p1.p">Nothing is sent anywhere except chatgpt.com.</p></div>
+      <div class="card"><div class="ic">🚫</div><h3 data-i18n="p1.h">No servers</h3><p data-i18n="p1.p">Your data goes nowhere except chatgpt.com.</p></div>
       <div class="card"><div class="ic">👤</div><h3 data-i18n="p2.h">No account</h3><p data-i18n="p2.p">No sign-up, no e-mail, no license key.</p></div>
       <div class="card"><div class="ic">📈</div><h3 data-i18n="p3.h">No tracking</h3><p data-i18n="p3.p">No analytics, no ads, no third-party code.</p></div>
       <div class="card"><div class="ic">🔓</div><h3 data-i18n="p4.h">Open source</h3><p data-i18n="p4.p">MIT license. Read every line on GitHub.</p></div>
@@ -465,11 +466,11 @@ Keep key numbers and names.
     <p class="kicker" data-i18n="q.k">FAQ</p>
     <h2 data-i18n="q.h">Questions</h2>
     <details><summary data-i18n="q1.q">Is it really free?</summary><p data-i18n="q1.a">Yes. Every feature, no limits, no subscription, no “Pro” upgrade. The “Pro” in the name is about what it can do, not about a price.</p></details>
-    <details><summary data-i18n="q2.q">Can it read or send my conversations somewhere?</summary><p data-i18n="q2.a">No. It works only on chatgpt.com and only sends the same requests the ChatGPT website sends when you click buttons yourself. There is no ChatKit Pro server. The code is open — you can check it.</p></details>
+    <details><summary data-i18n="q2.q">Can it read or send my conversations somewhere?</summary><p data-i18n="q2.a">No. It works only on chatgpt.com and only sends the same requests the ChatGPT website sends when you click buttons yourself. There is no ChatKit Pro server — the only extra request is an anonymous daily check on GitHub for a new version. The code is open — you can check it.</p></details>
     <details><summary data-i18n="q3.q">Can I undo a deletion?</summary><p data-i18n="q3.a">Deleted chats can't be restored — that's how ChatGPT works. Every bulk action asks for confirmation. If you're unsure, archive instead (archived chats can be restored) or export first.</p></details>
     <details><summary data-i18n="q4.q">Which ChatGPT plans does it work with?</summary><p data-i18n="q4.a">It's built for chatgpt.com in the browser and doesn't depend on a plan. Some features (like the Library or Projects) appear only if your account has them.</p></details>
     <details><summary data-i18n="q5.q">What happens when ChatGPT changes?</summary><p data-i18n="q5.a">ChatKit Pro uses ChatGPT's internal web API, which can change without notice. When something breaks, a fix is released on GitHub — report issues there.</p></details>
-    <details><summary data-i18n="q6.q">Why isn't it in the Chrome Web Store?</summary><p data-i18n="q6.a">Not yet — it's planned. For now, install it from GitHub Releases in developer mode; it takes two minutes.</p></details>
+    <details><summary data-i18n="q6.q">Why isn't it in the Chrome Web Store?</summary><p data-i18n="q6.a">Not yet — it's planned. For now, install it from GitHub Releases in developer mode; it takes two minutes. The extension tells you when a new version is out.</p></details>
     <details><summary data-i18n="q7.q">Firefox?</summary><p data-i18n="q7.a">A Firefox version is coming as a separate branch of the repository.</p></details>
   </div>
 </section>
@@ -527,9 +528,9 @@ const PL = {
   "trust.1": "Bez płatnych funkcji", "trust.2": "Dane zostają w przeglądarce", "trust.3": "PL · EN · FR · DE",
   "m.chats": "Czaty", "m.archive": "Archiwum", "m.library": "Biblioteka", "m.prompts": "Prompty", "m.notes": "Zakładki i notatki",
   "m.all": "Wszystkie czaty", "m.r1": "Plan marketingowy Q4", "m.r2": "Test losowej grafiki", "m.r3": "Ile to 17% z 240?", "m.r4": "Czat bez tytułu",
-  "m.r6": "Krem z marchewki", "m.r7": "test 2", "m.loadAll": "Wczytaj wszystkie", "m.move": "📁 Przenieś do…", "m.export": "⬇ Eksport",
+  "m.r6": "Pomysły na weekendowy wyjazd", "m.r5": "Nauka Pythona", "m.f1": "Praca", "m.f2": "Klienci", "m.f3": "Kod", "m.f4": "Przepisy", "m.r7": "test 2", "m.loadAll": "Wczytaj wszystkie", "m.move": "📁 Przenieś do…", "m.export": "⬇ Eksport",
   "m.archiveBtn": "Archiwizuj", "m.delete": "Usuń (4)", "m.status": "Wczytano 412 z 412 czatów · zaznaczono 4",
-  "num.1": "narzędzi w jednym panelu", "num.2": "cena, na zawsze", "num.3": "zewnętrznych serwerów", "num.4": "języki",
+  "num.1": "narzędzi w jednym panelu", "num.2": "cena, na zawsze", "num.3": "własnych serwerów", "num.4": "języki",
   "pain.k": "Dlaczego", "pain.h": "ChatGPT każe sprzątać po jednym czacie.",
   "pain.sub": "Setki testowych czatów, tysiące wygenerowanych obrazków, zero folderów i operacji hurtowych. ChatKit Pro dodaje to, czego brakuje — bezpośrednio na chatgpt.com.",
   "pain.bad": "Bez ChatKit Pro", "pain.b1": "Najedź na czat, kliknij trzy kropki", "pain.b2": "Kliknij „Usuń”, potwierdź", "pain.b3": "Powtórz dla każdego czatu",
@@ -576,16 +577,16 @@ const PL = {
   "i3.h": "Załaduj rozpakowane", "i3.p": "Kliknij „Załaduj rozpakowane” i wskaż rozpakowany folder.",
   "i4.h": "Przypnij", "i4.p": "Kliknij 🧩 obok paska adresu i przypnij ChatKit Pro.", "i5.h": "Otwórz ChatGPT", "i5.p": "Wejdź na chatgpt.com i kliknij ikonę CK. Gotowe.",
   "b.ok": "· Edge · Brave · Opera", "b.soon": "wkrótce",
-  "p.k": "Prywatność", "p.h": "Twoje czaty zostają Twoje.", "p.sub": "ChatKit Pro nie ma serwerów. Łączy się tylko z chatgpt.com z sesji, w której już jesteś zalogowany — dokładnie tak jak sama strona.",
-  "p1.h": "Bez serwerów", "p1.p": "Nic nie jest wysyłane nigdzie poza chatgpt.com.", "p2.h": "Bez konta", "p2.p": "Bez rejestracji, e-maila i klucza licencyjnego.",
+  "p.k": "Prywatność", "p.h": "Twoje czaty zostają Twoje.", "p.sub": "ChatKit Pro nie ma serwerów. Twoje czaty i pliki obsługiwane są tylko na chatgpt.com, z sesji, w której już jesteś zalogowany — dokładnie tak jak sama strona. Jedyne inne zapytanie to anonimowe, codzienne sprawdzenie wersji na GitHubie.",
+  "p1.h": "Bez serwerów", "p1.p": "Twoje dane nie trafiają nigdzie poza chatgpt.com.", "p2.h": "Bez konta", "p2.p": "Bez rejestracji, e-maila i klucza licencyjnego.",
   "p3.h": "Bez śledzenia", "p3.p": "Bez analityki, reklam i kodu firm trzecich.", "p4.h": "Otwarty kod", "p4.p": "Licencja MIT. Przeczytaj każdą linijkę na GitHubie.",
   "q.k": "FAQ", "q.h": "Pytania",
   "q1.q": "Czy to naprawdę za darmo?", "q1.a": "Tak. Wszystkie funkcje, bez limitów, abonamentu i płatnej wersji „Pro”. „Pro” w nazwie dotyczy możliwości, nie ceny.",
-  "q2.q": "Czy wtyczka może czytać moje rozmowy lub je gdzieś wysyłać?", "q2.a": "Nie. Działa tylko na chatgpt.com i wysyła wyłącznie te same zapytania, które wysyła strona ChatGPT, gdy sam klikasz przyciski. ChatKit Pro nie ma żadnego serwera. Kod jest otwarty — możesz to sprawdzić.",
+  "q2.q": "Czy wtyczka może czytać moje rozmowy lub je gdzieś wysyłać?", "q2.a": "Nie. Działa tylko na chatgpt.com i wysyła wyłącznie te same zapytania, które wysyła strona ChatGPT, gdy sam klikasz przyciski. ChatKit Pro nie ma żadnego serwera — jedyne dodatkowe zapytanie to anonimowe, codzienne sprawdzenie nowej wersji na GitHubie. Kod jest otwarty — możesz to sprawdzić.",
   "q3.q": "Czy da się cofnąć usunięcie?", "q3.a": "Usuniętych czatów nie da się przywrócić — tak działa ChatGPT. Każda operacja hurtowa pyta o potwierdzenie. Jeśli nie jesteś pewien, zarchiwizuj (archiwum da się przywrócić) albo najpierw wyeksportuj.",
   "q4.q": "Z którymi planami ChatGPT działa?", "q4.a": "Jest zrobiona dla chatgpt.com w przeglądarce i nie zależy od planu. Niektóre funkcje (np. Biblioteka czy Projekty) pojawiają się tylko, jeśli Twoje konto je ma.",
   "q5.q": "Co, jeśli ChatGPT coś zmieni?", "q5.a": "ChatKit Pro korzysta z wewnętrznego API strony ChatGPT, które może się zmienić bez zapowiedzi. Gdy coś przestanie działać, poprawka pojawi się na GitHubie — tam zgłaszaj problemy.",
-  "q6.q": "Dlaczego nie ma jej w Chrome Web Store?", "q6.a": "Jeszcze nie — to w planach. Na razie zainstaluj ją z GitHub Releases w trybie dewelopera; zajmuje to dwie minuty.",
+  "q6.q": "Dlaczego nie ma jej w Chrome Web Store?", "q6.a": "Jeszcze nie — to w planach. Na razie zainstaluj ją z GitHub Releases w trybie dewelopera; zajmuje to dwie minuty. Wtyczka sama powie Ci, gdy wyjdzie nowa wersja.",
   "q7.q": "A Firefox?", "q7.a": "Wersja dla Firefoksa powstanie jako osobna gałąź repozytorium.",
   "end.h": "Posprzątaj swój ChatGPT już dziś.", "end.sub": "Za darmo, open source, gotowe w dwie minuty.",
   "ft.issues": "Zgłoś problem", "ft.disc": "ChatKit Pro to niezależny projekt, niepowiązany z OpenAI ani przez nią nie wspierany. ChatGPT jest znakiem towarowym OpenAI.",
