@@ -92,6 +92,9 @@ Tests (jsdom simulation): `npm install && npm test`
 
 Adding a language: add an object to `DICT` in `src/i18n.js` and an option in the settings — `tests/i18n-check.js` reports missing keys.
 
+### Contact
+Bug reports, ideas, questions: **[GitHub Issues](../../issues)** or **[justplguy@gmail.com](mailto:justplguy@gmail.com)**.
+
 ---
 
 ## 🇵🇱 Polski
@@ -139,6 +142,9 @@ Wtyczka sama sprawdza GitHub Releases raz dziennie. Gdy wyjdzie nowa wersja, zob
 - Korzysta z nieoficjalnego, wewnętrznego API ChatGPT — zmiany po stronie OpenAI mogą wymagać aktualizacji.
 - Pasek boczny ChatGPT odświeża się dopiero po przeładowaniu strony (F5).
 - Usunięte pliki Biblioteki mogą trafić do „Ostatnio usunięte”.
+
+### Kontakt
+Błędy, pomysły, pytania: **[GitHub Issues](../../issues)** albo **[justplguy@gmail.com](mailto:justplguy@gmail.com)**.
 
 ---
 
