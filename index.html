@@ -69,7 +69,18 @@
   h1 em { font-style: normal; color: var(--red); }
   .lead { font-size: 19px; color: var(--muted); max-width: 540px; margin: 0 0 30px; }
   .ctas { display: flex; gap: 12px; flex-wrap: wrap; }
-  .dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; max-width: 560px; }
+  .dl { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 10px; max-width: 580px; }
+  .dl + .dl { margin-top: 10px; }
+  .dl .primary { order: -1; }
+  .dl .btn.store.primary { font-size: 16.5px; padding: 13px 18px; }
+  .dl .btn.gh.ghost { font-size: 14px; color: var(--muted); }
+  .dl .btn.gh.ghost:hover { color: var(--text); }
+  .if-live { display: none; }
+  .btn.store.primary .if-live { display: inline; }
+  body:not(.chrome-live) .if-chrome-live, body:not(.firefox-live) .if-firefox-live { display: none; }
+  .plat-note { margin: -6px 0 14px; color: var(--muted); font-size: 15px; }
+  .plat-note b { color: var(--text); }
+  .manual-h { margin: 26px 0 12px; color: var(--muted); font-size: 14px; font-weight: 600; }
   .dl .btn { justify-content: center; text-align: center; flex-direction: column; gap: 2px; padding: 11px 16px; line-height: 1.25; }
   .dl .btn small { font-size: 12px; font-weight: 500; opacity: .85; }
   .dl .btn small b { font-weight: 700; }
@@ -85,7 +96,7 @@
   .plat-h .blogo { width: 30px; height: 30px; }
   .plat-h .blogo.fb { font-size: 26px; }
   .plat-h small { font-size: 14px; color: var(--muted); font-weight: 500; }
-  .plat .dl { margin-top: 20px; }
+  .plat .dl { margin-top: 4px; }
   .step.alt { border-style: dashed; }
   .step.alt::before { content: "★"; background: transparent; border: 1px solid var(--line2); color: var(--muted); }
   .final .dl { margin: 0 auto; }
@@ -267,10 +278,12 @@
       <h1 data-i18n-html="hero.title">Your ChatGPT, <em>finally organized.</em></h1>
       <p class="lead" data-i18n="hero.lead">Delete hundreds of chats in seconds, clean up the image Library, sort conversations into folders, export them, and work faster with prompts, a minimap and full-text search. Every feature free — forever.</p>
       <div class="dl">
-        <a class="btn primary" data-href="release" target="_blank" rel="noopener"><span class="bl"><img class="blogo" src="assets/chrome.png" alt="" data-fb="🌐"><span data-i18n="cta.chrome">Download for Chrome</span></span><small>GitHub · <b data-ver="chromeGh"></b></small></a>
-        <a class="btn soon" data-store="chrome"><span class="bl"><img class="blogo" src="assets/chrome.png" alt="" data-fb="🌐"><span>Chrome Web Store</span></span><small><b data-ver="chromeStore"></b> · <span data-i18n="st.soon">In review · link soon</span></small></a>
-        <a class="btn primary" data-href="ffrelease" target="_blank" rel="noopener"><span class="bl"><img class="blogo" src="assets/firefox.png" alt="" data-fb="🦊"><span data-i18n="cta.firefox">Download for Firefox</span></span><small>GitHub · <b data-ver="firefoxGh"></b></small></a>
-        <a class="btn soon" data-store="firefox"><span class="bl"><img class="blogo" src="assets/firefox.png" alt="" data-fb="🦊"><span>Firefox Add-ons</span></span><small><b data-ver="firefoxStore"></b> · <span data-i18n="st.soon">In review · link soon</span></small></a>
+        <a class="btn soon store" data-store="chrome"><span class="bl"><img class="blogo" src="assets/chrome.png" alt="" data-fb="🌐"><span data-live="st.addChrome" data-live-en="Add to Chrome">Chrome Web Store</span></span><small><span class="if-live">Chrome Web Store · </span><b data-ver="chromeStore"></b> · <span data-i18n="st.soon">In review · link soon</span></small></a>
+        <a class="btn primary gh" data-href="release" data-gh="chrome" target="_blank" rel="noopener"><span class="bl"><img class="blogo" src="assets/chrome.png" alt="" data-fb="🌐"><span data-i18n="cta.chrome" data-live="st.ghZip" data-live-en="GitHub (ZIP)">Download for Chrome</span></span><small><span data-i18n="st.ghSmall" data-live="st.ghManual" data-live-en="manual install">GitHub</span> · <b data-ver="chromeGh"></b></small></a>
+      </div>
+      <div class="dl">
+        <a class="btn soon store" data-store="firefox"><span class="bl"><img class="blogo" src="assets/firefox.png" alt="" data-fb="🦊"><span data-live="st.addFirefox" data-live-en="Add to Firefox">Firefox Add-ons</span></span><small><span class="if-live">Firefox Add-ons · </span><b data-ver="firefoxStore"></b> · <span data-i18n="st.soon">In review · link soon</span></small></a>
+        <a class="btn primary gh" data-href="ffrelease" data-gh="firefox" target="_blank" rel="noopener"><span class="bl"><img class="blogo" src="assets/firefox.png" alt="" data-fb="🦊"><span data-i18n="cta.firefox" data-live="st.ghZip" data-live-en="GitHub (ZIP)">Download for Firefox</span></span><small><span data-i18n="st.ghSmall" data-live="st.ghManual" data-live-en="manual install">GitHub</span> · <b data-ver="firefoxGh"></b></small></a>
       </div>
       <div class="ctas dl-more">
         <a class="btn ghost" href="#features" data-i18n="cta.see">See what it does</a>
@@ -472,9 +485,15 @@ Keep key numbers and names.
   <div class="wrap">
     <p class="kicker" data-i18n="i.k">Install</p>
     <h2 data-i18n="i.h">Ready in two minutes.</h2>
-    <p class="sub" data-i18n="i.sub">Chrome Web Store and Firefox Add-ons listings are in review. Until they're live, install from GitHub Releases:</p>
+    <p class="sub" data-i18n="i.sub">Install from the official store in one click — or manually from GitHub.</p>
     <div class="plat">
       <div class="plat-h"><img class="blogo" src="assets/chrome.png" alt="" data-fb="🌐"><span>Chrome</span><small data-i18n="b.ok">· Edge · Brave · Opera</small></div>
+      <p class="plat-note if-chrome-live" data-i18n-html="i.cLive">Easiest: click <b>Add to Chrome</b> — one click, automatic updates. Works in Chrome, Edge, Brave and Opera.</p>
+      <div class="dl">
+        <a class="btn soon store" data-store="chrome"><span class="bl"><img class="blogo" src="assets/chrome.png" alt="" data-fb="🌐"><span data-live="st.addChrome" data-live-en="Add to Chrome">Chrome Web Store</span></span><small><span class="if-live">Chrome Web Store · </span><b data-ver="chromeStore"></b> · <span data-i18n="st.soon">In review · link soon</span></small></a>
+        <a class="btn primary gh" data-href="release" data-gh="chrome" target="_blank" rel="noopener"><span class="bl"><img class="blogo" src="assets/chrome.png" alt="" data-fb="🌐"><span data-i18n="cta.chrome" data-live="st.ghZip" data-live-en="GitHub (ZIP)">Download for Chrome</span></span><small><span data-i18n="st.ghSmall" data-live="st.ghManual" data-live-en="manual install">GitHub</span> · <b data-ver="chromeGh"></b></small></a>
+      </div>
+      <p class="manual-h" data-i18n="i.manual">Manual install from GitHub (developer mode):</p>
       <div class="steps">
         <div class="step"><h4 data-i18n="i1.h">Download</h4><p data-i18n-html="i1.p">Get <b>ChatKit-Pro-Chrome-v1.1.0.zip</b> from Releases and unzip it.</p></div>
         <div class="step"><h4 data-i18n="i2.h">Developer mode</h4><p data-i18n-html="i2.p">Open <code class="k">chrome://extensions</code> and switch on Developer mode.</p></div>
@@ -482,24 +501,22 @@ Keep key numbers and names.
         <div class="step"><h4 data-i18n="i4.h">Pin it</h4><p data-i18n="i4.p">Click 🧩 next to the address bar and pin ChatKit Pro.</p></div>
         <div class="step"><h4 data-i18n="i5.h">Open ChatGPT</h4><p data-i18n="i5.p">Go to chatgpt.com and click the CK icon. That's it.</p></div>
       </div>
-      <div class="dl">
-        <a class="btn primary" data-href="release" target="_blank" rel="noopener"><span class="bl"><img class="blogo" src="assets/chrome.png" alt="" data-fb="🌐"><span data-i18n="cta.chrome">Download for Chrome</span></span><small>GitHub · <b data-ver="chromeGh"></b></small></a>
-        <a class="btn soon" data-store="chrome"><span class="bl"><img class="blogo" src="assets/chrome.png" alt="" data-fb="🌐"><span>Chrome Web Store</span></span><small><b data-ver="chromeStore"></b> · <span data-i18n="st.soon">In review · link soon</span></small></a>
-      </div>
     </div>
 
     <div class="plat">
       <div class="plat-h"><img class="blogo" src="assets/firefox.png" alt="" data-fb="🦊"><span>Firefox</span><small data-i18n="b.ff">· 140+</small></div>
+      <p class="plat-note if-firefox-live" data-i18n-html="i.fLive">Easiest: click <b>Add to Firefox</b> — one click, automatic updates.</p>
+      <div class="dl">
+        <a class="btn soon store" data-store="firefox"><span class="bl"><img class="blogo" src="assets/firefox.png" alt="" data-fb="🦊"><span data-live="st.addFirefox" data-live-en="Add to Firefox">Firefox Add-ons</span></span><small><span class="if-live">Firefox Add-ons · </span><b data-ver="firefoxStore"></b> · <span data-i18n="st.soon">In review · link soon</span></small></a>
+        <a class="btn primary gh" data-href="ffrelease" data-gh="firefox" target="_blank" rel="noopener"><span class="bl"><img class="blogo" src="assets/firefox.png" alt="" data-fb="🦊"><span data-i18n="cta.firefox" data-live="st.ghZip" data-live-en="GitHub (ZIP)">Download for Firefox</span></span><small><span data-i18n="st.ghSmall" data-live="st.ghManual" data-live-en="manual install">GitHub</span> · <b data-ver="firefoxGh"></b></small></a>
+      </div>
+      <p class="manual-h" data-i18n="i.manualFf">Test install from GitHub (temporary add-on):</p>
       <div class="steps">
         <div class="step"><h4 data-i18n="f1.h">Download</h4><p data-i18n-html="f1.p">Get <b>ChatKit-Pro-Firefox-v1.1.0.zip</b> from Releases and unzip it.</p></div>
         <div class="step"><h4 data-i18n="f2.h">Debugging page</h4><p data-i18n-html="f2.p">Open <code class="k">about:debugging</code> → <b>This Firefox</b>.</p></div>
         <div class="step"><h4 data-i18n="f3.h">Load add-on</h4><p data-i18n-html="f3.p">Click “Load Temporary Add-on…” and pick <code class="k">manifest.json</code>.</p></div>
         <div class="step"><h4 data-i18n="f4.h">Open ChatGPT</h4><p data-i18n="f4.p">Go to chatgpt.com and click the CK icon — it's already on the toolbar.</p></div>
         <div class="step alt"><h4 data-i18n="f5.h">Keep it for good</h4><p data-i18n="f5.p">A ZIP add-on is temporary (gone after a restart). For a permanent install with auto-updates use Firefox Add-ons — in review now.</p></div>
-      </div>
-      <div class="dl">
-        <a class="btn primary" data-href="ffrelease" target="_blank" rel="noopener"><span class="bl"><img class="blogo" src="assets/firefox.png" alt="" data-fb="🦊"><span data-i18n="cta.firefox">Download for Firefox</span></span><small>GitHub · <b data-ver="firefoxGh"></b></small></a>
-        <a class="btn soon" data-store="firefox"><span class="bl"><img class="blogo" src="assets/firefox.png" alt="" data-fb="🦊"><span>Firefox Add-ons</span></span><small><b data-ver="firefoxStore"></b> · <span data-i18n="st.soon">In review · link soon</span></small></a>
       </div>
     </div>
 
@@ -515,7 +532,7 @@ Keep key numbers and names.
   <div class="wrap">
     <p class="kicker" data-i18n="p.k">Privacy</p>
     <h2 data-i18n="p.h">Your chats stay yours.</h2>
-    <p class="sub" data-i18n="p.sub">ChatKit Pro has no servers. Your chats and files are handled only on chatgpt.com, using the session you're already logged in with — exactly like the website itself. The only other request is an anonymous daily version check on GitHub.</p>
+    <p class="sub" data-i18n="p.sub">ChatKit Pro has no servers. Your chats and files are handled only on chatgpt.com, using the session you're already logged in with — exactly like the website itself. The version installed from GitHub also checks GitHub once a day for a new release (anonymously); store versions are updated by the browser.</p>
     <div class="privacy">
       <div class="card"><div class="ic">🚫</div><h3 data-i18n="p1.h">No servers</h3><p data-i18n="p1.p">Your data goes nowhere except chatgpt.com.</p></div>
       <div class="card"><div class="ic">👤</div><h3 data-i18n="p2.h">No account</h3><p data-i18n="p2.p">No sign-up, no e-mail, no license key.</p></div>
@@ -530,11 +547,12 @@ Keep key numbers and names.
     <p class="kicker" data-i18n="q.k">FAQ</p>
     <h2 data-i18n="q.h">Questions</h2>
     <details><summary data-i18n="q1.q">Is it really free?</summary><p data-i18n="q1.a">Yes. Every feature, no limits, no subscription, no “Pro” upgrade. The “Pro” in the name is about what it can do, not about a price.</p></details>
-    <details><summary data-i18n="q2.q">Can it read or send my conversations somewhere?</summary><p data-i18n="q2.a">No. It works only on chatgpt.com and only sends the same requests the ChatGPT website sends when you click buttons yourself. There is no ChatKit Pro server — the only extra request is an anonymous daily check on GitHub for a new version. The code is open — you can check it.</p></details>
+    <details><summary data-i18n="q2.q">Can it read or send my conversations somewhere?</summary><p data-i18n="q2.a">No. It works only on chatgpt.com and only sends the same requests the ChatGPT website sends when you click buttons yourself. There is no ChatKit Pro server — the only extra request (GitHub version only) is an anonymous daily check on GitHub for a new release. The code is open — you can check it.</p></details>
     <details><summary data-i18n="q3.q">Can I undo a deletion?</summary><p data-i18n="q3.a">Deleted chats can't be restored — that's how ChatGPT works. Every bulk action asks for confirmation. If you're unsure, archive instead (archived chats can be restored) or export first.</p></details>
     <details><summary data-i18n="q4.q">Which ChatGPT plans does it work with?</summary><p data-i18n="q4.a">It's built for chatgpt.com in the browser and doesn't depend on a plan. Some features (like the Library or Projects) appear only if your account has them.</p></details>
     <details><summary data-i18n="q5.q">What happens when ChatGPT changes?</summary><p data-i18n="q5.a">ChatKit Pro uses ChatGPT's internal web API, which can change without notice. When something breaks, a fix is released on GitHub — report issues there.</p></details>
-    <details><summary data-i18n="q6.q">Is it in the Chrome Web Store?</summary><p data-i18n="q6.a">It's in review right now — the link will appear here as soon as it's approved. Until then, install it from GitHub Releases in developer mode; it takes two minutes. The GitHub version tells you when a new release is out.</p></details>
+    <details><summary data-i18n="q6.q">Is it in the Chrome Web Store?</summary><p data-i18n-html="q6.a">Yes! Install it from the <a href="https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh" target="_blank" rel="noopener">Chrome Web Store</a> — it updates automatically. The GitHub version is still available for manual installs.</p></details>
+    <details><summary data-i18n="q9.q">I installed it from GitHub. How do I switch to the store version?</summary><p data-i18n="q9.a">Your folders, stars, prompts and notes are stored per installation, so move them over: in the GitHub version open the panel → ⚙ Settings → “Export data (JSON)”. Remove the GitHub version, add ChatKit Pro from the Chrome Web Store, then ⚙ Settings → “Import data” and pick the file.</p></details>
     <details><summary data-i18n="q7.q">Firefox?</summary><p data-i18n="q7.a">Yes! The Firefox version (140+) has the same features. It's in review on Firefox Add-ons; until then you can test it from the GitHub ZIP as a temporary add-on.</p></details>
     <details><summary data-i18n="q8.q">How do I report a bug or contact you?</summary><p data-i18n-html="q8.a">Open an issue on <a href="https://github.com/justPLguy/chatkit-pro/issues" target="_blank" rel="noopener">GitHub</a> or write to <a href="mailto:justplguy@gmail.com">justplguy@gmail.com</a> — bug reports, ideas and questions are all welcome.</p></details>
   </div>
@@ -545,10 +563,12 @@ Keep key numbers and names.
     <h2 data-i18n="end.h">Clean up your ChatGPT today.</h2>
     <p class="sub" data-i18n="end.sub">Free, open source, and ready in two minutes.</p>
     <div class="dl">
-        <a class="btn primary" data-href="release" target="_blank" rel="noopener"><span class="bl"><img class="blogo" src="assets/chrome.png" alt="" data-fb="🌐"><span data-i18n="cta.chrome">Download for Chrome</span></span><small>GitHub · <b data-ver="chromeGh"></b></small></a>
-        <a class="btn soon" data-store="chrome"><span class="bl"><img class="blogo" src="assets/chrome.png" alt="" data-fb="🌐"><span>Chrome Web Store</span></span><small><b data-ver="chromeStore"></b> · <span data-i18n="st.soon">In review · link soon</span></small></a>
-        <a class="btn primary" data-href="ffrelease" target="_blank" rel="noopener"><span class="bl"><img class="blogo" src="assets/firefox.png" alt="" data-fb="🦊"><span data-i18n="cta.firefox">Download for Firefox</span></span><small>GitHub · <b data-ver="firefoxGh"></b></small></a>
-        <a class="btn soon" data-store="firefox"><span class="bl"><img class="blogo" src="assets/firefox.png" alt="" data-fb="🦊"><span>Firefox Add-ons</span></span><small><b data-ver="firefoxStore"></b> · <span data-i18n="st.soon">In review · link soon</span></small></a>
+        <a class="btn soon store" data-store="chrome"><span class="bl"><img class="blogo" src="assets/chrome.png" alt="" data-fb="🌐"><span data-live="st.addChrome" data-live-en="Add to Chrome">Chrome Web Store</span></span><small><span class="if-live">Chrome Web Store · </span><b data-ver="chromeStore"></b> · <span data-i18n="st.soon">In review · link soon</span></small></a>
+        <a class="btn primary gh" data-href="release" data-gh="chrome" target="_blank" rel="noopener"><span class="bl"><img class="blogo" src="assets/chrome.png" alt="" data-fb="🌐"><span data-i18n="cta.chrome" data-live="st.ghZip" data-live-en="GitHub (ZIP)">Download for Chrome</span></span><small><span data-i18n="st.ghSmall" data-live="st.ghManual" data-live-en="manual install">GitHub</span> · <b data-ver="chromeGh"></b></small></a>
+      </div>
+      <div class="dl">
+        <a class="btn soon store" data-store="firefox"><span class="bl"><img class="blogo" src="assets/firefox.png" alt="" data-fb="🦊"><span data-live="st.addFirefox" data-live-en="Add to Firefox">Firefox Add-ons</span></span><small><span class="if-live">Firefox Add-ons · </span><b data-ver="firefoxStore"></b> · <span data-i18n="st.soon">In review · link soon</span></small></a>
+        <a class="btn primary gh" data-href="ffrelease" data-gh="firefox" target="_blank" rel="noopener"><span class="bl"><img class="blogo" src="assets/firefox.png" alt="" data-fb="🦊"><span data-i18n="cta.firefox" data-live="st.ghZip" data-live-en="GitHub (ZIP)">Download for Firefox</span></span><small><span data-i18n="st.ghSmall" data-live="st.ghManual" data-live-en="manual install">GitHub</span> · <b data-ver="firefoxGh"></b></small></a>
       </div>
     <p class="contact"><span data-i18n="end.contact">Found a bug or have an idea? Write to</span> <a href="mailto:justplguy@gmail.com">justplguy@gmail.com</a></p>
   </div>
@@ -577,7 +597,7 @@ const CONFIG = {
   // Wersje pokazywane pod przyciskami (osobno dla GitHuba i sklepów):
   VERSIONS: { chromeGh: "1.1.0", firefoxGh: "1.1.0", chromeStore: "1.1.0", firefoxStore: "1.1.0" },
   // Po akceptacji wklej tu linki do sklepów — przyciski same zmienią się w aktywne:
-  CHROME_STORE: "",   // np. "https://chromewebstore.google.com/detail/pehdgnogfmaeeldpjdmadfpankacofhh"
+  CHROME_STORE: "https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh",   // np. "https://chromewebstore.google.com/detail/pehdgnogfmaeeldpjdmadfpankacofhh"
   FIREFOX_STORE: ""   // np. "https://addons.mozilla.org/firefox/addon/chatkit-pro-by-justplguy/"
 };
 (function detectRepo() {
@@ -596,13 +616,23 @@ const LINKS = {
   license: GH + "/blob/main/LICENSE"
 };
 document.querySelectorAll("[data-href]").forEach(a => { a.href = LINKS[a.dataset.href]; });
-// Przyciski sklepów: puste = „W recenzji”, z linkiem = aktywny przycisk.
+// Sklepy: z linkiem w CONFIG → duży czerwony „Dodaj do …” na pierwszym miejscu, GitHub jako mała opcja.
+// Bez linku → „W recenzji”, a główny jest przycisk GitHub.
+const LIVE = { chrome: !!CONFIG.CHROME_STORE, firefox: !!CONFIG.FIREFOX_STORE };
+for (const b of ["chrome", "firefox"]) if (LIVE[b]) document.body.classList.add(b + "-live");
+const swapLabel = el => { if (el && el.dataset.live) { el.dataset.i18n = el.dataset.live; el.textContent = el.dataset.liveEn; } };
 document.querySelectorAll("[data-store]").forEach(a => {
   const url = a.dataset.store === "chrome" ? CONFIG.CHROME_STORE : CONFIG.FIREFOX_STORE;
   if (!url) return;
   a.href = url; a.target = "_blank"; a.rel = "noopener";
-  a.classList.replace("soon", "ghost");
-  const st = a.querySelector("[data-i18n='st.soon']"); st.dataset.i18n = "st.live"; st.textContent = "Free · auto-updates";
+  a.classList.replace("soon", "primary");
+  swapLabel(a.querySelector("[data-live]"));
+  const st = a.querySelector("[data-i18n='st.soon']"); st.dataset.i18n = "st.live"; st.textContent = "free · auto-updates";
+});
+document.querySelectorAll("[data-gh]").forEach(a => {
+  if (!LIVE[a.dataset.gh]) return;
+  a.classList.replace("primary", "ghost");
+  a.querySelectorAll("[data-live]").forEach(swapLabel);
 });
 // Logo przeglądarek: plik w assets/ (chrome.png, firefox.png); jeśli go brak — emoji.
 document.querySelectorAll("img.blogo").forEach(img => {
@@ -617,7 +647,11 @@ const PL = {
   "hero.pill": "Za darmo · open source · bez konta",
   "hero.title": "Twój ChatGPT <em>wreszcie uporządkowany.</em>",
   "hero.lead": "Usuń setki czatów w kilka sekund, wyczyść Bibliotekę obrazków, poukładaj rozmowy w folderach, wyeksportuj je i pracuj szybciej dzięki promptom, minimapie i wyszukiwaniu w treści. Wszystkie funkcje za darmo — na zawsze.",
-  "cta.chrome": "Pobierz dla Chrome", "cta.firefox": "Pobierz dla Firefoksa", "st.soon": "W recenzji · link wkrótce", "st.live": "Za darmo · aktualizacje automatyczne", "cta.see": "Zobacz, co potrafi", "cta.source": "Zobacz kod źródłowy",
+  "st.addChrome": "Dodaj do Chrome", "st.addFirefox": "Dodaj do Firefoksa", "st.ghZip": "GitHub (ZIP)", "st.ghSmall": "GitHub", "st.ghManual": "instalacja ręczna",
+  "i.cLive": "Najprościej: kliknij <b>Dodaj do Chrome</b> — jedno kliknięcie, aktualizacje automatyczne. Działa w Chrome, Edge, Brave i Operze.", "i.fLive": "Najprościej: kliknij <b>Dodaj do Firefoksa</b> — jedno kliknięcie, aktualizacje automatyczne.",
+  "i.manual": "Instalacja ręczna z GitHuba (tryb dewelopera):", "i.manualFf": "Instalacja testowa z GitHuba (dodatek tymczasowy):",
+  "q9.q": "Mam wersję z GitHuba. Jak przejść na wersję ze sklepu?", "q9.a": "Foldery, gwiazdki, prompty i notatki są zapisane osobno dla każdej instalacji, więc trzeba je przenieść: w wersji z GitHuba otwórz panel → ⚙ Ustawienia → „Eksportuj dane (JSON)”. Usuń wersję z GitHuba, dodaj ChatKit Pro z Chrome Web Store, potem ⚙ Ustawienia → „Importuj dane” i wskaż plik.",
+  "cta.chrome": "Pobierz dla Chrome", "cta.firefox": "Pobierz dla Firefoksa", "st.soon": "W recenzji · link wkrótce", "st.live": "za darmo · aktualizacje automatyczne", "cta.see": "Zobacz, co potrafi", "cta.source": "Zobacz kod źródłowy",
   "trust.1": "Bez płatnych funkcji", "trust.2": "Dane zostają w przeglądarce", "trust.3": "PL · EN · FR · DE",
   "m.chats": "Czaty", "m.archive": "Archiwum", "m.library": "Biblioteka", "m.prompts": "Prompty", "m.notes": "Zakładki i notatki",
   "m.all": "Wszystkie czaty", "m.r1": "Plan marketingowy Q4", "m.r2": "Test losowej grafiki", "m.r3": "Ile to 17% z 240?", "m.r4": "Czat bez tytułu",
@@ -664,22 +698,22 @@ const PL = {
   "c.r7": "Reguły sprzątania i statystyki", "c.r8": "Otwarty kod", "c.r9": "Wymagane konto / rejestracja", "c.r10": "Cena",
   "c.often": "często płatne", "c.often2": "często płatne", "c.often3": "często płatne", "c.often4": "często płatne", "c.often5": "często", "c.no": "Nie", "c.sub2": "abonament",
   "c.note": "„Typowe płatne rozszerzenia” to ogólny opis rynku, a nie konkretny produkt.",
-  "i.k": "Instalacja", "i.h": "Gotowe w dwie minuty.", "i.sub": "Wtyczka czeka na recenzję w Chrome Web Store i Firefox Add-ons. Do tego czasu zainstaluj ją z GitHub Releases:", "b.ff": "· 140+", "f1.h": "Pobierz", "f1.p": "Pobierz <b>ChatKit-Pro-Firefox-v1.1.0.zip</b> z Releases i rozpakuj.", "f2.h": "Strona debugowania", "f2.p": "Otwórz <code class=\"k\">about:debugging</code> → <b>Ten Firefox</b>.", "f3.h": "Załaduj dodatek", "f3.p": "Kliknij „Załaduj tymczasowy dodatek…” i wskaż <code class=\"k\">manifest.json</code>.", "f4.h": "Otwórz ChatGPT", "f4.p": "Wejdź na chatgpt.com i kliknij ikonę CK — jest już na pasku.", "f5.h": "Na stałe", "f5.p": "Dodatek z ZIP-a jest tymczasowy (znika po restarcie). Na stałe i z automatycznymi aktualizacjami — z Firefox Add-ons, który właśnie jest w recenzji.", "x.ff": "🦊 <b>Firefox:</b> pobierz ZIP dla Firefoksa, otwórz <code class=\"k\">about:debugging</code> → „Załaduj tymczasowy dodatek…” i wskaż <code class=\"k\">manifest.json</code> (tymczasowo — na stałe po publikacji w Firefox Add-ons).",
+  "i.k": "Instalacja", "i.h": "Gotowe w dwie minuty.", "i.sub": "Zainstaluj z oficjalnego sklepu jednym kliknięciem — albo ręcznie z GitHuba.", "b.ff": "· 140+", "f1.h": "Pobierz", "f1.p": "Pobierz <b>ChatKit-Pro-Firefox-v1.1.0.zip</b> z Releases i rozpakuj.", "f2.h": "Strona debugowania", "f2.p": "Otwórz <code class=\"k\">about:debugging</code> → <b>Ten Firefox</b>.", "f3.h": "Załaduj dodatek", "f3.p": "Kliknij „Załaduj tymczasowy dodatek…” i wskaż <code class=\"k\">manifest.json</code>.", "f4.h": "Otwórz ChatGPT", "f4.p": "Wejdź na chatgpt.com i kliknij ikonę CK — jest już na pasku.", "f5.h": "Na stałe", "f5.p": "Dodatek z ZIP-a jest tymczasowy (znika po restarcie). Na stałe i z automatycznymi aktualizacjami — z Firefox Add-ons, który właśnie jest w recenzji.", "x.ff": "🦊 <b>Firefox:</b> pobierz ZIP dla Firefoksa, otwórz <code class=\"k\">about:debugging</code> → „Załaduj tymczasowy dodatek…” i wskaż <code class=\"k\">manifest.json</code> (tymczasowo — na stałe po publikacji w Firefox Add-ons).",
   "i1.h": "Pobierz", "i1.p": "Pobierz <b>ChatKit-Pro-Chrome-v1.1.0.zip</b> z Releases i rozpakuj.",
   "i2.h": "Tryb dewelopera", "i2.p": "Otwórz <code class=\"k\">chrome://extensions</code> i włącz Tryb dewelopera.",
   "i3.h": "Załaduj rozpakowane", "i3.p": "Kliknij „Załaduj rozpakowane” i wskaż rozpakowany folder.",
   "i4.h": "Przypnij", "i4.p": "Kliknij 🧩 obok paska adresu i przypnij ChatKit Pro.", "i5.h": "Otwórz ChatGPT", "i5.p": "Wejdź na chatgpt.com i kliknij ikonę CK. Gotowe.",
   "b.ok": "· Edge · Brave · Opera", "b.soon": "wkrótce",
-  "p.k": "Prywatność", "p.h": "Twoje czaty zostają Twoje.", "p.sub": "ChatKit Pro nie ma serwerów. Twoje czaty i pliki obsługiwane są tylko na chatgpt.com, z sesji, w której już jesteś zalogowany — dokładnie tak jak sama strona. Jedyne inne zapytanie to anonimowe, codzienne sprawdzenie wersji na GitHubie.",
+  "p.k": "Prywatność", "p.h": "Twoje czaty zostają Twoje.", "p.sub": "ChatKit Pro nie ma serwerów. Twoje czaty i pliki obsługiwane są tylko na chatgpt.com, z sesji, w której już jesteś zalogowany — dokładnie tak jak sama strona. Wersja z GitHuba dodatkowo raz dziennie anonimowo sprawdza na GitHubie, czy jest nowa wersja; wersje ze sklepów aktualizuje przeglądarka.",
   "p1.h": "Bez serwerów", "p1.p": "Twoje dane nie trafiają nigdzie poza chatgpt.com.", "p2.h": "Bez konta", "p2.p": "Bez rejestracji, e-maila i klucza licencyjnego.",
   "p3.h": "Bez śledzenia", "p3.p": "Bez analityki, reklam i kodu firm trzecich.", "p4.h": "Otwarty kod", "p4.p": "Licencja MIT. Przeczytaj każdą linijkę na GitHubie.",
   "q.k": "FAQ", "q.h": "Pytania",
   "q1.q": "Czy to naprawdę za darmo?", "q1.a": "Tak. Wszystkie funkcje, bez limitów, abonamentu i płatnej wersji „Pro”. „Pro” w nazwie dotyczy możliwości, nie ceny.",
-  "q2.q": "Czy wtyczka może czytać moje rozmowy lub je gdzieś wysyłać?", "q2.a": "Nie. Działa tylko na chatgpt.com i wysyła wyłącznie te same zapytania, które wysyła strona ChatGPT, gdy sam klikasz przyciski. ChatKit Pro nie ma żadnego serwera — jedyne dodatkowe zapytanie to anonimowe, codzienne sprawdzenie nowej wersji na GitHubie. Kod jest otwarty — możesz to sprawdzić.",
+  "q2.q": "Czy wtyczka może czytać moje rozmowy lub je gdzieś wysyłać?", "q2.a": "Nie. Działa tylko na chatgpt.com i wysyła wyłącznie te same zapytania, które wysyła strona ChatGPT, gdy sam klikasz przyciski. ChatKit Pro nie ma żadnego serwera — jedyne dodatkowe zapytanie (tylko w wersji z GitHuba) to anonimowe, codzienne sprawdzenie nowej wersji na GitHubie. Kod jest otwarty — możesz to sprawdzić.",
   "q3.q": "Czy da się cofnąć usunięcie?", "q3.a": "Usuniętych czatów nie da się przywrócić — tak działa ChatGPT. Każda operacja hurtowa pyta o potwierdzenie. Jeśli nie jesteś pewien, zarchiwizuj (archiwum da się przywrócić) albo najpierw wyeksportuj.",
   "q4.q": "Z którymi planami ChatGPT działa?", "q4.a": "Jest zrobiona dla chatgpt.com w przeglądarce i nie zależy od planu. Niektóre funkcje (np. Biblioteka czy Projekty) pojawiają się tylko, jeśli Twoje konto je ma.",
   "q5.q": "Co, jeśli ChatGPT coś zmieni?", "q5.a": "ChatKit Pro korzysta z wewnętrznego API strony ChatGPT, które może się zmienić bez zapowiedzi. Gdy coś przestanie działać, poprawka pojawi się na GitHubie — tam zgłaszaj problemy.",
-  "q6.q": "Czy jest w Chrome Web Store?", "q6.a": "Właśnie przechodzi recenzję — link pojawi się tutaj zaraz po akceptacji. Do tego czasu zainstaluj ją z GitHub Releases w trybie dewelopera; zajmuje to dwie minuty. Wersja z GitHuba sama powie Ci, gdy wyjdzie nowa wersja.",
+  "q6.q": "Czy jest w Chrome Web Store?", "q6.a": "Tak! Zainstaluj ją z <a href=\"https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh\" target=\"_blank\" rel=\"noopener\">Chrome Web Store</a> — aktualizuje się sama. Wersja z GitHuba nadal jest dostępna do ręcznej instalacji.",
   "q7.q": "A Firefox?", "q7.a": "Tak! Wersja dla Firefoksa (140+) ma te same funkcje. Czeka na recenzję w Firefox Add-ons; do tego czasu możesz ją przetestować z ZIP-a z GitHuba jako dodatek tymczasowy.",
   "q8.q": "Jak zgłosić błąd albo się skontaktować?", "q8.a": "Załóż zgłoszenie na <a href=\"https://github.com/justPLguy/chatkit-pro/issues\" target=\"_blank\" rel=\"noopener\">GitHubie</a> albo napisz na <a href=\"mailto:justplguy@gmail.com\">justplguy@gmail.com</a> — błędy, pomysły i pytania są mile widziane.",
   "end.h": "Posprzątaj swój ChatGPT już dziś.", "end.sub": "Za darmo, open source, gotowe w dwie minuty.", "end.contact": "Znalazłeś błąd albo masz pomysł? Napisz na",

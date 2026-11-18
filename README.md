@@ -5,7 +5,8 @@
 <p align="center">
 <b>Free, open-source power tools for ChatGPT.</b><br>
 Bulk delete · Library cleanup · Folders · Export · Prompts · Minimap · Full-text search<br><br>
-<a href="../../releases"><b>⬇ Download (Releases)</b></a> ·
+<a href="https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh"><b>🛒 Add to Chrome (Chrome Web Store)</b></a><br><br>
+<a href="../../releases"><b>⬇ GitHub Releases</b></a> ·
 <a href="https://justplguy.github.io/chatkit-pro/"><b>🌐 Website</b></a> ·
 <a href="../../tree/chrome"><b>🧩 Chrome</b></a> ·
 <a href="../../tree/firefox"><b>🦊 Firefox</b></a> ·
@@ -32,7 +33,7 @@ This repository uses **one branch per browser**:
 | **[`firefox`](../../tree/firefox)** | extension for Firefox 140+ | ✅ **v1.1.0** |
 
 **Downloads are published only in [Releases](../../releases)** — one release per browser and version (e.g. `chrome-v1.1.0`, `firefox-v1.1.0`).
-**Store listings:** Chrome Web Store and Firefox Add-ons — ⏳ in review, links coming soon.
+**Store listings:** [Chrome Web Store](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh) ✅ · Firefox Add-ons ⏳ in review.
 Please don't use “Code → Download ZIP” on `main`: it doesn't contain the extension.
 
 ### Features
@@ -48,12 +49,17 @@ Please don't use “Code → Download ZIP” on `main`: it doesn't contain the e
 - 🌐 **English, Polish, French, German**
 
 ### Install (Chrome)
+**Recommended:** [**Add to Chrome — Chrome Web Store**](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh) (one click, automatic updates; also works in Edge, Brave and Opera).
+
+**Manual install from GitHub:**
 1. Download **`ChatKit-Pro-Chrome-v1.1.0.zip`** from [Releases](../../releases) and unzip it.
 2. Open `chrome://extensions`, switch on **Developer mode**.
 3. **Load unpacked** → choose the unzipped folder.
 4. Pin the extension and click its icon on [chatgpt.com](https://chatgpt.com).
 
 Full guide: [`chrome` branch README](../../tree/chrome#readme).
+
+**Moving from the GitHub version to the store version?** Your folders, stars, prompts and notes belong to each installation, so move them: in the GitHub version open the panel → ⚙ Settings → **Export data (JSON)**, remove the GitHub version, add ChatKit Pro from the [Chrome Web Store](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh), then ⚙ Settings → **Import data**.
 
 ### Install (Firefox)
 Firefox Add-ons listing is in review. Until then you can test it: download **`ChatKit-Pro-Firefox-v1.1.0.zip`** from [Releases](../../releases), unzip, open `about:debugging#/runtime/this-firefox` → **Load Temporary Add-on…** → pick `manifest.json` (temporary — removed when Firefox restarts). Details: [`firefox` branch README](../../tree/firefox#readme).
@@ -64,7 +70,8 @@ No servers of our own, no analytics, no account. Your chats are handled only on 
 ### Roadmap
 - [x] Chrome v1.1.0
 - [x] Firefox v1.1.0
-- [ ] Chrome Web Store & Firefox Add-ons listings (in review)
+- [x] Chrome Web Store
+- [ ] Firefox Add-ons (in review)
 - [ ] Move chats to Projects in bulk, empty the Library trash
 - [ ] More languages
 
@@ -88,7 +95,7 @@ Repozytorium ma **osobną gałąź dla każdej przeglądarki**:
 | **[`firefox`](../../tree/firefox)** | wtyczka dla Firefoksa 140+ | ✅ **v1.1.0** |
 
 **Pliki do pobrania są wyłącznie w [Releases](../../releases)** — osobne wydanie dla każdej przeglądarki i wersji (np. `chrome-v1.1.0`, `firefox-v1.1.0`).
-**Sklepy:** Chrome Web Store i Firefox Add-ons — ⏳ w recenzji, linki wkrótce.
+**Sklepy:** [Chrome Web Store](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh) ✅ · Firefox Add-ons ⏳ w recenzji.
 Nie używaj „Code → Download ZIP” na gałęzi `main` — nie ma tu wtyczki.
 
 ### Funkcje
@@ -104,12 +111,17 @@ Nie używaj „Code → Download ZIP” na gałęzi `main` — nie ma tu wtyczki
 - 🌐 **Polski, angielski, francuski, niemiecki**
 
 ### Instalacja (Chrome)
+**Polecane:** [**Dodaj do Chrome — Chrome Web Store**](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh) (jedno kliknięcie, aktualizacje automatyczne; działa też w Edge, Brave i Operze).
+
+**Instalacja ręczna z GitHuba:**
 1. Pobierz **`ChatKit-Pro-Chrome-v1.1.0.zip`** z [Releases](../../releases) i rozpakuj.
 2. Otwórz `chrome://extensions`, włącz **Tryb dewelopera**.
 3. **Załaduj rozpakowane** → wskaż rozpakowany folder.
 4. Przypnij wtyczkę i kliknij jej ikonę na [chatgpt.com](https://chatgpt.com).
 
 Pełna instrukcja: [README gałęzi `chrome`](../../tree/chrome#readme).
+
+**Przechodzisz z wersji z GitHuba na wersję ze sklepu?** Foldery, gwiazdki, prompty i notatki należą do konkretnej instalacji, więc przenieś je: w wersji z GitHuba otwórz panel → ⚙ Ustawienia → **Eksportuj dane (JSON)**, usuń wersję z GitHuba, dodaj ChatKit Pro z [Chrome Web Store](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh), potem ⚙ Ustawienia → **Importuj dane**.
 
 ### Instalacja (Firefox)
 Wtyczka czeka na recenzję w Firefox Add-ons. Do tego czasu możesz ją przetestować: pobierz **`ChatKit-Pro-Firefox-v1.1.0.zip`** z [Releases](../../releases), rozpakuj, otwórz `about:debugging#/runtime/this-firefox` → **Załaduj tymczasowy dodatek…** → wskaż `manifest.json` (tymczasowo — znika po restarcie Firefoksa). Szczegóły: [README gałęzi `firefox`](../../tree/firefox#readme).
