@@ -4,6 +4,7 @@
 
 <p align="center">
 <b>v1.1.0</b> · Chrome / Edge / Brave / Opera · MIT<br>
+<a href="https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh"><b>🛒 Add to Chrome (Chrome Web Store)</b></a><br>
 Free, open-source power tools for ChatGPT.<br>
 <a href="#-english">🇬🇧 English</a> · <a href="#-polski">🇵🇱 Polski</a>
 </p>
@@ -15,14 +16,19 @@ Free, open-source power tools for ChatGPT.<br>
 
 ## 🇬🇧 English
 
-### Install (2 minutes)
+### Install
+**Recommended:** [**Add to Chrome — Chrome Web Store**](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh) — one click, automatic updates. Works in Chrome, Edge, Brave and Opera.
+
+**Manual install from GitHub (2 minutes):**
 1. Download **`ChatKit-Pro-Chrome-v1.1.0.zip`** from **[Releases](../../releases)** (not “Code → Download ZIP”) and unzip it.
 2. Open `chrome://extensions` and switch on **Developer mode** (top-right).
 3. Click **Load unpacked** and pick the unzipped folder (the one that contains `manifest.json`).
 4. Pin the extension: 🧩 → 📌 next to **ChatKit Pro by JustPLGuy**.
 5. Open [chatgpt.com](https://chatgpt.com) and click the **CK icon** in the toolbar.
 
-**Update:** download the new ZIP from [Releases](../../releases), replace the files, click ↻ on the extension card in `chrome://extensions`, reload ChatGPT.
+**Update (GitHub version):** download the new ZIP from [Releases](../../releases), replace the files, click ↻ on the extension card in `chrome://extensions`, reload ChatGPT.
+
+**Moving from the GitHub version to the store version?** Your folders, stars, prompts and notes belong to each installation, so move them: in the GitHub version open the panel → ⚙ Settings → **Export data (JSON)**, remove the GitHub version, add ChatKit Pro from the [Chrome Web Store](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh), then ⚙ Settings → **Import data**.
 
 ### What's inside
 | Area | Features |
@@ -99,14 +105,19 @@ Bug reports, ideas, questions: **[GitHub Issues](../../issues)** or **[justplguy
 
 ## 🇵🇱 Polski
 
-### Instalacja (2 minuty)
+### Instalacja
+**Polecane:** [**Dodaj do Chrome — Chrome Web Store**](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh) — jedno kliknięcie, aktualizacje automatyczne. Działa w Chrome, Edge, Brave i Operze.
+
+**Instalacja ręczna z GitHuba (2 minuty):**
 1. Pobierz **`ChatKit-Pro-Chrome-v1.1.0.zip`** z **[Releases](../../releases)** (nie „Code → Download ZIP”) i rozpakuj.
 2. Otwórz `chrome://extensions` i włącz **Tryb dewelopera** (prawy górny róg).
 3. Kliknij **Załaduj rozpakowane** i wskaż rozpakowany folder (ten z plikiem `manifest.json`).
 4. Przypnij wtyczkę: 🧩 → 📌 przy **ChatKit Pro by JustPLGuy**.
 5. Wejdź na [chatgpt.com](https://chatgpt.com) i kliknij **ikonę CK** na pasku.
 
-**Aktualizacja:** pobierz nowy ZIP z [Releases](../../releases), podmień pliki, kliknij ↻ na karcie wtyczki w `chrome://extensions`, odśwież ChatGPT.
+**Aktualizacja (wersja z GitHuba):** pobierz nowy ZIP z [Releases](../../releases), podmień pliki, kliknij ↻ na karcie wtyczki w `chrome://extensions`, odśwież ChatGPT.
+
+**Przechodzisz z wersji z GitHuba na wersję ze sklepu?** Foldery, gwiazdki, prompty i notatki należą do konkretnej instalacji, więc przenieś je: w wersji z GitHuba otwórz panel → ⚙ Ustawienia → **Eksportuj dane (JSON)**, usuń wersję z GitHuba, dodaj ChatKit Pro z [Chrome Web Store](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh), potem ⚙ Ustawienia → **Importuj dane**.
 
 ### Co jest w środku
 | Obszar | Funkcje |
