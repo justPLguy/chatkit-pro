@@ -237,32 +237,6 @@
   footer a:hover { color: var(--text); }
 
 
-  /* Co nowego / What's new (#releases) */
-  #releases { scroll-margin-top: 64px; }
-  .rel-list { display: grid; gap: 18px; }
-  .rel { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px 28px; scroll-margin-top: 84px; }
-  .rel.latest { border-color: rgba(239,68,68,.45); background: linear-gradient(180deg, rgba(239,68,68,.07), transparent 55%), var(--card); }
-  .rel-h { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
-  .rel-v { font-size: 24px; font-weight: 800; letter-spacing: -.02em; }
-  .rel-date { color: var(--dim); font-size: 14px; }
-  .rel-badge { background: var(--red); color: #fff; border-radius: 999px; padding: 2px 10px; font-size: 12px; font-weight: 700; }
-  .rel-intro { color: var(--muted); margin: 4px 0 16px; font-size: 15.5px; }
-  .rel-get { display: flex; gap: 10px; flex-wrap: wrap; margin: 0 0 20px; }
-  .rel-get .btn { padding: 9px 16px; font-size: 14px; }
-  .rel-get .btn small { font-weight: 500; opacity: .85; }
-  .rel-get .btn.soon { border: 1px dashed var(--line2); color: var(--muted); cursor: default; }
-  .rel-get .btn.old { border: 1px solid var(--line); color: var(--dim); cursor: default; }
-  .rel-get .btn.ghost.sm { color: var(--muted); }
-  .rel ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-  .rel li { display: grid; grid-template-columns: 104px 1fr; gap: 14px; align-items: baseline; color: var(--muted); font-size: 15px; }
-  .rel li b { color: var(--text); font-weight: 600; }
-  .rtag { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; border-radius: 6px; padding: 3px 8px; justify-self: start; white-space: nowrap; }
-  .rtag.new { background: rgba(34,197,94,.13); color: #86efac; }      /* NOWE = zielone */
-  .rtag.better { background: rgba(59,130,246,.15); color: #93c5fd; }  /* LEPSZE = niebieskie */
-  .rtag.fix { background: rgba(249,115,22,.15); color: #fdba74; }     /* NAPRAWIONE = pomarańczowe */
-  .rel-more { margin-top: 18px; text-align: center; }
-  .rel-more .btn { cursor: pointer; background: none; color: var(--text); font-family: inherit; }
-  @media (max-width: 600px) { .rel { padding: 20px; } .rel li { grid-template-columns: 1fr; gap: 4px; } .rel-get .btn { flex: 1 1 100%; flex-wrap: wrap; gap: 4px 10px; } }
 
   @media (max-width: 960px) {
     .hero .wrap, .spot, .pain { grid-template-columns: 1fr; }
@@ -291,7 +265,7 @@
       <a href="#features" data-i18n="nav.features">Features</a>
       <a href="#compare" data-i18n="nav.compare">Compare</a>
       <a href="#install" data-i18n="nav.install">Install</a>
-      <a href="#releases" data-i18n="nav.rel">What's new</a>
+      <a href="releases/" data-i18n="nav.rel">What's new</a>
       <a href="#faq" data-i18n="nav.faq">FAQ</a>
     </div>
     <div class="lang" role="group" aria-label="Language">
@@ -304,7 +278,7 @@
 <header class="hero" id="top">
   <div class="wrap">
     <div>
-      <a class="pill" href="#releases" title="What\'s new"><b>v1.1</b><span data-i18n="hero.pill">Free · open source · no account</span></a>
+      <a class="pill" href="releases/" title="What's new"><b>v1.1</b><span data-i18n="hero.pill">Free · open source · no account</span></a>
       <h1 data-i18n-html="hero.title">Your ChatGPT, <em>finally organized.</em></h1>
       <p class="lead" data-i18n="hero.lead">Delete hundreds of chats in seconds, clean up the image Library, sort conversations into folders, export them, and work faster with prompts, a minimap and full-text search. Every feature free — forever.</p>
       <div class="dl">
@@ -572,16 +546,6 @@ Keep key numbers and names.
   </div>
 </section>
 
-<section class="alt" id="releases">
-  <div class="wrap" style="max-width:860px">
-    <p class="kicker" data-i18n="rel.k">Changelog</p>
-    <h2 data-i18n="rel.h">What's new</h2>
-    <p class="sub" data-i18n="rel.sub">Every version, what it adds and what it fixes — and where you can get it.</p>
-    <div class="rel-list" id="relList"></div>
-    <div class="rel-more" id="relMore" hidden><button class="btn ghost" type="button"></button></div>
-  </div>
-</section>
-
 <section id="faq">
   <div class="wrap" style="max-width:860px">
     <p class="kicker" data-i18n="q.k">FAQ</p>
@@ -618,7 +582,7 @@ Keep key numbers and names.
   <div class="wrap">
     <span><b style="color:var(--text)">ChatKit Pro</b> by JustPLGuy · v1.1.0</span>
     <a data-href="repo" target="_blank" rel="noopener">GitHub</a>
-    <a href="#releases" data-i18n="nav.rel">What's new</a>
+    <a href="releases/" data-i18n="nav.rel">What's new</a>
     <a data-href="releases" target="_blank" rel="noopener">GitHub Releases</a>
     <a data-href="issues" target="_blank" rel="noopener" data-i18n="ft.issues">Report an issue</a>
     <a href="mailto:justplguy@gmail.com">✉ justplguy@gmail.com</a>
@@ -683,150 +647,9 @@ document.querySelectorAll("img.blogo").forEach(img => {
 document.querySelectorAll("[data-ver]").forEach(b => { b.textContent = "v" + CONFIG.VERSIONS[b.dataset.ver]; });
 
 
-/* ===== Co nowego / What's new =====
-   NOWA WERSJA: dopisz obiekt NA GÓRZE listy (najnowsza pierwsza).
-   stores — status w sklepach: "live" (opublikowana) albo "review" (w recenzji).
-     Gdy sklep zaakceptuje: zmień "review" na "live". Starsza wersja sama pokaże „zastąpiona przez …”.
-     "live" działa tylko, gdy w CONFIG jest link do sklepu (CHROME_STORE / FIREFOX_STORE).
-   gh — czy wydanie jest już na GitHubie (link do ZIP-a w Releases).
-   Rodzaje zmian: new = nowe, better = ulepszenie, fix = poprawka. Teksty: [pogrubienie, opis]. */
-const RELEASES = [
-  {
-    v: "1.2.0", date: "2026-11-18",
-    stores: { chrome: "review", firefox: "review" }, gh: false,
-    intro: ["A big update: bulk rename, ZIP export, code saving, chat width — and far fewer requests to ChatGPT.",
-            "Duża aktualizacja: masowa zmiana nazw, eksport do ZIP, zapisywanie kodu, szerokość czatu — i dużo mniej zapytań do ChatGPT."],
-    items: [
-      ["better", ["Gentle on ChatGPT", "far fewer requests, so no more “Too many requests” / “Unable to load conversation”. If ChatGPT asks for a break, ChatKit Pro pauses in every tab and the panel shows a countdown."],
-                 ["Oszczędna dla ChatGPT", "dużo mniej zapytań, więc koniec z „Too many requests” / „Nie można wczytać konwersacji”. Gdy ChatGPT poprosi o przerwę, ChatKit Pro czeka we wszystkich kartach, a panel pokazuje odliczanie."]],
-      ["new", ["On/off switch", "the CK icon turns the extension on (red) and off (grey). The panel opens with the 🧰 button or Alt+Shift+K."],
-              ["Włącznik", "ikona CK włącza (czerwona) i wyłącza (szara) wtyczkę. Panel otwierasz przyciskiem 🧰 albo Alt+Shift+K."]],
-      ["new", ["Bulk rename", "add a prefix like “[Work]”, remove or replace text in many chat titles at once — with a live preview."],
-              ["Masowa zmiana nazw", "dodaj prefiks np. „[Praca]”, usuń albo zamień tekst w tytułach wielu czatów naraz — z podglądem."]],
-      ["new", ["Export to ZIP", "one file per chat (Markdown, HTML or JSON) in a single ZIP."],
-              ["Eksport do ZIP", "osobny plik dla każdego czatu (Markdown, HTML albo JSON) w jednym ZIP-ie."]],
-      ["new", ["Chat width & font size", "two sliders in Settings — great on wide monitors."],
-              ["Szerokość czatu i czcionka", "dwa suwaki w ustawieniach — świetne na szerokich monitorach."]],
-      ["new", ["Save code", "a “Save” button on every code block (.py, .js, .json…), and all code from a chat in one click from the minimap."],
-              ["Zapisywanie kodu", "przycisk „Zapisz” przy każdym bloku kodu (.py, .js, .json…), a z minimapy cały kod z czatu jednym kliknięciem."]],
-      ["new", ["Prompts 2.0", "⭐ favorites, #tags, drag-and-drop order and sorting."],
-              ["Prompty 2.0", "⭐ ulubione, #tagi, kolejność przeciąganiem i sortowanie."]],
-      ["new", ["Chat stats & backup reminder", "words, characters and ~tokens in the minimap; a periodic reminder to save a copy of your folders, prompts and notes."],
-              ["Liczniki i kopia zapasowa", "słowa, znaki i ~tokeny w minimapie; okresowe przypomnienie o kopii folderów, promptów i notatek."]],
-      ["better", ["Clearer timestamps", "“👤 You · Today, 14:32” and “🤖 ChatGPT · Yesterday, 23:10”."],
-                 ["Czytelniejsze znaczniki czasu", "„👤 Ty · Dziś, 14:32” i „🤖 ChatGPT · Wczoraj, 23:10”."]],
-      ["better", ["Quiet install", "installing no longer opens a ChatGPT tab."],
-                 ["Cicha instalacja", "instalacja nie otwiera już karty z ChatGPT."]],
-      ["fix", ["Vanishing panel", "after reloading ChatGPT the extension sometimes disappeared — it now restores itself."],
-              ["Znikający panel", "po odświeżeniu ChatGPT wtyczka czasem znikała — teraz sama się przywraca."]],
-      ["fix", ["Settings", "sliders and checkboxes no longer ignore a second change."],
-              ["Ustawienia", "suwaki i przełączniki nie ignorują już kolejnej zmiany."]]
-    ]
-  },
-  {
-    v: "1.1.0", date: "2026-11-17",
-    stores: { chrome: "live", firefox: "review" }, gh: true,
-    intro: ["The first version in the Chrome Web Store and the first one for Firefox. Everything you need to clean up and organize ChatGPT:",
-            "Pierwsza wersja w Chrome Web Store i pierwsza dla Firefoksa. Wszystko, czego trzeba do sprzątania i porządkowania ChatGPT:"],
-    items: [
-      ["new", ["Bulk actions", "select any number of chats (Shift+click for ranges) and delete, archive, restore, star or move them to folders."],
-              ["Operacje hurtowe", "zaznacz dowolną liczbę czatów (Shift+klik = zakres) i usuń, zarchiwizuj, przywróć, oznacz gwiazdką albo przenieś do folderów."]],
-      ["new", ["Library cleanup", "thumbnail grid, size sorting, AI-generated / uploaded filters; download and delete images in bulk (deleting a chat doesn't delete its images)."],
-              ["Czyszczenie Biblioteki", "siatka miniatur, sortowanie po rozmiarze, filtry AI / wgrane; hurtowe pobieranie i usuwanie obrazków (usunięcie czatu nie kasuje jego obrazków)."]],
-      ["new", ["Folders & stars", "nested, colored folders with drag & drop, also marked in the ChatGPT sidebar."],
-              ["Foldery i gwiazdki", "zagnieżdżone, kolorowe foldery z przeciąganiem, oznaczone też w pasku bocznym ChatGPT."]],
-      ["new", ["Export", "chats or whole folders to Markdown, HTML or PDF."],
-              ["Eksport", "czaty albo całe foldery do Markdown, HTML lub PDF."]],
-      ["new", ["Inside the chat", "timestamps above messages, a minimap with in-chat search, bookmarks and notes."],
-              ["W czacie", "znaczniki czasu nad wiadomościami, minimapa z wyszukiwaniem, zakładki i notatki."]],
-      ["new", ["Prompt library", "{{variables}}, categories, quick insert with Alt+Shift+P or //."],
-              ["Biblioteka promptów", "{{zmienne}}, kategorie, szybkie wstawianie przez Alt+Shift+P albo //."]],
-      ["new", ["And more", "full-text search across all chats, cleanup rules, statistics, classic dark mode, 4 languages (EN, PL, FR, DE)."],
-              ["I więcej", "wyszukiwanie w treści wszystkich czatów, reguły sprzątania, statystyki, klasyczny tryb ciemny, 4 języki (PL, EN, FR, DE)."]],
-      ["new", ["Welcome card & Firefox", "5 quick tips after installing; the first Firefox version (140+) with the same features."],
-              ["Karta powitalna i Firefox", "5 wskazówek na start; pierwsza wersja dla Firefoksa (140+) z tymi samymi funkcjami."]],
-      ["better", ["Fewer permissions", "and a clear “Log in to ChatGPT” message instead of an error when you're logged out."],
-                 ["Mniej uprawnień", "i czytelny komunikat „Zaloguj się do ChatGPT” zamiast błędu, gdy nie jesteś zalogowany."]],
-      ["fix", ["Notes on selected text", "the buttons were empty and covered ChatGPT's own popup."],
-              ["Notatki do zaznaczonego tekstu", "przyciski były puste i zasłaniały okienko ChatGPT."]]
-    ]
-  }
-];
-
-const REL_TXT = {
-  en: { latest: "Latest", new: "New", better: "Improved", fix: "Fixed",
-        addChrome: "Add to Chrome", addFirefox: "Add to Firefox", store: "free · auto-updates",
-        reviewChrome: "Chrome Web Store", reviewFirefox: "Firefox Add-ons", review: "in review · coming soon",
-        replaced: "replaced by", gh: "GitHub (ZIP)", more: n => `Show older versions (${n})`, less: "Show fewer" },
-  pl: { latest: "Najnowsza", new: "Nowe", better: "Lepsze", fix: "Naprawione",
-        addChrome: "Dodaj do Chrome", addFirefox: "Dodaj do Firefoksa", store: "za darmo · aktualizacje automatyczne",
-        reviewChrome: "Chrome Web Store", reviewFirefox: "Firefox Add-ons", review: "w recenzji · wkrótce",
-        replaced: "zastąpiona przez", gh: "GitHub (ZIP)", more: n => `Pokaż starsze wersje (${n})`, less: "Pokaż mniej" }
-};
-const REL_SHOW = 2; // ile wersji widać od razu
-let relOpen = false, relLang = "en";
-function renderReleases(lang) {
-  relLang = lang === "pl" ? "pl" : "en";
-  const T = REL_TXT[relLang], L = relLang === "pl" ? 1 : 0;
-  const list = document.getElementById("relList"); if (!list) return;
-  const el = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
-  const url = { chrome: CONFIG.CHROME_STORE, firefox: CONFIG.FIREFOX_STORE };
-  // najnowsza wersja opublikowana w danym sklepie (tylko ona dostaje przycisk „Dodaj do …”)
-  const liveIn = b => RELEASES.find(r => r.stores[b] === "live" && url[b]);
-  const logo = b => { const i = document.createElement("img"); i.className = "blogo"; i.alt = ""; i.src = "assets/" + b + ".png";
-    i.addEventListener("error", () => { const f = el("span", "blogo fb", b === "chrome" ? "🌐" : "🦊"); i.replaceWith(f); }); return i; };
-  list.textContent = "";
-  RELEASES.forEach((r, idx) => {
-    const card = el("article", "rel" + (idx === 0 ? " latest" : ""));
-    card.id = "v" + r.v.replace(/\./g, "-");
-    if (idx >= REL_SHOW && !relOpen) card.hidden = true;
-    const h = el("div", "rel-h");
-    h.append(el("span", "rel-v", "v" + r.v));
-    if (idx === 0) h.append(el("span", "rel-badge", T.latest));
-    h.append(el("span", "rel-date", new Date(r.date + "T12:00:00").toLocaleDateString(relLang === "pl" ? "pl-PL" : "en-US", { day: "numeric", month: "long", year: "numeric" })));
-    card.append(h);
-    if (r.intro) card.append(el("p", "rel-intro", r.intro[L]));
-    const get = el("div", "rel-get");
-    for (const b of ["chrome", "firefox"]) {
-      const st = r.stores[b], newest = liveIn(b);
-      let a;
-      if (st === "live" && url[b] && newest === r) {
-        a = el("a", "btn primary"); a.href = url[b]; a.target = "_blank"; a.rel = "noopener";
-        a.append(logo(b), el("span", null, b === "chrome" ? T.addChrome : T.addFirefox), el("small", null, "· " + T.store));
-      } else if (st === "live" && url[b] && newest) {
-        a = el("span", "btn old"); a.append(logo(b), el("span", null, (b === "chrome" ? T.reviewChrome : T.reviewFirefox) + " · " + T.replaced + " v" + newest.v));
-      } else if (st) {
-        a = el("span", "btn soon"); a.append(logo(b), el("span", null, b === "chrome" ? T.reviewChrome : T.reviewFirefox), el("small", null, T.review));
-      }
-      if (a) get.append(a);
-    }
-    if (r.gh) {
-      const g = el("a", "btn ghost sm", T.gh); g.href = GH + "/releases?q=" + r.v + "&expanded=true"; g.target = "_blank"; g.rel = "noopener";
-      get.append(g);
-    }
-    card.append(get);
-    const ul = el("ul");
-    for (const [type, en, pl] of r.items) {
-      const t = L ? pl : en, li = el("li");
-      const body = el("span"); body.append(el("b", null, t[0]), document.createTextNode(" — " + t[1]));
-      li.append(el("span", "rtag " + type, T[type]), body);
-      ul.append(li);
-    }
-    card.append(ul);
-    list.append(card);
-  });
-  const more = document.getElementById("relMore"), hiddenN = Math.max(0, RELEASES.length - REL_SHOW);
-  more.hidden = !hiddenN;
-  more.querySelector("button").textContent = relOpen ? T.less : T.more(hiddenN);
-}
-document.querySelector("#relMore button").addEventListener("click", () => { relOpen = !relOpen; renderReleases(relLang); });
-// link do konkretnej wersji, np. #v1-1-0 — rozwiń starsze, jeśli trzeba
-if (/^#v\d/.test(location.hash)) { relOpen = true; addEventListener("load", () => document.querySelector(location.hash)?.scrollIntoView()); }
-
 /* ===== Tłumaczenia / Translations (EN = HTML, PL poniżej) ===== */
 const PL = {
   "nav.features": "Funkcje", "nav.compare": "Porównanie", "nav.install": "Instalacja", "nav.faq": "FAQ", "nav.rel": "Co nowego",
-  "rel.k": "Historia zmian", "rel.h": "Co nowego", "rel.sub": "Każda wersja: co dodaje, co naprawia — i gdzie ją zdobyć.",
   "hero.pill": "Za darmo · open source · bez konta",
   "hero.title": "Twój ChatGPT <em>wreszcie uporządkowany.</em>",
   "hero.lead": "Usuń setki czatów w kilka sekund, wyczyść Bibliotekę obrazków, poukładaj rozmowy w folderach, wyeksportuj je i pracuj szybciej dzięki promptom, minimapie i wyszukiwaniu w treści. Wszystkie funkcje za darmo — na zawsze.",
@@ -920,7 +743,6 @@ function setLang(lang) {
   document.querySelector('meta[name="description"]').content = D._desc;
   document.querySelectorAll(".lang button").forEach(b => b.classList.toggle("on", b.dataset.lang === lang));
   try { localStorage.setItem("ckp-site-lang", lang); } catch (e) {}
-  renderReleases(lang);
 }
 document.querySelectorAll(".lang button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
 

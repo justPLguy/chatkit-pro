@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What's new — ChatKit Pro by JustPLGuy</title>
+<meta name="description" content="ChatKit Pro changelog: what every version adds and fixes, and where to get it (Chrome Web Store, Firefox Add-ons, GitHub).">
+<!-- Podgląd linku (Facebook, Messenger, Discord, X, LinkedIn) — adresy muszą być pełne -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ChatKit Pro by JustPLGuy">
+<meta property="og:url" content="https://justplguy.github.io/chatkit-pro/releases/">
+<meta property="og:title" content="What's new — ChatKit Pro by JustPLGuy">
+<meta property="og:description" content="Bulk delete chats and images, folders, export to PDF/Markdown, prompt library, minimap, full-text search. Free, open source, no account.">
+<meta property="og:image" content="https://justplguy.github.io/chatkit-pro/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ChatKit Pro — Your ChatGPT, finally organized.">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="pl_PL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="What's new — ChatKit Pro by JustPLGuy">
+<meta name="twitter:description" content="Bulk delete chats and images, folders, export, prompts, minimap, search. Free and open source.">
+<meta name="twitter:image" content="https://justplguy.github.io/chatkit-pro/assets/og-image.png">
+<link rel="canonical" href="https://justplguy.github.io/chatkit-pro/releases/">
+<link rel="icon" href="../assets/icon128.png">
+<style>
+  :root {
+    --bg: #0d0d0f; --bg2: #141417; --card: #18181c; --line: #26262c; --line2: #33333b;
+    --text: #ececf1; --muted: #a1a1aa; --dim: #71717a;
+    --red: #ef4444; --red2: #dc2626; --redsoft: rgba(239, 68, 68, .12); --amber: #fbbf24; --green: #22c55e;
+    --radius: 14px; --max: 1160px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+  .muted { color: var(--muted); }
+
+  /* nav */
+  nav { position: sticky; top: 0; z-index: 50; background: rgba(13, 13, 15, .82); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+  nav .wrap { display: flex; align-items: center; gap: 22px; height: 64px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -.01em; }
+  .logo { width: 32px; height: 32px; border-radius: 8px; background: var(--red); color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 14px; box-shadow: inset 0 0 0 2px rgba(255,255,255,.18); }
+  .brand small { font-weight: 500; color: var(--dim); font-size: 13px; }
+  .navlinks { display: flex; gap: 20px; margin-left: auto; font-size: 14.5px; color: var(--muted); }
+  .navlinks a:hover { color: var(--text); }
+  .lang { display: flex; border: 1px solid var(--line2); border-radius: 8px; overflow: hidden; }
+  .lang button { background: none; border: 0; color: var(--muted); padding: 6px 10px; cursor: pointer; font: 600 12.5px system-ui; }
+  .lang button.on { background: var(--red); color: #fff; }
+  .gh { border: 1px solid var(--line2); padding: 7px 13px; border-radius: 8px; font-size: 14px; }
+  .gh:hover { border-color: var(--dim); }
+
+  /* buttons */
+  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 13px 22px; border-radius: 10px; font-weight: 650; font-size: 15.5px; border: 1px solid transparent; transition: .15s; }
+  .btn.primary { background: var(--red); color: #fff; box-shadow: 0 8px 30px rgba(239, 68, 68, .28); }
+  .btn.primary:hover { background: var(--red2); transform: translateY(-1px); }
+  .btn.ghost { border-color: var(--line2); color: var(--text); }
+  .btn.ghost:hover { border-color: var(--dim); }
+  .btn.disabled { border-color: var(--line); color: var(--dim); cursor: default; }
+
+  /* hero */
+  .hero { padding: 84px 0 64px; position: relative; overflow: hidden; }
+  .hero::before { content: ""; position: absolute; inset: -40% -10% auto auto; width: 760px; height: 760px; background: radial-gradient(circle, rgba(239,68,68,.16), transparent 62%); pointer-events: none; }
+  .hero .wrap { display: grid; grid-template-columns: 1.02fr 1fr; gap: 56px; align-items: center; position: relative; }
+  .pill { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); border: 1px solid var(--line2); border-radius: 999px; padding: 5px 12px 5px 6px; margin-bottom: 22px; }
+  a.pill:hover { border-color: var(--dim); color: var(--text); }
+  .pill b { background: var(--redsoft); color: #fca5a5; border-radius: 999px; padding: 2px 9px; font-size: 12px; }
+  h1 { font-size: clamp(38px, 5.2vw, 60px); line-height: 1.05; letter-spacing: -.035em; margin: 0 0 20px; font-weight: 800; }
+  h1 em { font-style: normal; color: var(--red); }
+  .lead { font-size: 19px; color: var(--muted); max-width: 540px; margin: 0 0 30px; }
+  .ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+  .dl { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 10px; max-width: 580px; }
+  .dl + .dl { margin-top: 10px; }
+  .dl .primary { order: -1; }
+  .dl .btn.store.primary { font-size: 16.5px; padding: 13px 18px; }
+  .dl .btn.gh.ghost { font-size: 14px; color: var(--muted); }
+  .dl .btn.gh.ghost:hover { color: var(--text); }
+  .if-live { display: none; }
+  .btn.store.primary .if-live { display: inline; }
+  body:not(.chrome-live) .if-chrome-live, body:not(.firefox-live) .if-firefox-live { display: none; }
+  .plat-note { margin: -6px 0 14px; color: var(--muted); font-size: 15px; }
+  .plat-note b { color: var(--text); }
+  .manual-h { margin: 26px 0 12px; color: var(--muted); font-size: 14px; font-weight: 600; }
+  .dl .btn { justify-content: center; text-align: center; flex-direction: column; gap: 2px; padding: 11px 16px; line-height: 1.25; }
+  .dl .btn small { font-size: 12px; font-weight: 500; opacity: .85; }
+  .dl .btn small b { font-weight: 700; }
+  .btn.soon { border: 1px dashed var(--line2); color: var(--muted); cursor: default; }
+  .btn.soon small::before { content: "⏳ "; }
+  .btn.soon small b { color: var(--text); }
+  .dl-more { margin-top: 14px; }
+  .bl { display: inline-flex; align-items: center; gap: 8px; }
+  .blogo { width: 20px; height: 20px; object-fit: contain; flex: none; }
+  .blogo.fb { width: auto; height: auto; font-size: 17px; line-height: 1; }
+  .plat { border: 1px solid var(--line); border-radius: 18px; padding: 26px; margin-top: 28px; background: rgba(255,255,255,.012); }
+  .plat-h { display: flex; align-items: center; gap: 12px; margin: 0 0 20px; font-size: 22px; font-weight: 800; letter-spacing: -.01em; }
+  .plat-h .blogo { width: 30px; height: 30px; }
+  .plat-h .blogo.fb { font-size: 26px; }
+  .plat-h small { font-size: 14px; color: var(--muted); font-weight: 500; }
+  .plat .dl { margin-top: 4px; }
+  .step.alt { border-style: dashed; }
+  .step.alt::before { content: "★"; background: transparent; border: 1px solid var(--line2); color: var(--muted); }
+  .final .dl { margin: 0 auto; }
+  .contact { margin-top: 22px; font-size: 14.5px; color: var(--muted); }
+  .contact a { color: var(--text); border-bottom: 1px solid var(--line2); }
+  .contact a:hover, details p a:hover { border-color: var(--red); }
+  details p a { color: var(--text); border-bottom: 1px solid var(--line2); }
+  @media (max-width: 520px) { .dl { grid-template-columns: 1fr; } }
+  .trust { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 28px; font-size: 14px; color: var(--muted); }
+  .trust span::before { content: "✓"; color: var(--green); margin-right: 6px; font-weight: 700; }
+
+  /* mock panel */
+  .mock { background: #1f1f1f; border: 1px solid #3a3a3a; border-radius: 14px; box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.02); font-size: 13px; overflow: hidden; transform: perspective(1400px) rotateY(-6deg) rotateX(2deg); }
+  .mock .top { display: flex; align-items: center; gap: 8px; padding: 9px 12px 0; }
+  .mock .top b { color: #f87171; font-size: 13px; }
+  .mock .top b small { color: #888; font-weight: 400; font-size: 11px; }
+  .mock .tabs { display: flex; gap: 2px; padding: 0 10px; border-bottom: 1px solid #333; font-size: 12.5px; color: #aaa; overflow: hidden; white-space: nowrap; }
+  .mock .tabs span { padding: 7px 7px; border-bottom: 2px solid transparent; }
+  .mock .tabs .on { color: #fff; border-color: var(--red); font-weight: 600; }
+  .mock .body { display: grid; grid-template-columns: 130px 1fr; min-height: 300px; }
+  .mock .fold { border-right: 1px solid #333; padding: 8px 0; font-size: 12px; }
+  .mock .fold div { padding: 5px 10px; display: flex; gap: 7px; align-items: center; color: #ccc; }
+  .mock .fold .on { background: #2f2626; border-left: 3px solid var(--red); padding-left: 7px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+  .mock .row { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-bottom: 1px solid #2a2a2a; color: #ddd; }
+  .mock .row.sel { background: #3b1d1d; }
+  .cb { width: 13px; height: 13px; border: 1px solid #666; border-radius: 3px; flex-shrink: 0; }
+  .sel .cb { background: var(--red); border-color: var(--red); }
+  .st { color: #777; } .st.on { color: var(--amber); }
+  .row .t { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .row .d { color: #888; font-size: 11px; }
+  .tag { font-size: 10px; padding: 1px 6px; border-radius: 8px; border: 1px solid; margin-left: 6px; }
+  .mock .foot { display: flex; gap: 6px; padding: 9px 10px; border-top: 1px solid #333; align-items: center; flex-wrap: nowrap; }
+  .mock .foot .mb { white-space: nowrap; }
+  .mb { background: #2f2f2f; border: 1px solid #444; border-radius: 6px; padding: 4px 9px; font-size: 11.5px; color: #eee; }
+  .mb.red { background: #b91c1c; border-color: #b91c1c; }
+  .mock .status { padding: 0 10px 9px; font-size: 11.5px; color: #aaa; }
+
+  /* sections */
+  section { padding: 84px 0; }
+  .alt { background: var(--bg2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .kicker { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; margin: 0 0 10px; }
+  h2 { font-size: clamp(28px, 3.4vw, 40px); letter-spacing: -.025em; line-height: 1.15; margin: 0 0 14px; }
+  .sub { color: var(--muted); font-size: 18px; max-width: 680px; margin: 0 0 44px; }
+
+  .numbers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 40px 0; border-bottom: 1px solid var(--line); }
+  .numbers div { text-align: center; }
+  .numbers b { display: block; font-size: 34px; letter-spacing: -.03em; }
+  .numbers span { color: var(--muted); font-size: 14px; }
+
+  .pain { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .pain .box { border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; background: var(--card); }
+  .pain .box.bad h3::before { content: "😩 "; } .pain .box.good h3::before { content: "⚡ "; }
+  .pain .box.good { border-color: rgba(239,68,68,.45); background: linear-gradient(180deg, rgba(239,68,68,.07), transparent 70%), var(--card); }
+  .pain h3 { margin: 0 0 12px; font-size: 19px; }
+  .pain ol, .pain ul { margin: 0; padding-left: 20px; color: var(--muted); }
+  .pain li { margin: 6px 0; }
+  .clicks { font-family: ui-monospace, Consolas, monospace; font-size: 13px; color: var(--dim); margin-top: 14px; }
+
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; transition: .15s; }
+  .card:hover { border-color: var(--line2); transform: translateY(-2px); }
+  .card .ic { width: 42px; height: 42px; border-radius: 10px; background: var(--redsoft); display: grid; place-items: center; font-size: 21px; margin-bottom: 14px; }
+  .card h3 { margin: 0 0 6px; font-size: 17px; }
+  .card p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  .spot { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; margin-bottom: 84px; }
+  .spot:last-child { margin-bottom: 0; }
+  .spot.rev .txt { order: 2; }
+  .spot ul { padding: 0; list-style: none; margin: 18px 0 0; }
+  .spot li { padding: 7px 0 7px 30px; position: relative; color: var(--muted); }
+  .spot li::before { content: "→"; position: absolute; left: 0; color: var(--red); font-weight: 700; }
+  .spot li b { color: var(--text); font-weight: 600; }
+  .frame { background: #1f1f1f; border: 1px solid #3a3a3a; border-radius: 14px; padding: 14px; box-shadow: 0 24px 60px rgba(0,0,0,.45); font-size: 13px; }
+  .thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .th { aspect-ratio: 1; border-radius: 8px; border: 2px solid #2a2a2a; position: relative; }
+  .th.sel { border-color: var(--red); }
+  .th.sel::after { content: "✓"; position: absolute; top: 5px; left: 5px; width: 16px; height: 16px; border-radius: 4px; background: var(--red); color: #fff; font-size: 11px; display: grid; place-items: center; }
+  .th:nth-child(1) { background: linear-gradient(135deg, #f97316, #7c2d12); } .th:nth-child(2) { background: linear-gradient(135deg, #0ea5e9, #1e3a8a); }
+  .th:nth-child(3) { background: linear-gradient(135deg, #a855f7, #3b0764); } .th:nth-child(4) { background: linear-gradient(135deg, #f43f5e, #4c0519); }
+  .th:nth-child(5) { background: linear-gradient(135deg, #22c55e, #14532d); } .th:nth-child(6) { background: linear-gradient(135deg, #eab308, #713f12); }
+  .th:nth-child(7) { background: linear-gradient(135deg, #64748b, #0f172a); } .th:nth-child(8) { background: linear-gradient(135deg, #ec4899, #500724); }
+  .framebar { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; color: #aaa; font-size: 12px; gap: 8px; flex-wrap: wrap; }
+  .field { display: grid; gap: 4px; margin-bottom: 10px; color: #bbb; font-size: 12px; }
+  .inp { background: #2a2a2a; border: 1px solid #444; border-radius: 6px; padding: 7px 9px; color: #eee; font-size: 13px; }
+  .code { background: #111; border: 1px solid #333; border-radius: 8px; padding: 10px 12px; font: 12.5px/1.5 ui-monospace, Consolas, monospace; color: #ddd; white-space: pre-wrap; margin-bottom: 10px; }
+  .code i { color: var(--amber); font-style: normal; }
+  .mm { display: grid; grid-template-columns: 1fr 210px; gap: 12px; }
+  .chat { display: grid; gap: 8px; align-content: start; }
+  .msg { border-radius: 10px; padding: 8px 10px; font-size: 12.5px; color: #ddd; }
+  .msg.u { background: #1e3a5f; justify-self: end; max-width: 85%; }
+  .msg.a { background: #262626; }
+  .ts { font-size: 10.5px; color: #777; }
+  .ts.r { text-align: right; }
+  .side { border-left: 1px solid #333; padding-left: 10px; font-size: 12px; }
+  .side div { padding: 5px 0; border-bottom: 1px solid #262626; color: #ccc; display: flex; gap: 6px; }
+  .side div span:first-child { color: #777; min-width: 16px; }
+  .side .hit { background: #3b1d1d; margin: 0 -6px; padding: 5px 6px; border-radius: 4px; }
+
+  table.cmp { width: 100%; border-collapse: collapse; font-size: 15px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .cmp th, .cmp td { padding: 13px 16px; text-align: left; border-bottom: 1px solid var(--line); }
+  .cmp th { font-size: 13px; color: var(--muted); font-weight: 600; background: #1b1b20; }
+  .cmp td:not(:first-child), .cmp th:not(:first-child) { text-align: center; }
+  .cmp .us { background: rgba(239,68,68,.06); color: var(--text); font-weight: 600; }
+  .cmp th.us { color: #fca5a5; }
+  .cmp td.us.y { color: var(--green); }
+  .y { color: var(--green); font-weight: 700; } .n { color: #52525b; } .p { color: var(--amber); font-size: 13px; }
+  .cmpnote { color: var(--dim); font-size: 13px; margin-top: 12px; }
+
+  .steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; counter-reset: s; }
+  .step { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 18px; position: relative; }
+  .step::before { counter-increment: s; content: counter(s); width: 30px; height: 30px; border-radius: 50%; background: var(--red); color: #fff; display: grid; place-items: center; font-weight: 800; margin-bottom: 12px; }
+  .step h4 { margin: 0 0 6px; font-size: 15.5px; }
+  .step p { margin: 0; color: var(--muted); font-size: 14px; }
+  kbd, code.k { background: #26262c; border: 1px solid #3a3a42; border-bottom-width: 2px; border-radius: 5px; padding: 1px 6px; font: 12.5px ui-monospace, Consolas, monospace; color: var(--text); }
+  .browsers { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+  .bchip { border: 1px solid var(--line2); border-radius: 10px; padding: 10px 16px; display: flex; gap: 10px; align-items: center; font-weight: 600; }
+  .bchip small { color: var(--muted); font-weight: 500; }
+  .bchip.soon { opacity: .6; border-style: dashed; }
+
+  .privacy { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .privacy .card { text-align: center; }
+  .privacy .card .ic { margin: 0 auto 14px; background: rgba(34,197,94,.12); }
+
+  details { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 0 20px; margin-bottom: 10px; }
+  summary { cursor: pointer; padding: 17px 0; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; color: var(--red); font-size: 20px; line-height: 1; }
+  details[open] summary::after { content: "−"; }
+  details p { margin: 0 0 18px; color: var(--muted); }
+
+  .final { text-align: center; padding: 96px 0; background: radial-gradient(ellipse at center, rgba(239,68,68,.14), transparent 60%); }
+  .final .sub { margin: 0 auto 32px; }
+  footer { border-top: 1px solid var(--line); padding: 34px 0; color: var(--dim); font-size: 14px; }
+  footer .wrap { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
+  footer .disc { flex-basis: 100%; font-size: 12.5px; }
+  footer a:hover { color: var(--text); }
+
+  /* Co nowego / What's new (#releases) */
+  #releases { scroll-margin-top: 64px; }
+  .rel-list { display: grid; gap: 18px; }
+  .rel { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px 28px; scroll-margin-top: 84px; }
+  .rel.latest { border-color: rgba(239,68,68,.45); background: linear-gradient(180deg, rgba(239,68,68,.07), transparent 55%), var(--card); }
+  .rel-h { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+  .rel-v { font-size: 24px; font-weight: 800; letter-spacing: -.02em; }
+  .rel-date { color: var(--dim); font-size: 14px; }
+  .rel-badge { background: var(--red); color: #fff; border-radius: 999px; padding: 2px 10px; font-size: 12px; font-weight: 700; }
+  .rel-intro { color: var(--muted); margin: 4px 0 16px; font-size: 15.5px; }
+  .rel-get { display: flex; gap: 10px; flex-wrap: wrap; margin: 0 0 20px; }
+  .rel-get .btn { padding: 9px 16px; font-size: 14px; }
+  .rel-get .btn small { font-weight: 500; opacity: .85; }
+  .rel-get .btn.soon { border: 1px dashed var(--line2); color: var(--muted); cursor: default; }
+  .rel-get .btn.old { border: 1px solid var(--line); color: var(--dim); cursor: default; }
+  .rel-get .btn.ghost.sm { color: var(--muted); }
+  .rel ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .rel li { display: grid; grid-template-columns: 104px 1fr; gap: 14px; align-items: baseline; color: var(--muted); font-size: 15px; }
+  .rel li b { color: var(--text); font-weight: 600; }
+  .rtag { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; border-radius: 6px; padding: 3px 8px; justify-self: start; white-space: nowrap; }
+  .rtag.new { background: rgba(34,197,94,.13); color: #86efac; }      /* NOWE = zielone */
+  .rtag.better { background: rgba(59,130,246,.15); color: #93c5fd; }  /* LEPSZE = niebieskie */
+  .rtag.fix { background: rgba(249,115,22,.15); color: #fdba74; }     /* NAPRAWIONE = pomarańczowe */
+  .rel-more { margin-top: 18px; text-align: center; }
+  .rel-more .btn { cursor: pointer; background: none; color: var(--text); font-family: inherit; }
+  @media (max-width: 600px) { .rel { padding: 20px; } .rel li { grid-template-columns: 1fr; gap: 4px; } .rel-get .btn { flex: 1 1 100%; flex-wrap: wrap; gap: 4px 10px; } }
+
+  @media (max-width: 960px) {
+    .hero .wrap, .spot, .pain { grid-template-columns: 1fr; }
+    .spot.rev .txt { order: 0; }
+    .grid { grid-template-columns: 1fr 1fr; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .privacy, .numbers { grid-template-columns: 1fr 1fr; }
+    .navlinks { display: none; }
+    .mock { transform: none; }
+  }
+  @media (max-width: 600px) {
+    .grid, .steps, .privacy { grid-template-columns: 1fr; }
+    .mock .body { grid-template-columns: 1fr; } .mock .fold { display: none; }
+    .mm { grid-template-columns: 1fr; } .side { display: none; }
+    .cmp { font-size: 13px; } .cmp th, .cmp td { padding: 10px 8px; }
+    nav .brand small { display: none; }
+  }
+  .navlinks a.on { color: var(--text); }
+  #releases { padding-top: 56px; }
+  .back { display: inline-block; color: var(--muted); font-size: 14.5px; margin-bottom: 26px; }
+  .back:hover { color: var(--text); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="../"><span class="logo">CK</span>ChatKit Pro <small>by JustPLGuy</small></a>
+    <div class="navlinks">
+      <a href="../#features" data-i18n="nav.features">Features</a>
+      <a href="../#compare" data-i18n="nav.compare">Compare</a>
+      <a href="../#install" data-i18n="nav.install">Install</a>
+      <a class="on" href="./" aria-current="page" data-i18n="nav.rel">What's new</a>
+      <a href="../#faq" data-i18n="nav.faq">FAQ</a>
+    </div>
+    <div class="lang" role="group" aria-label="Language">
+      <button data-lang="en">EN</button><button data-lang="pl">PL</button>
+    </div>
+    <a class="gh" data-href="repo" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</nav>
+
+<main>
+<section id="releases">
+  <div class="wrap" style="max-width:860px">
+    <a class="back" href="../" data-i18n="rel.back">← ChatKit Pro</a>
+    <p class="kicker" data-i18n="rel.k">Changelog</p>
+    <h2 data-i18n="rel.h">What's new</h2>
+    <p class="sub" data-i18n="rel.sub">Every version, what it adds and what it fixes — and where you can get it.</p>
+    <div class="rel-list" id="relList"></div>
+    <div class="rel-more" id="relMore" hidden><button class="btn ghost" type="button"></button></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span><b style="color:var(--text)">ChatKit Pro</b> by JustPLGuy · v1.1.0</span>
+    <a data-href="repo" target="_blank" rel="noopener">GitHub</a>
+    <a href="./" data-i18n="nav.rel">What's new</a>
+    <a data-href="releases" target="_blank" rel="noopener">GitHub Releases</a>
+    <a data-href="issues" target="_blank" rel="noopener" data-i18n="ft.issues">Report an issue</a>
+    <a href="mailto:justplguy@gmail.com">✉ justplguy@gmail.com</a>
+    <a data-href="license" target="_blank" rel="noopener">MIT License</a>
+    <span class="disc" data-i18n="ft.disc">ChatKit Pro is an independent project and is not affiliated with, endorsed by, or sponsored by OpenAI. ChatGPT is a trademark of OpenAI.</span>
+  </div>
+</footer>
+
+<script>
+/* ===== Konfiguracja / Configuration =====
+   REPO: wykrywane automatycznie na GitHub Pages (uzytkownik.github.io/repo).
+   Gdy strona jest gdzie indziej — wpisz tu "uzytkownik/repo". */
+const CONFIG = {
+  REPO: "justPLguy/chatkit-pro",
+  CHROME_TAG: "chrome-v1.1.0",
+  FIREFOX_TAG: "firefox-v1.1.0",
+  // Wersje pokazywane pod przyciskami (osobno dla GitHuba i sklepów):
+  VERSIONS: { chromeGh: "1.1.0", firefoxGh: "1.1.0", chromeStore: "1.1.0", firefoxStore: "1.1.0" },
+  // Po akceptacji wklej tu linki do sklepów — przyciski same zmienią się w aktywne:
+  CHROME_STORE: "https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh",   // np. "https://chromewebstore.google.com/detail/pehdgnogfmaeeldpjdmadfpankacofhh"
+  FIREFOX_STORE: ""   // np. "https://addons.mozilla.org/firefox/addon/chatkit-pro-by-justplguy/"
+};
+(function detectRepo() {
+  const m = location.hostname.match(/^([a-z0-9-]+)\.github\.io$/i);
+  const seg = location.pathname.split("/").filter(Boolean)[0];
+  if (m && seg) CONFIG.REPO = m[1] + "/" + seg;
+})();
+const GH = "https://github.com/" + CONFIG.REPO;
+const LINKS = {
+  repo: GH,
+  release: GH + "/releases/tag/" + CONFIG.CHROME_TAG,
+  ffrelease: GH + "/releases/tag/" + CONFIG.FIREFOX_TAG,
+  releases: GH + "/releases",
+  chrome: GH + "/tree/chrome",
+  issues: GH + "/issues",
+  license: GH + "/blob/main/LICENSE"
+};
+document.querySelectorAll("[data-href]").forEach(a => { a.href = LINKS[a.dataset.href]; });
+// Sklepy: z linkiem w CONFIG → duży czerwony „Dodaj do …” na pierwszym miejscu, GitHub jako mała opcja.
+// Bez linku → „W recenzji”, a główny jest przycisk GitHub.
+const LIVE = { chrome: !!CONFIG.CHROME_STORE, firefox: !!CONFIG.FIREFOX_STORE };
+for (const b of ["chrome", "firefox"]) if (LIVE[b]) document.body.classList.add(b + "-live");
+const swapLabel = el => { if (el && el.dataset.live) { el.dataset.i18n = el.dataset.live; el.textContent = el.dataset.liveEn; } };
+document.querySelectorAll("[data-store]").forEach(a => {
+  const url = a.dataset.store === "chrome" ? CONFIG.CHROME_STORE : CONFIG.FIREFOX_STORE;
+  if (!url) return;
+  a.href = url; a.target = "_blank"; a.rel = "noopener";
+  a.classList.replace("soon", "primary");
+  swapLabel(a.querySelector("[data-live]"));
+  const st = a.querySelector("[data-i18n='st.soon']"); st.dataset.i18n = "st.live"; st.textContent = "free · auto-updates";
+});
+document.querySelectorAll("[data-gh]").forEach(a => {
+  if (!LIVE[a.dataset.gh]) return;
+  a.classList.replace("primary", "ghost");
+  a.querySelectorAll("[data-live]").forEach(swapLabel);
+});
+// Logo przeglądarek: plik w assets/ (chrome.png, firefox.png); jeśli go brak — emoji.
+document.querySelectorAll("img.blogo").forEach(img => {
+  const fb = () => { const s = document.createElement("span"); s.className = "blogo fb"; s.textContent = img.dataset.fb; img.replaceWith(s); };
+  if (img.complete && img.naturalWidth === 0) fb(); else img.addEventListener("error", fb);
+});
+document.querySelectorAll("[data-ver]").forEach(b => { b.textContent = "v" + CONFIG.VERSIONS[b.dataset.ver]; });
+
+/* ===== Co nowego / What's new =====
+   NOWA WERSJA: dopisz obiekt NA GÓRZE listy (najnowsza pierwsza).
+   stores — status w sklepach: "live" (opublikowana) albo "review" (w recenzji).
+     Gdy sklep zaakceptuje: zmień "review" na "live". Starsza wersja sama pokaże „zastąpiona przez …”.
+     "live" działa tylko, gdy w CONFIG jest link do sklepu (CHROME_STORE / FIREFOX_STORE).
+   gh — czy wydanie jest już na GitHubie (link do ZIP-a w Releases).
+   Rodzaje zmian: new = nowe, better = ulepszenie, fix = poprawka. Teksty: [pogrubienie, opis]. */
+const RELEASES = [
+  {
+    v: "1.2.0", date: "2026-11-18",
+    stores: { chrome: "review", firefox: "review" }, gh: false,
+    intro: ["A big update: bulk rename, ZIP export, code saving, chat width — and far fewer requests to ChatGPT.",
+            "Duża aktualizacja: masowa zmiana nazw, eksport do ZIP, zapisywanie kodu, szerokość czatu — i dużo mniej zapytań do ChatGPT."],
+    items: [
+      ["better", ["Gentle on ChatGPT", "far fewer requests, so no more “Too many requests” / “Unable to load conversation”. If ChatGPT asks for a break, ChatKit Pro pauses in every tab and the panel shows a countdown."],
+                 ["Oszczędna dla ChatGPT", "dużo mniej zapytań, więc koniec z „Too many requests” / „Nie można wczytać konwersacji”. Gdy ChatGPT poprosi o przerwę, ChatKit Pro czeka we wszystkich kartach, a panel pokazuje odliczanie."]],
+      ["new", ["On/off switch", "the CK icon turns the extension on (red) and off (grey). The panel opens with the 🧰 button or Alt+Shift+K."],
+              ["Włącznik", "ikona CK włącza (czerwona) i wyłącza (szara) wtyczkę. Panel otwierasz przyciskiem 🧰 albo Alt+Shift+K."]],
+      ["new", ["Bulk rename", "add a prefix like “[Work]”, remove or replace text in many chat titles at once — with a live preview."],
+              ["Masowa zmiana nazw", "dodaj prefiks np. „[Praca]”, usuń albo zamień tekst w tytułach wielu czatów naraz — z podglądem."]],
+      ["new", ["Export to ZIP", "one file per chat (Markdown, HTML or JSON) in a single ZIP."],
+              ["Eksport do ZIP", "osobny plik dla każdego czatu (Markdown, HTML albo JSON) w jednym ZIP-ie."]],
+      ["new", ["Chat width & font size", "two sliders in Settings — great on wide monitors."],
+              ["Szerokość czatu i czcionka", "dwa suwaki w ustawieniach — świetne na szerokich monitorach."]],
+      ["new", ["Save code", "a “Save” button on every code block (.py, .js, .json…), and all code from a chat in one click from the minimap."],
+              ["Zapisywanie kodu", "przycisk „Zapisz” przy każdym bloku kodu (.py, .js, .json…), a z minimapy cały kod z czatu jednym kliknięciem."]],
+      ["new", ["Prompts 2.0", "⭐ favorites, #tags, drag-and-drop order and sorting."],
+              ["Prompty 2.0", "⭐ ulubione, #tagi, kolejność przeciąganiem i sortowanie."]],
+      ["new", ["Chat stats & backup reminder", "words, characters and ~tokens in the minimap; a periodic reminder to save a copy of your folders, prompts and notes."],
+              ["Liczniki i kopia zapasowa", "słowa, znaki i ~tokeny w minimapie; okresowe przypomnienie o kopii folderów, promptów i notatek."]],
+      ["better", ["Clearer timestamps", "“👤 You · Today, 14:32” and “🤖 ChatGPT · Yesterday, 23:10”."],
+                 ["Czytelniejsze znaczniki czasu", "„👤 Ty · Dziś, 14:32” i „🤖 ChatGPT · Wczoraj, 23:10”."]],
+      ["better", ["Quiet install", "installing no longer opens a ChatGPT tab."],
+                 ["Cicha instalacja", "instalacja nie otwiera już karty z ChatGPT."]],
+      ["fix", ["Vanishing panel", "after reloading ChatGPT the extension sometimes disappeared — it now restores itself."],
+              ["Znikający panel", "po odświeżeniu ChatGPT wtyczka czasem znikała — teraz sama się przywraca."]],
+      ["fix", ["Settings", "sliders and checkboxes no longer ignore a second change."],
+              ["Ustawienia", "suwaki i przełączniki nie ignorują już kolejnej zmiany."]]
+    ]
+  },
+  {
+    v: "1.1.0", date: "2026-11-17",
+    stores: { chrome: "live", firefox: "review" }, gh: true,
+    intro: ["The first version in the Chrome Web Store and the first one for Firefox. Everything you need to clean up and organize ChatGPT:",
+            "Pierwsza wersja w Chrome Web Store i pierwsza dla Firefoksa. Wszystko, czego trzeba do sprzątania i porządkowania ChatGPT:"],
+    items: [
+      ["new", ["Bulk actions", "select any number of chats (Shift+click for ranges) and delete, archive, restore, star or move them to folders."],
+              ["Operacje hurtowe", "zaznacz dowolną liczbę czatów (Shift+klik = zakres) i usuń, zarchiwizuj, przywróć, oznacz gwiazdką albo przenieś do folderów."]],
+      ["new", ["Library cleanup", "thumbnail grid, size sorting, AI-generated / uploaded filters; download and delete images in bulk (deleting a chat doesn't delete its images)."],
+              ["Czyszczenie Biblioteki", "siatka miniatur, sortowanie po rozmiarze, filtry AI / wgrane; hurtowe pobieranie i usuwanie obrazków (usunięcie czatu nie kasuje jego obrazków)."]],
+      ["new", ["Folders & stars", "nested, colored folders with drag & drop, also marked in the ChatGPT sidebar."],
+              ["Foldery i gwiazdki", "zagnieżdżone, kolorowe foldery z przeciąganiem, oznaczone też w pasku bocznym ChatGPT."]],
+      ["new", ["Export", "chats or whole folders to Markdown, HTML or PDF."],
+              ["Eksport", "czaty albo całe foldery do Markdown, HTML lub PDF."]],
+      ["new", ["Inside the chat", "timestamps above messages, a minimap with in-chat search, bookmarks and notes."],
+              ["W czacie", "znaczniki czasu nad wiadomościami, minimapa z wyszukiwaniem, zakładki i notatki."]],
+      ["new", ["Prompt library", "{{variables}}, categories, quick insert with Alt+Shift+P or //."],
+              ["Biblioteka promptów", "{{zmienne}}, kategorie, szybkie wstawianie przez Alt+Shift+P albo //."]],
+      ["new", ["And more", "full-text search across all chats, cleanup rules, statistics, classic dark mode, 4 languages (EN, PL, FR, DE)."],
+              ["I więcej", "wyszukiwanie w treści wszystkich czatów, reguły sprzątania, statystyki, klasyczny tryb ciemny, 4 języki (PL, EN, FR, DE)."]],
+      ["new", ["Welcome card & Firefox", "5 quick tips after installing; the first Firefox version (140+) with the same features."],
+              ["Karta powitalna i Firefox", "5 wskazówek na start; pierwsza wersja dla Firefoksa (140+) z tymi samymi funkcjami."]],
+      ["better", ["Fewer permissions", "and a clear “Log in to ChatGPT” message instead of an error when you're logged out."],
+                 ["Mniej uprawnień", "i czytelny komunikat „Zaloguj się do ChatGPT” zamiast błędu, gdy nie jesteś zalogowany."]],
+      ["fix", ["Notes on selected text", "the buttons were empty and covered ChatGPT's own popup."],
+              ["Notatki do zaznaczonego tekstu", "przyciski były puste i zasłaniały okienko ChatGPT."]]
+    ]
+  }
+];
+
+const REL_TXT = {
+  en: { latest: "Latest", new: "New", better: "Improved", fix: "Fixed",
+        addChrome: "Add to Chrome", addFirefox: "Add to Firefox", store: "free · auto-updates",
+        reviewChrome: "Chrome Web Store", reviewFirefox: "Firefox Add-ons", review: "in review · coming soon",
+        replaced: "replaced by", gh: "GitHub (ZIP)", more: n => `Show older versions (${n})`, less: "Show fewer" },
+  pl: { latest: "Najnowsza", new: "Nowe", better: "Lepsze", fix: "Naprawione",
+        addChrome: "Dodaj do Chrome", addFirefox: "Dodaj do Firefoksa", store: "za darmo · aktualizacje automatyczne",
+        reviewChrome: "Chrome Web Store", reviewFirefox: "Firefox Add-ons", review: "w recenzji · wkrótce",
+        replaced: "zastąpiona przez", gh: "GitHub (ZIP)", more: n => `Pokaż starsze wersje (${n})`, less: "Pokaż mniej" }
+};
+const REL_SHOW = 5; // ile wersji widać od razu (reszta pod „Pokaż starsze”)
+let relOpen = false, relLang = "en";
+function renderReleases(lang) {
+  relLang = lang === "pl" ? "pl" : "en";
+  const T = REL_TXT[relLang], L = relLang === "pl" ? 1 : 0;
+  const list = document.getElementById("relList"); if (!list) return;
+  const el = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+  const url = { chrome: CONFIG.CHROME_STORE, firefox: CONFIG.FIREFOX_STORE };
+  // najnowsza wersja opublikowana w danym sklepie (tylko ona dostaje przycisk „Dodaj do …”)
+  const liveIn = b => RELEASES.find(r => r.stores[b] === "live" && url[b]);
+  const logo = b => { const i = document.createElement("img"); i.className = "blogo"; i.alt = ""; i.src = "../assets/" + b + ".png";
+    i.addEventListener("error", () => { const f = el("span", "blogo fb", b === "chrome" ? "🌐" : "🦊"); i.replaceWith(f); }); return i; };
+  list.textContent = "";
+  RELEASES.forEach((r, idx) => {
+    const card = el("article", "rel" + (idx === 0 ? " latest" : ""));
+    card.id = "v" + r.v.replace(/\./g, "-");
+    if (idx >= REL_SHOW && !relOpen) card.hidden = true;
+    const h = el("div", "rel-h");
+    h.append(el("span", "rel-v", "v" + r.v));
+    if (idx === 0) h.append(el("span", "rel-badge", T.latest));
+    h.append(el("span", "rel-date", new Date(r.date + "T12:00:00").toLocaleDateString(relLang === "pl" ? "pl-PL" : "en-US", { day: "numeric", month: "long", year: "numeric" })));
+    card.append(h);
+    if (r.intro) card.append(el("p", "rel-intro", r.intro[L]));
+    const get = el("div", "rel-get");
+    for (const b of ["chrome", "firefox"]) {
+      const st = r.stores[b], newest = liveIn(b);
+      let a;
+      if (st === "live" && url[b] && newest === r) {
+        a = el("a", "btn primary"); a.href = url[b]; a.target = "_blank"; a.rel = "noopener";
+        a.append(logo(b), el("span", null, b === "chrome" ? T.addChrome : T.addFirefox), el("small", null, "· " + T.store));
+      } else if (st === "live" && url[b] && newest) {
+        a = el("span", "btn old"); a.append(logo(b), el("span", null, (b === "chrome" ? T.reviewChrome : T.reviewFirefox) + " · " + T.replaced + " v" + newest.v));
+      } else if (st) {
+        a = el("span", "btn soon"); a.append(logo(b), el("span", null, b === "chrome" ? T.reviewChrome : T.reviewFirefox), el("small", null, T.review));
+      }
+      if (a) get.append(a);
+    }
+    if (r.gh) {
+      const g = el("a", "btn ghost sm", T.gh); g.href = GH + "/releases?q=" + r.v + "&expanded=true"; g.target = "_blank"; g.rel = "noopener";
+      get.append(g);
+    }
+    card.append(get);
+    const ul = el("ul");
+    for (const [type, en, pl] of r.items) {
+      const t = L ? pl : en, li = el("li");
+      const body = el("span"); body.append(el("b", null, t[0]), document.createTextNode(" — " + t[1]));
+      li.append(el("span", "rtag " + type, T[type]), body);
+      ul.append(li);
+    }
+    card.append(ul);
+    list.append(card);
+  });
+  const more = document.getElementById("relMore"), hiddenN = Math.max(0, RELEASES.length - REL_SHOW);
+  more.hidden = !hiddenN;
+  more.querySelector("button").textContent = relOpen ? T.less : T.more(hiddenN);
+}
+document.querySelector("#relMore button").addEventListener("click", () => { relOpen = !relOpen; renderReleases(relLang); });
+// link do konkretnej wersji, np. #v1-1-0 — rozwiń starsze, jeśli trzeba
+if (/^#v\d/.test(location.hash)) { relOpen = true; addEventListener("load", () => document.querySelector(location.hash)?.scrollIntoView()); }
+
+/* ===== Tłumaczenia / Translations (EN = HTML, PL poniżej) ===== */
+const PL = {
+  "nav.features": "Funkcje", "nav.compare": "Porównanie", "nav.install": "Instalacja", "nav.faq": "FAQ", "nav.rel": "Co nowego",
+  "rel.k": "Historia zmian", "rel.h": "Co nowego", "rel.sub": "Każda wersja: co dodaje, co naprawia — i gdzie ją zdobyć.",
+  "hero.pill": "Za darmo · open source · bez konta",
+  "hero.title": "Twój ChatGPT <em>wreszcie uporządkowany.</em>",
+  "hero.lead": "Usuń setki czatów w kilka sekund, wyczyść Bibliotekę obrazków, poukładaj rozmowy w folderach, wyeksportuj je i pracuj szybciej dzięki promptom, minimapie i wyszukiwaniu w treści. Wszystkie funkcje za darmo — na zawsze.",
+  "st.addChrome": "Dodaj do Chrome", "st.addFirefox": "Dodaj do Firefoksa", "st.ghZip": "GitHub (ZIP)", "st.ghSmall": "GitHub", "st.ghManual": "instalacja ręczna",
+  "i.cLive": "Najprościej: kliknij <b>Dodaj do Chrome</b> — jedno kliknięcie, aktualizacje automatyczne. Działa w Chrome, Edge, Brave i Operze.", "i.fLive": "Najprościej: kliknij <b>Dodaj do Firefoksa</b> — jedno kliknięcie, aktualizacje automatyczne.",
+  "i.manual": "Instalacja ręczna z GitHuba (tryb dewelopera):", "i.manualFf": "Instalacja testowa z GitHuba (dodatek tymczasowy):",
+  "q9.q": "Mam wersję z GitHuba. Jak przejść na wersję ze sklepu?", "q9.a": "Foldery, gwiazdki, prompty i notatki są zapisane osobno dla każdej instalacji, więc trzeba je przenieść: w wersji z GitHuba otwórz panel → ⚙ Ustawienia → „Eksportuj dane (JSON)”. Usuń wersję z GitHuba, dodaj ChatKit Pro z Chrome Web Store, potem ⚙ Ustawienia → „Importuj dane” i wskaż plik.",
+  "cta.chrome": "Pobierz dla Chrome", "cta.firefox": "Pobierz dla Firefoksa", "st.soon": "W recenzji · link wkrótce", "st.live": "za darmo · aktualizacje automatyczne", "cta.see": "Zobacz, co potrafi", "cta.source": "Zobacz kod źródłowy",
+  "trust.1": "Bez płatnych funkcji", "trust.2": "Dane zostają w przeglądarce", "trust.3": "PL · EN · FR · DE",
+  "m.chats": "Czaty", "m.archive": "Archiwum", "m.library": "Biblioteka", "m.prompts": "Prompty", "m.notes": "Zakładki i notatki",
+  "m.all": "Wszystkie czaty", "m.r1": "Plan marketingowy Q4", "m.r2": "Test losowej grafiki", "m.r3": "Ile to 17% z 240?", "m.r4": "Czat bez tytułu",
+  "m.r6": "Pomysły na weekendowy wyjazd", "m.r5": "Nauka Pythona", "m.f1": "Praca", "m.f2": "Klienci", "m.f3": "Kod", "m.f4": "Przepisy", "m.r7": "test 2", "m.loadAll": "Wczytaj wszystkie", "m.move": "📁 Przenieś do…", "m.export": "⬇ Eksport",
+  "m.archiveBtn": "Archiwizuj", "m.delete": "Usuń (4)", "m.status": "Wczytano 412 z 412 czatów · zaznaczono 4",
+  "num.1": "narzędzi w jednym panelu", "num.2": "cena, na zawsze", "num.3": "własnych serwerów", "num.4": "języki",
+  "pain.k": "Dlaczego", "pain.h": "ChatGPT każe sprzątać po jednym czacie.",
+  "pain.sub": "Setki testowych czatów, tysiące wygenerowanych obrazków, zero folderów i operacji hurtowych. ChatKit Pro dodaje to, czego brakuje — bezpośrednio na chatgpt.com.",
+  "pain.bad": "Bez ChatKit Pro", "pain.b1": "Najedź na czat, kliknij trzy kropki", "pain.b2": "Kliknij „Usuń”, potwierdź", "pain.b3": "Powtórz dla każdego czatu",
+  "pain.b4": "Usunięte czaty zostawiają obrazki w Bibliotece", "pain.bc": "100 czatów ≈ 300 kliknięć",
+  "pain.good": "Z ChatKit Pro", "pain.g1": "Wczytaj wszystkie czaty, przefiltruj (np. starsze niż 30 dni)", "pain.g2": "Zaznacz widoczne — albo Shift+klik dla zakresu",
+  "pain.g3": "Usuń, zarchiwizuj albo przenieś do folderu", "pain.g4": "Tak samo wyczyść Bibliotekę — z licznikiem miejsca", "pain.gc": "100 czatów ≈ 3 kliknięcia",
+  "f.k": "Funkcje", "f.h": "Wszystko, czego brakowało w ChatGPT.", "f.sub": "Jeden panel otwierany ikoną na pasku. Bez rejestracji, bez limitów, bez płatnej wersji.",
+  "f1.h": "Masowe usuwanie i archiwizacja", "f1.p": "Zaznacz dowolną liczbę czatów checkboxami i Shift+klik. Usuń, zarchiwizuj, przywróć z archiwum — za jednym razem.",
+  "f2.h": "Czyszczenie Biblioteki", "f2.p": "Usunięcie czatu nie usuwa jego plików. Usuwaj lub pobieraj obrazki hurtem, sortuj po rozmiarze, filtruj wygenerowane i wgrane.",
+  "f3.h": "Foldery i gwiazdki", "f3.p": "Zagnieżdżone, kolorowe foldery z przeciąganiem. Gwiazdki i kolory widać też w pasku bocznym ChatGPT.",
+  "f4.h": "Eksport", "f4.p": "Zaznaczone czaty albo cały folder do Markdown, HTML lub PDF — z datą i godziną każdej wiadomości.",
+  "f5.h": "Znaczniki czasu", "f5.p": "Zobacz, kiedy dokładnie wysłano każdą wiadomość, i dokładny czas ostatniej zmiany czatu — nie tylko „Wczoraj”.",
+  "f6.h": "Biblioteka promptów", "f6.p": "Zapisuj prompty ze {{zmiennymi}} i wstawiaj je skrótem Alt+Shift+P albo wpisując // w polu wiadomości.",
+  "f7.h": "Minimapa", "f7.p": "Klikalny spis treści długich rozmów z wyszukiwaniem. Przeskocz do dowolnej wiadomości, nawet 200 wiadomości wyżej.",
+  "f8.h": "Zakładki i notatki", "f8.p": "Oznaczaj ważne odpowiedzi, dodawaj notatki do czatu lub zaznaczonego fragmentu i miej je wszystkie w jednym miejscu.",
+  "f9.h": "Wyszukiwanie w treści", "f9.p": "Znajdź rozmowę po zdaniu z jej środka. Indeks powstaje lokalnie w Twojej przeglądarce.",
+  "f10.h": "Reguły sprzątania", "f10.p": "„Czaty starsze niż 90 dni bez gwiazdki → archiwum.” Zobacz podgląd, zanim cokolwiek się stanie.",
+  "f11.h": "Statystyki", "f11.p": "Ile masz czatów i plików, ile miejsca zajmuje Biblioteka i co zajmuje go najwięcej.",
+  "f12.h": "Klasyczny tryb ciemny i 4 języki", "f12.p": "Przywróć łagodniejszy, szary tryb ciemny. Interfejs po polsku, angielsku, francusku i niemiecku.",
+  "s1.k": "Czyszczenie Biblioteki", "s1.h": "2400 obrazków? Zaznacz wszystko i gotowe.",
+  "s1.p": "ChatGPT trzyma każdy wgrany i wygenerowany plik w Bibliotece — nawet po usunięciu czatu. ChatKit Pro pokazuje je w siatce miniatur, którą da się naprawdę posprzątać.",
+  "s1.l1": "<b>Siatka miniatur</b> z regulowanym rozmiarem i pełnoekranowym podglądem", "s1.l2": "<b>Filtry:</b> wygenerowane przez AI, wgrane, z projektów, starsze niż X dni",
+  "s1.l3": "<b>Licznik rozmiaru</b> — widzisz, ile MB zwalniasz", "s1.l4": "<b>Pobieranie</b> zaznaczonych plików przed usunięciem",
+  "s1.l5": "<b>Zaznaczenie przetrwa</b> odświeżenie strony — jeden missclick go nie skasuje", "s1.bar": "Zaznaczono 2412 (1,8 GB)", "s1.btn": "Usuń zaznaczone",
+  "s2.k": "Biblioteka promptów", "s2.h": "Przestań przepisywać te same prompty.", "s2.p": "Napisz szablon raz, oznacz zmienne części i uzupełnij je w małym formularzu przy wstawianiu.",
+  "s2.l1": "<b>Zmienne</b> z wartościami domyślnymi: {{ton|swobodny}}", "s2.l2": "<b>Szybkie wstawianie:</b> Alt+Shift+P albo // w pustym polu wiadomości",
+  "s2.l3": "<b>Zapisz dowolną wysłaną wiadomość</b> jako prompt jednym kliknięciem", "s2.l4": "<b>Pakiet startowy</b> 10 promptów, import i eksport JSON",
+  "s2.code": "Streść poniższy tekst w <i>{{liczba|5}}</i> punktach.\nZachowaj najważniejsze liczby i nazwy.\n\n<i>{{tekst}}</i>",
+  "s2.inp": "Raport kwartalny: przychody wzrosły o 14% …", "s2.btn": "Wstaw",
+  "s3.k": "W czacie", "s3.h": "Odnajdź się w długich rozmowach.", "s3.p": "Smukły panel przy prawej krawędzi każdego czatu: spis treści, wyszukiwanie, zakładki i notatki — plus data nad każdą wiadomością.",
+  "s3.l1": "<b>Spis treści</b> wszystkich Twoich pytań — kliknij, by przeskoczyć", "s3.l2": "<b>Wyszukiwanie</b> w rozmowie z podświetleniem",
+  "s3.l3": "<b>Zaznacz tekst</b> w odpowiedzi → dodaj notatkę lub zakładkę", "s3.l4": "<b>Znaczniki czasu</b> nad każdą wiadomością",
+  "s3.m1": "Możesz skrócić wiadomość powitalną?", "s3.m2": "Jasne — oto krótsza wersja w tym samym tonie…", "s3.m3": "Idealnie, teraz wiadomość pożegnalna.",
+  "s3.t1": "Konfiguracja serwera Discord", "s3.t2": "Role i uprawnienia", "s3.t3": "Wiadomość powitalna 🔖", "s3.t4": "Skróć ją", "s3.t5": "Wiadomość pożegnalna",
+  "c.k": "Porównanie", "c.h": "Wszystko za darmo. Naprawdę.", "c.sub": "Wiele rozszerzeń do ChatGPT chowa najlepsze funkcje za abonamentem. ChatKit Pro w ogóle nie ma płatnej wersji.",
+  "c.paid": "Typowe płatne rozszerzenia", "c.rare": "rzadko", "c.r1": "Masowe usuwanie i archiwizacja", "c.r2": "Czyszczenie Biblioteki (obrazków)", "c.r3": "Foldery i gwiazdki",
+  "c.r4": "Eksport do Markdown / HTML / PDF", "c.r5": "Biblioteka promptów ze zmiennymi", "c.r6": "Wyszukiwanie w treści wszystkich czatów",
+  "c.r7": "Reguły sprzątania i statystyki", "c.r8": "Otwarty kod", "c.r9": "Wymagane konto / rejestracja", "c.r10": "Cena",
+  "c.often": "często płatne", "c.often2": "często płatne", "c.often3": "często płatne", "c.often4": "często płatne", "c.often5": "często", "c.no": "Nie", "c.sub2": "abonament",
+  "c.note": "„Typowe płatne rozszerzenia” to ogólny opis rynku, a nie konkretny produkt.",
+  "i.k": "Instalacja", "i.h": "Gotowe w dwie minuty.", "i.sub": "Zainstaluj z oficjalnego sklepu jednym kliknięciem — albo ręcznie z GitHuba.", "b.ff": "· 140+", "f1.h": "Pobierz", "f1.p": "Pobierz <b>ChatKit-Pro-Firefox-v1.1.0.zip</b> z Releases i rozpakuj.", "f2.h": "Strona debugowania", "f2.p": "Otwórz <code class=\"k\">about:debugging</code> → <b>Ten Firefox</b>.", "f3.h": "Załaduj dodatek", "f3.p": "Kliknij „Załaduj tymczasowy dodatek…” i wskaż <code class=\"k\">manifest.json</code>.", "f4.h": "Otwórz ChatGPT", "f4.p": "Wejdź na chatgpt.com i kliknij ikonę CK — jest już na pasku.", "f5.h": "Na stałe", "f5.p": "Dodatek z ZIP-a jest tymczasowy (znika po restarcie). Na stałe i z automatycznymi aktualizacjami — z Firefox Add-ons, który właśnie jest w recenzji.", "x.ff": "🦊 <b>Firefox:</b> pobierz ZIP dla Firefoksa, otwórz <code class=\"k\">about:debugging</code> → „Załaduj tymczasowy dodatek…” i wskaż <code class=\"k\">manifest.json</code> (tymczasowo — na stałe po publikacji w Firefox Add-ons).",
+  "i1.h": "Pobierz", "i1.p": "Pobierz <b>ChatKit-Pro-Chrome-v1.1.0.zip</b> z Releases i rozpakuj.",
+  "i2.h": "Tryb dewelopera", "i2.p": "Otwórz <code class=\"k\">chrome://extensions</code> i włącz Tryb dewelopera.",
+  "i3.h": "Załaduj rozpakowane", "i3.p": "Kliknij „Załaduj rozpakowane” i wskaż rozpakowany folder.",
+  "i4.h": "Przypnij", "i4.p": "Kliknij 🧩 obok paska adresu i przypnij ChatKit Pro.", "i5.h": "Otwórz ChatGPT", "i5.p": "Wejdź na chatgpt.com i kliknij ikonę CK. Gotowe.",
+  "b.ok": "· Edge · Brave · Opera", "b.soon": "wkrótce",
+  "p.k": "Prywatność", "p.h": "Twoje czaty zostają Twoje.", "p.sub": "ChatKit Pro nie ma serwerów. Twoje czaty i pliki obsługiwane są tylko na chatgpt.com, z sesji, w której już jesteś zalogowany — dokładnie tak jak sama strona. Wersja z GitHuba dodatkowo raz dziennie anonimowo sprawdza na GitHubie, czy jest nowa wersja; wersje ze sklepów aktualizuje przeglądarka.",
+  "p1.h": "Bez serwerów", "p1.p": "Twoje dane nie trafiają nigdzie poza chatgpt.com.", "p2.h": "Bez konta", "p2.p": "Bez rejestracji, e-maila i klucza licencyjnego.",
+  "p3.h": "Bez śledzenia", "p3.p": "Bez analityki, reklam i kodu firm trzecich.", "p4.h": "Otwarty kod", "p4.p": "Licencja MIT. Przeczytaj każdą linijkę na GitHubie.",
+  "q.k": "FAQ", "q.h": "Pytania",
+  "q1.q": "Czy to naprawdę za darmo?", "q1.a": "Tak. Wszystkie funkcje, bez limitów, abonamentu i płatnej wersji „Pro”. „Pro” w nazwie dotyczy możliwości, nie ceny.",
+  "q2.q": "Czy wtyczka może czytać moje rozmowy lub je gdzieś wysyłać?", "q2.a": "Nie. Działa tylko na chatgpt.com i wysyła wyłącznie te same zapytania, które wysyła strona ChatGPT, gdy sam klikasz przyciski. ChatKit Pro nie ma żadnego serwera — jedyne dodatkowe zapytanie (tylko w wersji z GitHuba) to anonimowe, codzienne sprawdzenie nowej wersji na GitHubie. Kod jest otwarty — możesz to sprawdzić.",
+  "q3.q": "Czy da się cofnąć usunięcie?", "q3.a": "Usuniętych czatów nie da się przywrócić — tak działa ChatGPT. Każda operacja hurtowa pyta o potwierdzenie. Jeśli nie jesteś pewien, zarchiwizuj (archiwum da się przywrócić) albo najpierw wyeksportuj.",
+  "q4.q": "Z którymi planami ChatGPT działa?", "q4.a": "Jest zrobiona dla chatgpt.com w przeglądarce i nie zależy od planu. Niektóre funkcje (np. Biblioteka czy Projekty) pojawiają się tylko, jeśli Twoje konto je ma.",
+  "q5.q": "Co, jeśli ChatGPT coś zmieni?", "q5.a": "ChatKit Pro korzysta z wewnętrznego API strony ChatGPT, które może się zmienić bez zapowiedzi. Gdy coś przestanie działać, poprawka pojawi się na GitHubie — tam zgłaszaj problemy.",
+  "q6.q": "Czy jest w Chrome Web Store?", "q6.a": "Tak! Zainstaluj ją z <a href=\"https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh\" target=\"_blank\" rel=\"noopener\">Chrome Web Store</a> — aktualizuje się sama. Wersja z GitHuba nadal jest dostępna do ręcznej instalacji.",
+  "q7.q": "A Firefox?", "q7.a": "Tak! Wersja dla Firefoksa (140+) ma te same funkcje. Czeka na recenzję w Firefox Add-ons; do tego czasu możesz ją przetestować z ZIP-a z GitHuba jako dodatek tymczasowy.",
+  "q8.q": "Jak zgłosić błąd albo się skontaktować?", "q8.a": "Załóż zgłoszenie na <a href=\"https://github.com/justPLguy/chatkit-pro/issues\" target=\"_blank\" rel=\"noopener\">GitHubie</a> albo napisz na <a href=\"mailto:justplguy@gmail.com\">justplguy@gmail.com</a> — błędy, pomysły i pytania są mile widziane.",
+  "end.h": "Posprzątaj swój ChatGPT już dziś.", "end.sub": "Za darmo, open source, gotowe w dwie minuty.", "end.contact": "Znalazłeś błąd albo masz pomysł? Napisz na",
+  "ft.issues": "Zgłoś problem", "ft.disc": "ChatKit Pro to niezależny projekt, niepowiązany z OpenAI ani przez nią nie wspierany. ChatGPT jest znakiem towarowym OpenAI.",
+  "_title": "ChatKit Pro by JustPLGuy — darmowe narzędzia do ChatGPT",
+  "_desc": "Masowe usuwanie i archiwizacja czatów ChatGPT, czyszczenie Biblioteki, foldery, gwiazdki, eksport do Markdown/PDF, biblioteka promptów, minimapa, zakładki, wyszukiwanie w treści. Za darmo i open source."
+};
+
+// podstrona: własny tytuł i opis
+PL._title = "Co nowego — ChatKit Pro by JustPLGuy";
+PL._desc = "Historia zmian ChatKit Pro: co dodaje i naprawia każda wersja i gdzie ją pobrać (Chrome Web Store, Firefox Add-ons, GitHub).";
+PL["rel.back"] = "← ChatKit Pro";
+
+const EN = {};
+document.querySelectorAll("[data-i18n]").forEach(el => { EN[el.dataset.i18n] = el.textContent; });
+document.querySelectorAll("[data-i18n-html]").forEach(el => { EN[el.dataset.i18nHtml] = el.innerHTML; });
+EN._title = document.title;
+EN._desc = document.querySelector('meta[name="description"]').content;
+
+function setLang(lang) {
+  const D = lang === "pl" ? PL : EN;
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach(el => { const v = D[el.dataset.i18n]; if (v != null) el.textContent = v; });
+  document.querySelectorAll("[data-i18n-html]").forEach(el => { const v = D[el.dataset.i18nHtml]; if (v != null) el.innerHTML = v; });
+  document.title = D._title;
+  document.querySelector('meta[name="description"]').content = D._desc;
+  document.querySelectorAll(".lang button").forEach(b => b.classList.toggle("on", b.dataset.lang === lang));
+  try { localStorage.setItem("ckp-site-lang", lang); } catch (e) {}
+  renderReleases(lang);
+}
+document.querySelectorAll(".lang button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
+
+// Domyślnie angielski; ?lang=pl lub wcześniejszy wybór użytkownika ma pierwszeństwo.
+const fromUrl = new URLSearchParams(location.search).get("lang");
+let saved = null; try { saved = localStorage.getItem("ckp-site-lang"); } catch (e) {}
+setLang(fromUrl === "pl" || fromUrl === "en" ? fromUrl : saved === "pl" ? "pl" : "en");
+</script>
+</body>
+</html>
