@@ -72,6 +72,7 @@
   .ctas { display: flex; gap: 12px; flex-wrap: wrap; }
   .dl { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 10px; max-width: 580px; }
   .dl + .dl { margin-top: 10px; }
+  .dl.solo { grid-template-columns: minmax(0, 1fr); }
   .dl .primary { order: -1; }
   .dl .btn.store.primary { font-size: 16.5px; padding: 13px 18px; }
   .dl .btn.gh.ghost { font-size: 14px; color: var(--muted); }
@@ -298,12 +299,11 @@
 <header class="hero" id="top">
   <div class="wrap">
     <div>
-      <a class="pill" href="releases/" title="What's new"><b>v1.1</b><span data-i18n="hero.pill">Free · open source · no account</span></a>
+      <a class="pill" href="releases/" title="What's new"><b>v1.2</b><span data-i18n="hero.pill">Free · open source · no account</span></a>
       <h1 data-i18n-html="hero.title">Your ChatGPT, <em>finally organized.</em></h1>
       <p class="lead" data-i18n="hero.lead">Delete hundreds of chats in seconds, clean up the image Library, sort conversations into folders, export them, and work faster with prompts, a minimap and full-text search. Every feature free — forever.</p>
-      <div class="dl">
+      <div class="dl solo">
         <a class="btn soon store" data-store="chrome"><span class="bl"><img class="blogo" src="assets/chrome.png" alt="" data-fb="🌐"><span data-live="st.addChrome" data-live-en="Add to Chrome">Chrome Web Store</span></span><small><span class="if-live">Chrome Web Store · </span><b data-ver="chromeStore"></b> · <span data-i18n="st.soon">In review · link soon</span></small></a>
-        <a class="btn primary gh" data-href="release" data-gh="chrome" target="_blank" rel="noopener"><span class="bl"><img class="blogo" src="assets/chrome.png" alt="" data-fb="🌐"><span data-i18n="cta.chrome" data-live="st.ghZip" data-live-en="GitHub (ZIP)">Download for Chrome</span></span><small><span data-i18n="st.ghSmall" data-live="st.ghManual" data-live-en="manual install">GitHub</span> · <b data-ver="chromeGh"></b></small></a>
       </div>
       <div class="dl">
         <a class="btn soon store" data-store="firefox"><span class="bl"><img class="blogo" src="assets/firefox.png" alt="" data-fb="🦊"><span data-live="st.addFirefox" data-live-en="Add to Firefox">Firefox Add-ons</span></span><small><span class="if-live">Firefox Add-ons · </span><b data-ver="firefoxStore"></b> · <span data-i18n="st.soon">In review · link soon</span></small></a>
@@ -513,17 +513,8 @@ Keep key numbers and names.
     <div class="plat">
       <div class="plat-h"><img class="blogo" src="assets/chrome.png" alt="" data-fb="🌐"><span>Chrome</span><small data-i18n="b.ok">· Edge · Brave · Opera</small></div>
       <p class="plat-note if-chrome-live" data-i18n-html="i.cLive">Easiest: click <b>Add to Chrome</b> — one click, automatic updates. Works in Chrome, Edge, Brave and Opera.</p>
-      <div class="dl">
+      <div class="dl solo">
         <a class="btn soon store" data-store="chrome"><span class="bl"><img class="blogo" src="assets/chrome.png" alt="" data-fb="🌐"><span data-live="st.addChrome" data-live-en="Add to Chrome">Chrome Web Store</span></span><small><span class="if-live">Chrome Web Store · </span><b data-ver="chromeStore"></b> · <span data-i18n="st.soon">In review · link soon</span></small></a>
-        <a class="btn primary gh" data-href="release" data-gh="chrome" target="_blank" rel="noopener"><span class="bl"><img class="blogo" src="assets/chrome.png" alt="" data-fb="🌐"><span data-i18n="cta.chrome" data-live="st.ghZip" data-live-en="GitHub (ZIP)">Download for Chrome</span></span><small><span data-i18n="st.ghSmall" data-live="st.ghManual" data-live-en="manual install">GitHub</span> · <b data-ver="chromeGh"></b></small></a>
-      </div>
-      <p class="manual-h" data-i18n="i.manual">Manual install from GitHub (developer mode):</p>
-      <div class="steps">
-        <div class="step"><h4 data-i18n="i1.h">Download</h4><p data-i18n-html="i1.p">Get <b>ChatKit-Pro-Chrome-v1.1.0.zip</b> from Releases and unzip it.</p></div>
-        <div class="step"><h4 data-i18n="i2.h">Developer mode</h4><p data-i18n-html="i2.p">Open <code class="k">chrome://extensions</code> and switch on Developer mode.</p></div>
-        <div class="step"><h4 data-i18n="i3.h">Load unpacked</h4><p data-i18n="i3.p">Click “Load unpacked” and choose the unzipped folder.</p></div>
-        <div class="step"><h4 data-i18n="i4.h">Pin it</h4><p data-i18n="i4.p">Click 🧩 next to the address bar and pin ChatKit Pro.</p></div>
-        <div class="step"><h4 data-i18n="i5.h">Open ChatGPT</h4><p data-i18n="i5.p">Go to chatgpt.com and click the CK icon. That's it.</p></div>
       </div>
     </div>
 
@@ -577,6 +568,7 @@ Keep key numbers and names.
     <details><summary data-i18n="q5.q">What happens when ChatGPT changes?</summary><p data-i18n="q5.a">ChatKit Pro uses ChatGPT's internal web API, which can change without notice. When something breaks, a fix is released on GitHub — report issues there.</p></details>
     <details><summary data-i18n="q6.q">Is it in the Chrome Web Store?</summary><p data-i18n-html="q6.a">Yes! Install it from the <a href="https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh" target="_blank" rel="noopener">Chrome Web Store</a> — it updates automatically. The GitHub version is still available for manual installs.</p></details>
     <details><summary data-i18n="q9.q">I installed it from GitHub. How do I switch to the store version?</summary><p data-i18n="q9.a">Your folders, stars, prompts and notes are stored per installation, so move them over: in the GitHub version open the panel → ⚙ Settings → “Export data (JSON)”. Remove the GitHub version, add ChatKit Pro from the Chrome Web Store, then ⚙ Settings → “Import data” and pick the file.</p></details>
+    <details><summary data-i18n="q10.q">Can ChatKit Pro cause “Too many requests” in ChatGPT?</summary><p data-i18n="q10.a">Not since version 1.2.0. ChatKit Pro sends as few requests as possible: an open chat is fetched once (only after you stop on it), recently viewed chats aren't downloaded again, background tabs send nothing, and bulk actions run at a calm pace. If ChatGPT still answers “too many requests”, ChatKit Pro pauses all its requests for as long as ChatGPT asks (at least a minute) — bulk actions wait and continue on their own, and the panel shows a countdown. Using version 1.1.0 and seeing this error? Update to 1.2.0, or turn the extension off for a while — the limit lifts by itself.</p></details>
     <details><summary data-i18n="q7.q">Firefox?</summary><p data-i18n="q7.a">Yes! The Firefox version (140+) has the same features. It's in review on Firefox Add-ons; until then you can test it from the GitHub ZIP as a temporary add-on.</p></details>
     <details><summary data-i18n="q8.q">How do I report a bug or contact you?</summary><p data-i18n-html="q8.a">Open an issue on <a href="https://github.com/justPLguy/chatkit-pro/issues" target="_blank" rel="noopener">GitHub</a> or write to <a href="mailto:justplguy@gmail.com">justplguy@gmail.com</a> — bug reports, ideas and questions are all welcome.</p></details>
   </div>
@@ -586,9 +578,8 @@ Keep key numbers and names.
   <div class="wrap">
     <h2 data-i18n="end.h">Clean up your ChatGPT today.</h2>
     <p class="sub" data-i18n="end.sub">Free, open source, and ready in two minutes.</p>
-    <div class="dl">
+    <div class="dl solo">
         <a class="btn soon store" data-store="chrome"><span class="bl"><img class="blogo" src="assets/chrome.png" alt="" data-fb="🌐"><span data-live="st.addChrome" data-live-en="Add to Chrome">Chrome Web Store</span></span><small><span class="if-live">Chrome Web Store · </span><b data-ver="chromeStore"></b> · <span data-i18n="st.soon">In review · link soon</span></small></a>
-        <a class="btn primary gh" data-href="release" data-gh="chrome" target="_blank" rel="noopener"><span class="bl"><img class="blogo" src="assets/chrome.png" alt="" data-fb="🌐"><span data-i18n="cta.chrome" data-live="st.ghZip" data-live-en="GitHub (ZIP)">Download for Chrome</span></span><small><span data-i18n="st.ghSmall" data-live="st.ghManual" data-live-en="manual install">GitHub</span> · <b data-ver="chromeGh"></b></small></a>
       </div>
       <div class="dl">
         <a class="btn soon store" data-store="firefox"><span class="bl"><img class="blogo" src="assets/firefox.png" alt="" data-fb="🦊"><span data-live="st.addFirefox" data-live-en="Add to Firefox">Firefox Add-ons</span></span><small><span class="if-live">Firefox Add-ons · </span><b data-ver="firefoxStore"></b> · <span data-i18n="st.soon">In review · link soon</span></small></a>
@@ -601,7 +592,7 @@ Keep key numbers and names.
 
 <footer>
   <div class="wrap">
-    <span><b style="color:var(--text)">ChatKit Pro</b> by JustPLGuy · v1.1.0</span>
+    <span><b style="color:var(--text)">ChatKit Pro</b> by JustPLGuy · v1.2.0</span>
     <a data-href="repo" target="_blank" rel="noopener">GitHub</a>
     <a href="releases/" data-i18n="nav.rel">What's new</a>
     <a data-href="releases" target="_blank" rel="noopener">GitHub Releases</a>
@@ -619,10 +610,10 @@ Keep key numbers and names.
    Gdy strona jest gdzie indziej — wpisz tu "uzytkownik/repo". */
 const CONFIG = {
   REPO: "justPLguy/chatkit-pro",
-  CHROME_TAG: "chrome-v1.1.0",
+  CHROME_TAG: "chrome-v1.2.0",
   FIREFOX_TAG: "firefox-v1.1.0",
   // Wersje pokazywane pod przyciskami (osobno dla GitHuba i sklepów):
-  VERSIONS: { chromeGh: "1.1.0", firefoxGh: "1.1.0", chromeStore: "1.1.0", firefoxStore: "1.1.0" },
+  VERSIONS: { chromeGh: "1.2.0", firefoxGh: "1.1.0", chromeStore: "1.2.0", firefoxStore: "1.1.0" },
   // Po akceptacji wklej tu linki do sklepów — przyciski same zmienią się w aktywne:
   CHROME_STORE: "https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh",   // np. "https://chromewebstore.google.com/detail/pehdgnogfmaeeldpjdmadfpankacofhh"
   FIREFOX_STORE: ""   // np. "https://addons.mozilla.org/firefox/addon/chatkit-pro-by-justplguy/"

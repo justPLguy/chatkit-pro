@@ -236,7 +236,7 @@
 "rel.addFirefox": "Firefox'a ekle",
 "rel.store": "ücretsiz · otomatik güncellemeler",
 "rel.review": "incelemede · yakında",
-"rel.replaced": "yeni sürüm:",
+"rel.replaced": "yeni sürüm:", "rel.newer": "daha yeni sürüm mevcut",
 "rel.gh": "GitHub (ZIP)",
 "rel.more": "Eski sürümleri göster ({n})",
 "rel.less": "Daha az göster",

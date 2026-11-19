@@ -236,7 +236,7 @@
 "rel.addFirefox": "Zu Firefox hinzufügen",
 "rel.store": "kostenlos · automatische Updates",
 "rel.review": "in Prüfung · bald verfügbar",
-"rel.replaced": "ersetzt durch",
+"rel.replaced": "ersetzt durch", "rel.newer": "neuere Version verfügbar",
 "rel.gh": "GitHub (ZIP)",
 "rel.more": "Ältere Versionen anzeigen ({n})",
 "rel.less": "Weniger anzeigen",

@@ -236,7 +236,7 @@
 "rel.addFirefox": "Dodaj do Firefoksa",
 "rel.store": "za darmo · aktualizacje automatyczne",
 "rel.review": "w recenzji · wkrótce",
-"rel.replaced": "zastąpiona przez",
+"rel.replaced": "zastąpiona przez", "rel.newer": "dostępna nowsza wersja",
 "rel.gh": "GitHub (ZIP)",
 "rel.more": "Pokaż starsze wersje ({n})",
 "rel.less": "Pokaż mniej",

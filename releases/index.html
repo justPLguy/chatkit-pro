@@ -251,6 +251,9 @@
   .rel-get .btn small { font-weight: 500; opacity: .85; }
   .rel-get .btn.soon { border: 1px dashed var(--line2); color: var(--muted); cursor: default; }
   .rel-get .btn.old { border: 1px solid var(--line); color: var(--dim); cursor: default; }
+  .rel-get a.btn.old { cursor: pointer; }
+  .rel-get a.btn.old:hover { border-color: var(--dim); color: var(--muted); }
+  .rel-get .btn.old small.newer { color: var(--text); font-weight: 600; margin-left: 2px; }
   .rel-get .btn.ghost.sm { color: var(--muted); }
   .rel ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
   .rel li { display: grid; grid-template-columns: 104px 1fr; gap: 14px; align-items: baseline; color: var(--muted); font-size: 15px; }
@@ -340,7 +343,7 @@
 
 <footer>
   <div class="wrap">
-    <span><b style="color:var(--text)">ChatKit Pro</b> by JustPLGuy · v1.1.0</span>
+    <span><b style="color:var(--text)">ChatKit Pro</b> by JustPLGuy · v1.2.0</span>
     <a data-href="repo" target="_blank" rel="noopener">GitHub</a>
     <a href="./" data-i18n="nav.rel">What's new</a>
     <a data-href="releases" target="_blank" rel="noopener">GitHub Releases</a>
@@ -358,10 +361,10 @@
    Gdy strona jest gdzie indziej — wpisz tu "uzytkownik/repo". */
 const CONFIG = {
   REPO: "justPLguy/chatkit-pro",
-  CHROME_TAG: "chrome-v1.1.0",
+  CHROME_TAG: "chrome-v1.2.0",
   FIREFOX_TAG: "firefox-v1.1.0",
   // Wersje pokazywane pod przyciskami (osobno dla GitHuba i sklepów):
-  VERSIONS: { chromeGh: "1.1.0", firefoxGh: "1.1.0", chromeStore: "1.1.0", firefoxStore: "1.1.0" },
+  VERSIONS: { chromeGh: "1.2.0", firefoxGh: "1.1.0", chromeStore: "1.2.0", firefoxStore: "1.1.0" },
   // Po akceptacji wklej tu linki do sklepów — przyciski same zmienią się w aktywne:
   CHROME_STORE: "https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh",   // np. "https://chromewebstore.google.com/detail/pehdgnogfmaeeldpjdmadfpankacofhh"
   FIREFOX_STORE: ""   // np. "https://addons.mozilla.org/firefox/addon/chatkit-pro-by-justplguy/"
@@ -418,7 +421,7 @@ document.querySelectorAll("[data-ver]").forEach(b => { b.textContent = "v" + CON
 const RELEASES = [
   {
     v: "1.2.0", date: "2026-11-18",
-    stores: { chrome: "review", firefox: "review" }, gh: false,
+    stores: { chrome: "live", firefox: "review" }, gh: true,
     intro: "A big update: bulk rename, ZIP export, code saving, chat width — and far fewer requests to ChatGPT.",
     items: [
       ["better", ["Gentle on ChatGPT", "far fewer requests, so no more “Too many requests” / “Unable to load conversation”. If ChatGPT asks for a break, ChatKit Pro pauses in every tab and the panel shows a countdown."]],
@@ -456,7 +459,7 @@ const RELEASES = [
 
 const REL_EN = { "rel.latest": "Latest", "rel.new": "New", "rel.better": "Improved", "rel.fix": "Fixed",
   "rel.addChrome": "Add to Chrome", "rel.addFirefox": "Add to Firefox", "rel.store": "free · auto-updates",
-  "rel.review": "in review · coming soon", "rel.replaced": "replaced by", "rel.gh": "GitHub (ZIP)", "rel.more": "Show older versions ({n})", "rel.less": "Show fewer" };
+  "rel.review": "in review · coming soon", "rel.replaced": "replaced by", "rel.newer": "newer version available", "rel.gh": "GitHub (ZIP)", "rel.more": "Show older versions ({n})", "rel.less": "Show fewer" };
 const REL_SHOW = 5; // ile wersji widać od razu (reszta pod „Pokaż starsze”)
 let relOpen = false, relLang = "en";
 function renderReleases(lang) {
@@ -490,7 +493,10 @@ function renderReleases(lang) {
         a = el("a", "btn primary"); a.href = url[b]; a.target = "_blank"; a.rel = "noopener";
         a.append(logo(b), el("span", null, b === "chrome" ? T.addChrome : T.addFirefox), el("small", null, "· " + T.store));
       } else if (st === "live" && url[b] && newest) {
-        a = el("span", "btn old"); a.append(logo(b), el("span", null, (b === "chrome" ? "Chrome Web Store" : "Firefox Add-ons") + " · " + T.replaced + " v" + newest.v));
+        // starsza wersja: „dostępna nowsza wersja” + link do karty najnowszej
+        a = el("a", "btn old"); a.href = "#v" + newest.v.replace(/\./g, "-");
+        a.addEventListener("click", e => { e.preventDefault(); document.getElementById("v" + newest.v.replace(/\./g, "-"))?.scrollIntoView({ behavior: "smooth" }); });
+        a.append(logo(b), el("span", null, b === "chrome" ? "Chrome Web Store" : "Firefox Add-ons"), el("small", "newer", "⬆ " + T.newer + " · v" + newest.v));
       } else if (st) {
         a = el("span", "btn soon"); a.append(logo(b), el("span", null, b === "chrome" ? "Chrome Web Store" : "Firefox Add-ons"), el("small", null, T.review));
       }

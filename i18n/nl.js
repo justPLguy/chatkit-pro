@@ -236,7 +236,7 @@
 "rel.addFirefox": "Toevoegen aan Firefox",
 "rel.store": "gratis · automatische updates",
 "rel.review": "in beoordeling · binnenkort",
-"rel.replaced": "vervangen door",
+"rel.replaced": "vervangen door", "rel.newer": "nieuwere versie beschikbaar",
 "rel.gh": "GitHub (ZIP)",
 "rel.more": "Oudere versies tonen ({n})",
 "rel.less": "Minder tonen",

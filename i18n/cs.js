@@ -236,7 +236,7 @@
 "rel.addFirefox": "Přidat do Firefoxu",
 "rel.store": "zdarma · automatické aktualizace",
 "rel.review": "ve schvalování · již brzy",
-"rel.replaced": "nahrazena verzí",
+"rel.replaced": "nahrazena verzí", "rel.newer": "k dispozici je novější verze",
 "rel.gh": "GitHub (ZIP)",
 "rel.more": "Zobrazit starší verze ({n})",
 "rel.less": "Zobrazit méně",

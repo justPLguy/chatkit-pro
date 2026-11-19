@@ -236,7 +236,7 @@
 "rel.addFirefox": "添加到 Firefox",
 "rel.store": "免费 · 自动更新",
 "rel.review": "审核中 · 即将推出",
-"rel.replaced": "已更新为",
+"rel.replaced": "已更新为", "rel.newer": "有更新的版本",
 "rel.gh": "GitHub (ZIP)",
 "rel.more": "显示更早的版本 ({n})",
 "rel.less": "收起",

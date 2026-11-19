@@ -236,7 +236,7 @@
 "rel.addFirefox": "Firefox에 추가",
 "rel.store": "무료 · 자동 업데이트",
 "rel.review": "심사 중 · 곧 공개",
-"rel.replaced": "새 버전:",
+"rel.replaced": "새 버전:", "rel.newer": "새 버전이 있습니다",
 "rel.gh": "GitHub (ZIP)",
 "rel.more": "이전 버전 보기 ({n})",
 "rel.less": "접기",

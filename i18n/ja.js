@@ -236,7 +236,7 @@
 "rel.addFirefox": "Firefox に追加",
 "rel.store": "無料 · 自動更新",
 "rel.review": "審査中 · まもなく公開",
-"rel.replaced": "新しいバージョン：",
+"rel.replaced": "新しいバージョン：", "rel.newer": "新しいバージョンがあります",
 "rel.gh": "GitHub (ZIP)",
 "rel.more": "以前のバージョンを表示 ({n})",
 "rel.less": "折りたたむ",
