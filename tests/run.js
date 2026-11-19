@@ -57,6 +57,7 @@ w.chrome = {
   }, onChanged: { addListener() {} } }
 };
 w.__sent = [];
+w.TextEncoder = TextEncoder;
 storage.update = { checkedAt: Date.now(), current: "1.0.0", latest: "1.1.0", url: "https://github.com/justPLguy/chatkit-pro/releases/tag/chrome-v1.1.0", available: true };
 w.confirm = () => true;
 w.prompt = () => "Folder Test";
@@ -73,7 +74,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 const assert = (c, m) => { if (!c) { console.error("FAIL:", m); process.exitCode = 1; } else console.log("ok  -", m); };
 
 (async () => {
-  await sleep(1500);
+  await sleep(2600); // znaczniki: 1,5 s na „zatrzymanie się” na czacie + zapytanie
   const root = w.document.getElementById("chatkit-pro-host").shadowRoot;
   const $ = s => root.querySelector(s);
   const $$ = s => [...root.querySelectorAll(s)];
@@ -245,6 +246,141 @@ const assert = (c, m) => { if (!c) { console.error("FAIL:", m); process.exitCode
   assert(tab("Archiv") && tab("Bibliothek"), "przełączenie języka na niemiecki");
   langSel.value = "fr"; langSel.dispatchEvent(new w.Event("change")); await sleep(200);
   assert($$("#tabs button").some(b => b.textContent === "Discussions"), "przełączenie języka na francuski");
+
+  // ===== v1.2.0 =====
+  // ZIP: poprawna struktura (sygnatury, liczba plików)
+  {
+    const blob = w.CK.zip([{ name: "a.md", data: "x" }, { name: "a.md", data: "y" }]);
+    const buf = Buffer.from(await new Promise(r => { const fr = new w.FileReader(); fr.onload = () => r(fr.result); fr.readAsArrayBuffer(blob); }));
+    const eocd = buf.lastIndexOf(Buffer.from([0x50, 0x4b, 0x05, 0x06]));
+    assert(buf.readUInt32LE(0) === 0x04034b50 && eocd > 0 && buf.readUInt16LE(eocd + 10) === 2 && buf.includes(Buffer.from("a (2).md")), "ZIP: nagłówki, 2 pliki, unikalne nazwy");
+  }
+  // eksport do ZIP (plik na czat)
+  {
+    const dl = []; const orig = w.CK.download; w.CK.download = (n, d) => dl.push({ n, d });
+    const r = await w.CK.exportChats(["c1", "c2"], "zip-json", () => {});
+    w.CK.download = orig;
+    assert(r.ok === 2 && dl.length === 1 && dl[0].n.endsWith(".zip") && dl[0].d instanceof w.Blob && dl[0].d.size > 200, "eksport ZIP: jeden plik .zip z 2 czatami");
+    const j = JSON.parse(w.CK._export.toJson({ id: "c9", title: "T", create_time: now, update_time: now, msgs: [{ role: "user", text: "hej", time: now }] }));
+    assert(j.url.endsWith("/c/c9") && j.messages[0].role === "user" && j.created, "eksport JSON: struktura czatu");
+  }
+  // kod: wyciąganie bloków, nazwy plików, liczniki
+  assert(JSON.stringify(w.CK.extractCode("a\n```python\nprint(1)\n```\nb")) === JSON.stringify([{ lang: "python", code: "print(1)\n" }]), "kod: blok ``` z językiem");
+  assert(w.CK.codeFileName("Mój czat", "TypeScript", 2) === "Mój czat-2.ts" && w.CK.codeExt("C#") === "cs" && w.CK.codeExt("nieznany") === "txt", "kod: rozszerzenia plików");
+  const st = w.CK.chatStats([{ role: "user", text: "Ala ma kota" }, { role: "assistant", text: "Zażółć gęślą" }]);
+  assert(st.messages === 2 && st.words === 5 && st.chars === 23 && st.tokens === 6, "liczniki: wiadomości, słowa, znaki, tokeny");
+  // przycisk „Zapisz” przy bloku kodu
+  {
+    const main = w.document.createElement("main");
+    main.innerHTML = '<div class="markdown"><pre><div><div>python</div><button>Copy</button></div><div><code class="whitespace-pre">print("hi")</code></div></pre></div>';
+    w.document.body.append(main);
+    const pre = main.querySelector("pre");
+    assert(w.CK._code.codeBlockFrom(main.querySelector("code")) === pre && w.CK._code.langOf(pre) === "python", "kod: wykrycie bloku i języka z nagłówka");
+    pre.getBoundingClientRect = () => ({ top: 100, bottom: 300, left: 50, right: 650, width: 600, height: 200 });
+    pre.dispatchEvent(new w.MouseEvent("mouseover", { bubbles: true }));
+    const cbtn = w.document.getElementById("chatkit-pro-code").shadowRoot.querySelector("button");
+    assert(cbtn.style.display === "flex" && cbtn.textContent.includes("💾"), "kod: przycisk pojawia się nad blokiem");
+    const dl = []; const orig = w.CK.download; w.CK.download = (n, d) => dl.push({ n, d });
+    cbtn.click(); w.CK.download = orig;
+    assert(dl.length === 1 && dl[0].n.endsWith(".py") && dl[0].d.startsWith('print("hi")'), "kod: zapis bloku do pliku .py");
+    main.remove();
+  }
+  // szerokość czatu i czcionka
+  w.CK.store.data.settings.chatWidth = 1200; w.CK.store.data.settings.fontSize = 17; await w.CK.store.save("settings"); await sleep(50);
+  const lookCss = w.document.getElementById("chatkit-pro-look").textContent;
+  assert(lookCss.includes("--thread-content-max-width: 1200px") && lookCss.includes("font-size: 17px"), "wygląd: szerokość 1200 px i czcionka 17 px");
+  w.CK.store.data.settings.chatWidth = 0; w.CK.store.data.settings.fontSize = 0; await w.CK.store.save("settings"); await sleep(50);
+  assert(w.document.getElementById("chatkit-pro-look").textContent.trim() === "", "wygląd: domyślnie nic nie zmienia");
+  assert(w.CK.lookCss(2000, 0).includes("100%"), "wygląd: pełna szerokość");
+  if (!$$(".pane input[type=range]").length) { $("#setbtn").click(); await sleep(100); }
+  assert($$(".pane input[type=range]").length === 2, "ustawienia: 2 suwaki (szerokość, czcionka)");
+
+  // suwak działa wielokrotnie, także gdy obiekt ustawień zostanie podmieniony (storage.onChanged)
+  {
+    const rng = $$(".pane input[type=range]")[0];
+    const move = async i => { rng.value = i; rng.dispatchEvent(new w.Event("input")); rng.dispatchEvent(new w.Event("change")); await sleep(30); };
+    await move(2); const a1 = w.CK.store.data.settings.chatWidth;
+    w.CK.store.data.settings = { ...w.CK.store.data.settings }; // jak po chrome.storage.onChanged
+    await move(5); const a2 = w.CK.store.data.settings.chatWidth;
+    w.CK.store.data.settings = { ...w.CK.store.data.settings };
+    rng.parentElement.querySelector("button").click(); await sleep(30);
+    assert(a1 === 900 && a2 === 1200 && w.CK.store.data.settings.chatWidth === 0, "suwak: kolejne zmiany i ↺ działają za każdym razem");
+  }
+  // czytelne znaczniki czasu
+  {
+    const n = new Date(2026, 10, 17, 23, 0);
+    w.CK.locale = "pl-PL";
+    const f = x => w.CK.fmtStamp(x.getTime(), n);
+    const r = [f(new Date(2026, 10, 17, 1, 30)), f(new Date(2026, 10, 16, 23, 10)), f(new Date(2026, 10, 13, 1, 30)), f(new Date(2025, 2, 5, 9, 0))];
+    console.log("    znaczniki:", r.join(" | "));
+    assert(r[0].endsWith("01:30") && /^(Dziś|Today|Aujourd|Heute)/.test(r[0]) && /^(Wczoraj|Yesterday|Hier|Gestern)/.test(r[1]) && r[2].includes("13") && r[3].includes("2025"), "znaczniki czasu: dziś / wczoraj / dzień tygodnia / rok");
+  }
+
+  assert(w.CK.lookCss(0, 18).includes("main [data-chatgpt-search-message-ids] :is(p, li") && w.CK.lookCss(0, 18).includes("main [data-ck-role]"), "czcionka: obejmuje treść odpowiedzi i pytań");
+  {
+    const labels = [...w.document.querySelectorAll("[data-ck-ts]")].map(e => e.getAttribute("data-ck-role") + "=" + e.getAttribute("data-ck-ts"));
+    console.log("    etykiety:", labels.join(" | "));
+    assert(!/order\s*:/.test(w.document.getElementById("chatkit-pro-ts-style").textContent), "znaczniki czasu: bez order (kontenery display: contents)");
+    assert(labels.length && labels.every(l => l.startsWith("user=👤") || l.startsWith("assistant=🤖 ChatGPT")), "znaczniki czasu: podpis roli (👤 Ty / 🤖 ChatGPT)");
+  }
+
+  // przypomnienie o kopii zapasowej
+  {
+    if (!w.CK.store.data.folders.length) { w.CK.store.data.folders.push({ id: "fx", name: "X" }); await w.CK.store.save("folders"); }
+    const day = 86400000, bakBox = () => $("#bak");
+    w.CK.store.data.settings.backupEvery = 7;
+    w.CK._backup.set({ firstSeen: Date.now() - 3 * day, lastBackup: 0, backupSnooze: 0 });
+    const early = bakBox().style.display;
+    w.CK._backup.set({ firstSeen: Date.now() - 10 * day });
+    const shown = bakBox().style.display === "flex" && bakBox().querySelectorAll("button").length === 2;
+    const dl = []; const orig = w.CK.download; w.CK.download = (n, d) => dl.push({ n, d });
+    bakBox().querySelector("button.go").click(); await sleep(30); w.CK.download = orig;
+    const after = bakBox().style.display;
+    assert(early === "none" && shown && dl.length === 1 && dl[0].n.startsWith("chatkit-pro-backup-") && JSON.parse(dl[0].d).folders.length && after === "none" && storage.lastBackup > 0,
+      "kopia: przypomnienie po 7 dniach, „Zrób kopię” pobiera JSON i chowa pasek");
+    w.CK._backup.set({ lastBackup: Date.now() - 8 * day });
+    const again = bakBox().style.display;
+    $$("#bak button")[1].click(); await sleep(30);
+    const snoozed = bakBox().style.display;
+    w.CK._backup.set({ backupSnooze: 0 }); w.CK.store.data.settings.backupEvery = 0; await w.CK.store.save("settings"); await sleep(30);
+    assert(again === "flex" && snoozed === "none" && bakBox().style.display === "none", "kopia: „Później” odkłada, „nigdy” wyłącza");
+    w.CK.store.data.settings.backupEvery = 7; await w.CK.store.save("settings");
+  }
+
+  // masowa zmiana nazw: logika tytułów
+  {
+    const r = w.CK.renameTitle;
+    assert(r("Plan", "prefix", "[Praca]") === "[Praca] Plan" && r("[Praca] Plan", "prefix", "[Praca]") === "[Praca] Plan" &&
+      r("Plan", "suffix", "(old)") === "Plan (old)" && r("[Praca] Plan", "remove", "[Praca]") === "Plan" &&
+      r("Test test", "replace", "test", "próba") === "Test próba" && r("x", "remove", "x") === "x", "zmiana nazw: prefiks, sufiks, usuń, zamień (bez pustych tytułów)");
+  }
+  // prompty v2: ulubione na górze, kolejność, tagi
+  {
+    const P = w.CK.prompts;
+    w.CK.store.data.prompts = [
+      { id: "pa", title: "A", text: "a", uses: 5, tags: ["mail"] },
+      { id: "pb", title: "B", text: "b", uses: 1 },
+      { id: "pc", title: "C", text: "c", uses: 9, fav: true, tags: ["kod", "mail"] }];
+    await w.CK.store.save("prompts");
+    assert(P.sorted(P.list(), "manual").map(x => x.id).join() === "pc,pa,pb" && P.sorted(P.list(), "uses").map(x => x.id).join() === "pc,pa,pb", "prompty: ulubiony zawsze pierwszy");
+    await P.move("pb", "pa");
+    assert(P.list().map(x => x.id).join() === "pb,pa,pc", "prompty: przeciągnięcie zmienia kolejność");
+    await P.toggleFav("pc");
+    assert(P.sorted(P.list(), "manual").map(x => x.id).join() === "pb,pa,pc" && !P.list()[2].fav, "prompty: przełączanie ulubionego");
+    assert(JSON.stringify(P.normTags(" Mail, #kod ,mail")) === JSON.stringify(["mail", "kod"]) && P.tags()[0][0] === "mail", "prompty: tagi (normalizacja, liczniki)");
+  }
+
+  // włącznik wtyczki + przywracanie usuniętych elementów
+  {
+    const host = w.document.getElementById("chatkit-pro-host"), mmHost = w.document.getElementById("chatkit-pro-minimap");
+    w.CK.store.data.enabled = false; await w.CK.store.save("enabled"); await sleep(50);
+    const offOk = host.style.display === "none" && mmHost.style.display === "none" && !w.document.querySelector("[data-ck-ts]") && !$("#panel").classList.contains("open");
+    w.CK.store.data.enabled = true; await w.CK.store.save("enabled"); await sleep(3200);
+    const onOk = host.style.display === "" && mmHost.style.display === "" && !!w.document.querySelector("[data-ck-ts]");
+    assert(offOk && onOk, "włącznik: wyłączenie chowa wszystko, włączenie przywraca bez przeładowania");
+    host.remove(); mmHost.remove(); await sleep(50);
+    assert(host.isConnected && mmHost.isConnected, "strażnik: ChatGPT usunął elementy wtyczki → wracają");
+  }
 
   // niezalogowany: czytelny komunikat zamiast błędu
   const realFetch = w.fetch;

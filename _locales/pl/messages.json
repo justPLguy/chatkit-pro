@@ -7,5 +7,11 @@
   },
   "appDesc": {
     "message": "Masowe usuwanie czatów ChatGPT, czyszczenie Biblioteki, foldery, eksport, prompty, minimapa i wyszukiwanie. Za darmo."
+  },
+  "actionOn": {
+    "message": "włączony (kliknij, aby wyłączyć)"
+  },
+  "actionOff": {
+    "message": "wyłączony (kliknij, aby włączyć)"
   }
 }

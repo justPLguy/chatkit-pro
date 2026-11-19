@@ -57,7 +57,7 @@
         } catch (e) { fail++; }
         done++;
         onProgress && onProgress(done, todo.length);
-        await CK.sleep(300);
+        await CK.sleep(1000); // spokojne tempo: ~60 czatów na minutę, żeby nie wpaść w limit ChatGPT
       }
       cache = null;
       return { indexed: done - fail, fail, skipped: chats.length - todo.length };

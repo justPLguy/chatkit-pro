@@ -85,11 +85,9 @@
       if (!sState.results) return;
       if (!sState.results.length) { res.append(el("div", { class: "empty" }, t("ui.noResults"))); return; }
       res.append(el("p", { class: "muted" }, t("se.found", { n: sState.results.length })));
-      const terms = sState.q.toLowerCase().split(/\s+/).filter(w => w.length > 1).map(w => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
-      const re = terms.length ? new RegExp("(" + terms.join("|") + ")", "gi") : null;
+      const hq = sState.q.split(/\s+/).filter(w => w.length > 1).join(" ");
       for (const r of sState.results) {
-        const sn = el("div", { class: "body" });
-        sn.innerHTML = CK.esc(r.snippet).replace(re || /$^/, '<span class="hl">$1</span>');
+        const sn = el("div", { class: "body" }, CK.highlight(r.snippet, hq, "span", "hl"));
         res.append(el("div", { class: "card" },
           el("div", { class: "h" }, el("b", {}, r.title), el("span", { class: "muted" }, CK.fmtDate(r.updated)), button("↗ " + t("ui.open"), () => CK.goto(r.id))), sn));
       }

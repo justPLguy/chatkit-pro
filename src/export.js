@@ -69,7 +69,23 @@ ${c.msgs.map(m => `<div class="msg ${m.role}"><div class="who">${m.role === "use
     f.srcdoc = html;
   }
 
-  // ids: lista id czatów; format: "md" | "html" | "pdf"
+  const toJson = c => JSON.stringify({ id: c.id, title: c.title, url: "https://chatgpt.com/c/" + c.id,
+    created: CK.toDate(c.create_time)?.toISOString() || null, updated: CK.toDate(c.update_time)?.toISOString() || null,
+    messages: c.msgs.map(m => ({ role: m.role, time: CK.toDate(m.time)?.toISOString() || null, text: m.text })) }, null, 2);
+
+  // Jeden plik na czat: „2026-11-17 Tytuł.md” (data ostatniej zmiany), w ZIP-ie.
+  function zipChats(convs, kind) {
+    const ext = kind === "json" ? "json" : kind;
+    const files = convs.map(c => {
+      const d = CK.toDate(c.update_time) || CK.toDate(c.create_time);
+      const stamp = d ? d.toISOString().slice(0, 10) + " " : "";
+      const data = kind === "md" ? toMarkdown(c) : kind === "html" ? htmlDoc(c.title, [c]) : toJson(c);
+      return { name: stamp + CK.safeName(c.title) + "." + ext, data, date: d || undefined };
+    });
+    return CK.zip(files);
+  }
+
+  // ids: lista id czatów; format: "md" | "html" | "pdf" | "zip-md" | "zip-html" | "zip-json"
   CK.exportChats = async (ids, format, onProgress = () => {}, name) => {
     const convs = [];
     let fail = 0;
@@ -79,17 +95,18 @@ ${c.msgs.map(m => `<div class="msg ${m.role}"><div class="who">${m.role === "use
         convs.push({ id: ids[i], title: conv.title || CK.t("untitled"), create_time: conv.create_time, update_time: conv.update_time, msgs: CK.linearize(conv) });
       } catch (e) { fail++; console.warn("[ChatKit Pro] eksport", ids[i], e); }
       onProgress(i + 1, ids.length);
-      if (i < ids.length - 1) await CK.sleep(250);
+      if (i < ids.length - 1) await CK.sleep(600);
     }
     if (!convs.length) throw new Error(CK.t("exp.noneFetched"));
     const date = new Date().toISOString().slice(0, 10);
     const base = CK.safeName(name || (convs.length === 1 ? convs[0].title : `chatgpt-export-${date}`));
     const docTitle = convs.length === 1 ? convs[0].title : `${CK.t("exp.title")} (${convs.length}) — ${date}`;
-    if (format === "md") CK.download(base + ".md", convs.map(toMarkdown).join("\n---\n\n"), "text/markdown");
+    if (format.startsWith("zip-")) CK.download(CK.safeName(name || `chatgpt-export-${date}`) + ".zip", zipChats(convs, format.slice(4)));
+    else if (format === "md") CK.download(base + ".md", convs.map(toMarkdown).join("\n---\n\n"), "text/markdown");
     else if (format === "html") CK.download(base + ".html", htmlDoc(docTitle, convs), "text/html");
     else printHtml(htmlDoc(docTitle, convs));
     return { ok: convs.length, fail };
   };
 
-  CK._export = { toMarkdown, mdLite }; // do testów
+  CK._export = { toMarkdown, mdLite, zipChats, toJson }; // do testów
 })();

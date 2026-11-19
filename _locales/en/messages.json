@@ -7,5 +7,11 @@
   },
   "appDesc": {
     "message": "Bulk delete & archive ChatGPT chats, clean up the Library, folders, export, prompts, minimap and search. Free, no account."
+  },
+  "actionOn": {
+    "message": "ON (click to turn off)"
+  },
+  "actionOff": {
+    "message": "OFF (click to turn on)"
   }
 }

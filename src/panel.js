@@ -16,8 +16,8 @@
     return {
       items: [], offset: 0, done: false, total: null,
       reset() { this.items = []; this.offset = 0; this.done = false; this.total = null; },
-      async fetchPage(offset) {
-        const r = await CK.withRetry(() => CK.api(`/conversations?offset=${offset}&limit=100&order=updated${archived ? "&is_archived=true" : ""}`));
+      async fetchPage(offset, bg = false) {
+        const r = await CK.withRetry(() => CK.api(`/conversations?offset=${offset}&limit=100&order=updated${archived ? "&is_archived=true" : ""}`, { bg }), { bg });
         if (!r.ok) throw new Error(t("err.chatList", { s: r.status }));
         const j = await r.json();
         const list = (j.items || []).map(c => ({ key: c.id, title: c.title || t("untitled"), date: c.update_time, created: c.create_time }));
@@ -32,8 +32,8 @@
         if (!list.length || (this.total !== null && this.offset >= this.total)) this.done = true;
         return list.length;
       },
-      async refreshTop() {
-        const { list, total } = await this.fetchPage(0);
+      async refreshTop(bg = false) {
+        const { list, total } = await this.fetchPage(0, bg);
         const byKey = new Map(this.items.map(i => [i.key, i]));
         let added = 0;
         for (const c of list) { const old = byKey.get(c.key); if (old) Object.assign(old, c); else { this.items.push(c); added++; } }
@@ -42,7 +42,7 @@
         return added;
       },
       async loadEverything(onProgress) {
-        while (!this.done) { const n = await this.loadPage(); onProgress && onProgress(this.items.length); if (!n) break; await sleep(200); }
+        while (!this.done) { const n = await this.loadPage(); onProgress && onProgress(this.items.length); if (!n) break; await sleep(500); }
       }
     };
   }
@@ -94,7 +94,7 @@
         return list.length;
       },
       async loadEverything(onProgress) {
-        while (!this.done) { const n = await this.loadPage(); onProgress && onProgress(this.items.length); if (!n && !this.done) break; await sleep(200); }
+        while (!this.done) { const n = await this.loadPage(); onProgress && onProgress(this.items.length); if (!n && !this.done) break; await sleep(500); }
       },
       async remove(keys, onProgress) {
         const byKey = new Map(this.items.map(i => [i.key, i]));
@@ -134,7 +134,7 @@
   // =====================================================================
   const host = document.createElement("div");
   host.id = "chatkit-pro-host";
-  document.documentElement.appendChild(host);
+  CK.keepAttached(host);
   const root = host.attachShadow({ mode: "open" });
 
   root.innerHTML = `
@@ -159,6 +159,12 @@
     #upd { margin: 6px 10px 0; padding: 7px 10px; border-radius: 8px; background: rgba(34,197,94,.12); border: 1px solid rgba(34,197,94,.45); color: #bbf7d0; display: flex; align-items: center; gap: 8px; font-size: 12.5px; }
     #upd a { background: #16a34a; color: #fff; border-radius: 6px; padding: 4px 10px; text-decoration: none; font-weight: 600; font-size: 12px; }
     #upd a:hover { background: #15803d; }
+    .rnprev { margin-top: 8px; border-top: 1px solid #333; padding-top: 6px; max-height: 200px; overflow-y: auto; }
+    .rnrow { font-size: 12px; padding: 3px 0; color: #ddd; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .rnrow s { color: #888; } .rnrow b { color: #86efac; font-weight: 600; } .rnrow.same b { color: #999; font-weight: 400; }
+    #bak { margin: 6px 10px 0; padding: 7px 10px; border-radius: 8px; background: rgba(245,158,11,.10); border: 1px solid rgba(245,158,11,.45); color: #fde68a; display: flex; align-items: center; gap: 8px; font-size: 12.5px; flex-wrap: wrap; }
+    #bak button.go { background: #d97706; color: #fff; border-color: #d97706; font-weight: 600; }
+    #bak button.go:hover { background: #b45309; }
     #viewctl { display: none; align-items: center; gap: 6px; color: #aaa; font-size: 12px; }
     #panel.big.lib #viewctl { display: flex; }
     #viewctl input { width: 110px; }
@@ -233,6 +239,18 @@
     .card:hover { border-color: #444; }
     .card .h { display: flex; gap: 8px; align-items: center; }
     .card .h b { flex: 1; font-size: 13px; }
+    .card.pr .h b { cursor: default; }
+    .card.pr .drag { cursor: grab; color: #666; padding: 0 2px; user-select: none; font-size: 14px; }
+    .card.pr .drag:hover { color: #ccc; }
+    .card.pr .fav { cursor: pointer; font-size: 15px; color: #666; }
+    .card.pr .fav.on { color: #fbbf24; }
+    .card.pr.dragging { opacity: .45; }
+    .card.pr.over { border-color: #ef4444; box-shadow: 0 -2px 0 #ef4444; }
+    .card.pr.favd { border-color: rgba(251,191,36,.35); }
+    .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+    .tag { font-size: 11px; padding: 1px 7px; border-radius: 999px; background: #1e3a5f; color: #bfdbfe; cursor: pointer; border: 1px solid transparent; }
+    .tag:hover, .tag.on { border-color: #60a5fa; }
+    .tagbar { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; margin: 0 0 10px; }
     .card .body { color: #bbb; font-size: 12px; white-space: pre-wrap; margin-top: 4px; max-height: 6.5em; overflow: hidden; }
     .quote { border-left: 3px solid #ef4444; padding-left: 8px; color: #ccc; font-style: italic; margin: 4px 0; white-space: pre-wrap; }
     .hl { background: #854d0e; color: #fff; border-radius: 2px; }
@@ -259,6 +277,7 @@
       <button class="x" id="close">×</button>
     </header>
     <div id="upd" style="display:none"></div>
+    <div id="bak" style="display:none"></div>
     <div id="tabs"></div>
     <div class="filters" id="filters"></div>
     <div id="body"><div id="folders"></div><div id="list"></div></div>
@@ -404,7 +423,7 @@
       const actions = el("span", { class: "a" },
         act("＋", t("fold.sub"), async () => { const n = prompt(t("fold.subPrompt", { name: fo.name })); if (n && n.trim()) await CK.folders.create(n.trim(), fo.id); }),
         act("✎", t("fold.rename"), async () => { const n = prompt(t("fold.renamePrompt"), fo.name); if (n && n.trim()) await CK.folders.update(fo.id, { name: n.trim() }); }),
-        act("⬇", t("fold.export"), () => exportFlow(CK.folders.chatsIn(fo.id), "md", fo.name)),
+        act("⬇", t("fold.export"), () => exportFlow(CK.folders.chatsIn(fo.id), ls.get("expfmt", "md"), fo.name)),
         act("✕", t("fold.delete"), async () => {
           if (confirm(t("confirm.folderDelete", { name: fo.name }))) {
             if (CK.folders.subtree(fo.id).has(f.folder)) f.folder = "all";
@@ -588,8 +607,9 @@
         });
         a.append(fsel);
       }
-      const efmt = select([["md", "Markdown"], ["html", "HTML"], ["pdf", t("exp.pdf")]], ls.get("expfmt", "md"), v => ls.set("expfmt", v));
+      const efmt = select([["md", "Markdown"], ["html", "HTML"], ["pdf", t("exp.pdf")], ["zip-md", t("exp.zip", { f: "Markdown" })], ["zip-html", t("exp.zip", { f: "HTML" })], ["zip-json", t("exp.zip", { f: "JSON" })]], ls.get("expfmt", "md"), v => ls.set("expfmt", v));
       a.append(efmt, button("⬇ " + t("ui.export"), () => exportFlow(selectedLoaded(), efmt.value), need));
+      a.append(button("✏ " + t("rn.btn"), () => renameFlow(selectedLoaded()), need));
       if (current === "chats") a.append(button(t("ui.archive"), () => chatBulk("archive"), need));
       else a.append(button("↩ " + t("ui.restore"), () => chatBulk("unarchive"), need));
       a.append(button(t("ui.delete"), () => chatBulk("delete"), { ...need, class: "danger" }));
@@ -659,6 +679,60 @@
     setMsg(t("msg.doneChats", { ok, fail: fail ? t("msg.failPart", { n: fail }) : "" }));
   }
 
+  // ---------- masowa zmiana nazw ----------
+  // mode: prefix | suffix | remove | replace; zwraca nowy tytuł (bez podwójnych spacji na brzegach).
+  CK.renameTitle = (title, mode, text, repl = "") => {
+    const s = String(title || ""), x = String(text || "");
+    if (!x && mode !== "replace") return s;
+    let out = s;
+    if (mode === "prefix") out = s.startsWith(x) ? s : x + (/\s$/.test(x) ? "" : " ") + s;
+    else if (mode === "suffix") out = s.endsWith(x) ? s : s + (/^\s/.test(x) ? "" : " ") + x;
+    else if (mode === "remove") out = x ? s.split(x).join("") : s;
+    else if (mode === "replace") out = x ? s.split(x).join(repl) : s;
+    return out.replace(/\s{2,}/g, " ").trim() || s;
+  };
+
+  async function renameFlow(keys) {
+    if (!keys.length) return setMsg(t("msg.selectFirst"));
+    const src = sources[current];
+    const items = keys.map(k => src.items.find(i => i.key === k)).filter(Boolean);
+    const st = { mode: ls.get("rnmode", "prefix"), text: "", repl: "" };
+    const prev = el("div", { class: "rnprev" });
+    const draw = () => {
+      prev.replaceChildren();
+      const ch = items.map(i => [i.title || t("untitled"), CK.renameTitle(i.title || t("untitled"), st.mode, st.text, st.repl)]);
+      const n = ch.filter(([a, b]) => a !== b).length;
+      prev.append(el("p", { class: "muted" }, t("rn.preview", { n, all: items.length })));
+      for (const [a, b] of ch.slice(0, 6)) prev.append(el("div", { class: "rnrow" + (a === b ? " same" : "") }, el("s", {}, a), " → ", el("b", {}, b)));
+      if (ch.length > 6) prev.append(el("p", { class: "muted" }, t("rn.more", { n: ch.length - 6 })));
+    };
+    const textIn = el("input", { type: "text", placeholder: t("rn.textPh") }), replIn = el("input", { type: "text", placeholder: t("rn.replPh") });
+    const replRow = el("label", {}, t("rn.repl"), replIn);
+    const modeSel = select([["prefix", t("rn.prefix")], ["suffix", t("rn.suffix")], ["remove", t("rn.remove")], ["replace", t("rn.replace")]], st.mode,
+      v => { st.mode = v; ls.set("rnmode", v); replRow.style.display = v === "replace" ? "" : "none"; draw(); });
+    replRow.style.display = st.mode === "replace" ? "" : "none";
+    textIn.addEventListener("input", () => { st.text = textIn.value; draw(); });
+    replIn.addEventListener("input", () => { st.repl = replIn.value; draw(); });
+    draw();
+    const go = await modal("✏ " + t("rn.title", { n: items.length }), () => el("div", { class: "form" },
+      el("label", {}, t("rn.mode"), modeSel), el("label", {}, t("rn.text"), textIn), replRow, prev),
+      [{ label: t("ui.cancel"), result: null }, { label: t("rn.apply"), cls: "primary", value: () => st.text ? true : (setMsg(t("rn.empty")), false) }]);
+    if (!go) return;
+    const todo = items.map(i => ({ i, title: CK.renameTitle(i.title || "", st.mode, st.text, st.repl) })).filter(x => x.title && x.title !== x.i.title);
+    if (!todo.length) return setMsg(t("rn.nothing"));
+    let ok = 0, fail = 0;
+    await safe(async () => {
+      for (const { i, title } of todo) {
+        if (await CK.patchConversation(i.key, { title })) { ok++; i.title = title; CK.sidebarRename && CK.sidebarRename(i.key, title); } else fail++;
+        progress(ok + fail, todo.length, t("prog.rename"));
+        await sleep(300);
+      }
+    });
+    CK.nudgeChatGPT && CK.nudgeChatGPT();
+    renderList();
+    setMsg(t("rn.done", { ok, fail: fail ? t("msg.failPart", { n: fail }) : "" }));
+  }
+
   async function libDelete(keysArg) {
     const keys = Array.isArray(keysArg) ? keysArg : selectedLoaded(); if (!keys.length) return;
     if (!confirm(t("confirm.libDelete", { n: keys.length }))) return;
@@ -680,14 +754,17 @@
     if (res) setMsg(t("msg.exported", { n: res.ok, fail: res.fail ? t("msg.failPart", { n: res.fail }) : "" }) + (format === "pdf" ? " " + t("msg.pdfHint") : ""));
   }
 
-  let refreshing = false;
+  // Ciche odświeżanie (otwarcie panelu, zmiana czatu): najwyżej raz na 30 s, tylko w widocznej karcie,
+  // jako zapytanie w tle (przy przerwie po 429 nic nie wysyła). Przycisk ↻ odświeża zawsze.
+  let refreshing = false, lastQuiet = 0;
   async function quietRefresh(manual = false) {
     if (!LIST_TABS.includes(current) || busy || refreshing) return;
+    if (!manual && (document.visibilityState === "hidden" || Date.now() - lastQuiet < 30000)) return;
     const src = sources[current];
     if (!src.items.length) { if (manual) loadOne(); return; }
-    refreshing = true;
+    refreshing = true; lastQuiet = Date.now();
     try {
-      const added = await src.refreshTop();
+      const added = await src.refreshTop(!manual);
       renderList();
       if (manual || added) setMsg(added ? t("msg.refreshed", { n: added }) : t("msg.upToDate"));
     } catch (e) { if (manual) setMsg(t("msg.error", { e: e.message })); }
@@ -765,6 +842,48 @@
       el("a", { href: upd.url, target: "_blank", rel: "noopener" }, "⬇ " + t("upd.download")),
       el("span", { class: "ic", title: t("upd.dismiss"), onclick: () => { ls.set("updDismissed", upd.latest); renderUpdate(); } }, "×"));
   }
+  // ---------- kopia zapasowa: dane + przypomnienie ----------
+  const backupJson = () => { const d = CK.store.data; return JSON.stringify({ app: "ChatKit Pro", version: CK.VERSION, exported: new Date().toISOString(), folders: d.folders, chatFolder: d.chatFolder, stars: d.stars, prompts: d.prompts, bookmarks: d.bookmarks, notes: d.notes, chatNotes: d.chatNotes, rules: d.rules, settings: d.settings }, null, 2); };
+  let bak = { lastBackup: 0, backupSnooze: 0, firstSeen: 0 };
+  async function exportBackup() {
+    CK.download(`chatkit-pro-backup-${new Date().toISOString().slice(0, 10)}.json`, backupJson(), "application/json");
+    bak.lastBackup = Date.now();
+    try { await chrome.storage.local.set({ lastBackup: bak.lastBackup }); } catch {}
+    renderBackup();
+    setMsg(t("bak.done"));
+  }
+  // Czy jest co chronić (własne foldery, gwiazdki, notatki, zakładki, reguły, używane prompty)?
+  function hasUserData() {
+    const d = CK.store.data, n = o => Object.keys(o || {}).length;
+    return d.folders.length + n(d.stars) + n(d.chatFolder) + n(d.bookmarks) + d.notes.length + n(d.chatNotes) + d.rules.length > 0 ||
+      (Array.isArray(d.prompts) && d.prompts.some(x => x.uses > 0));
+  }
+  CK.backupDue = (now = Date.now()) => {
+    const every = +CK.store.data.settings.backupEvery || 0;
+    if (!every || !hasUserData()) return false;
+    const base = Math.max(bak.lastBackup || 0, bak.backupSnooze || 0, bak.firstSeen || now);
+    return now - base >= every * 86400000;
+  };
+  function renderBackup() {
+    const box = $("#bak"); box.replaceChildren();
+    const show = CK.backupDue();
+    box.style.display = show ? "flex" : "none";
+    if (!show) return;
+    const ago = bak.lastBackup ? t("bak.ago", { n: Math.floor((Date.now() - bak.lastBackup) / 86400000) }) : t("bak.never");
+    box.append(el("span", {}, "💾 " + t("bak.remind", { ago })), el("span", { class: "sp" }),
+      button("⬇ " + t("bak.now"), exportBackup, { class: "go" }),
+      button(t("bak.later"), async () => { bak.backupSnooze = Date.now(); try { await chrome.storage.local.set({ backupSnooze: bak.backupSnooze }); } catch {} renderBackup(); }));
+  }
+  CK._backup = { state: () => bak, set: o => { Object.assign(bak, o); renderBackup(); } }; // do testów
+  async function loadBackup() {
+    try {
+      const r = await chrome.storage.local.get(["lastBackup", "backupSnooze", "firstSeen"]);
+      bak = { lastBackup: r.lastBackup || 0, backupSnooze: r.backupSnooze || 0, firstSeen: r.firstSeen || 0 };
+      if (!bak.firstSeen) { bak.firstSeen = Date.now(); await chrome.storage.local.set({ firstSeen: bak.firstSeen }); }
+    } catch {}
+    renderBackup();
+  }
+
   async function loadUpdate() { try { upd = (await chrome.storage.local.get("update")).update || null; } catch {} renderUpdate(); }
   const askUpdate = force => chrome.runtime.sendMessage({ type: "ck-check-update", force }).catch(e => ({ error: e.message }));
   chrome.storage.onChanged.addListener((ch, area) => {
@@ -776,7 +895,21 @@
     const d = CK.store.data, S = d.settings;
     const save = async () => { await CK.store.save("settings"); };
     const chk = (key, label, def = false) => el("label", { class: "chk", style: "margin:4px 0" },
-      el("input", { type: "checkbox", checked: S[key] ?? def, onchange: async e => { S[key] = e.target.checked; await save(); } }), label);
+      el("input", { type: "checkbox", checked: S[key] ?? def, onchange: async e => { CK.store.data.settings[key] = e.target.checked; await save(); } }), label);
+    // Suwak po liście wartości (0 = ustawienie ChatGPT). Zapis z opóźnieniem, podgląd na żywo.
+    const slider = (key, label, steps, fmt) => {
+      const cur = Math.max(0, steps.indexOf(+S[key] || 0));
+      const out = el("b", { style: "min-width:84px;text-align:right;font-size:12px" }, fmt(steps[cur]));
+      let timer;
+      const inp = el("input", { type: "range", min: 0, max: steps.length - 1, step: 1, value: cur, style: "flex:1;accent-color:#ef4444" });
+      inp.addEventListener("input", () => {
+        const v = steps[+inp.value]; out.textContent = fmt(v); CK.store.data.settings[key] = v;
+        clearTimeout(timer); timer = setTimeout(save, 150);
+      });
+      inp.addEventListener("change", () => { clearTimeout(timer); save(); });
+      return el("div", { class: "rowb", style: "gap:10px" }, el("span", { style: "min-width:120px;font-size:12px;color:#ccc" }, label), inp, out,
+        button("↺", () => { CK.store.data.settings[key] = 0; inp.value = 0; out.textContent = fmt(0); save(); }, { title: t("set.reset") }));
+    };
     const fileIn = el("input", { type: "file", accept: ".json,application/json", style: "display:none", onchange: async e => {
       const file = e.target.files[0]; if (!file) return;
       try {
@@ -790,7 +923,7 @@
     return el("div", { class: "pane" },
       el("h3", {}, t("set.language")),
       el("div", { class: "rowb" }, select([["auto", t("set.langAuto")], ["pl", "Polski"], ["en", "English"], ["fr", "Français"], ["de", "Deutsch"]], S.lang || "auto",
-        async v => { S.lang = v; await save(); CK.applyLang(); renderAll(); })),
+        async v => { CK.store.data.settings.lang = v; await save(); CK.applyLang(); renderAll(); })),
       el("h3", {}, t("set.look")),
       chk("timestamps", t("set.timestamps"), true),
       el("div", { class: "rowb" }, button(t("set.tsDiag"), () => copy(JSON.stringify(CK.tsDebug ? CK.tsDebug() : {}, null, 1), t("msg.diagCopied")))),
@@ -798,6 +931,11 @@
       chk("classicDark", t("set.classicDark"), false),
       chk("sidebarMarks", t("set.sidebarMarks"), true),
       chk("showFab", t("set.showFab"), true),
+      el("h3", {}, t("set.chatLook")),
+      slider("chatWidth", t("set.chatWidth"), [0, 800, 900, 1000, 1100, 1200, 1400, 1600, 2000], v => v === 0 ? t("set.default") : v >= 2000 ? t("set.fullWidth") : v + " px"),
+      slider("fontSize", t("set.fontSize"), [0, 13, 14, 15, 16, 17, 18, 20, 22], v => v === 0 ? t("set.default") : v + " px"),
+      el("p", { class: "muted", style: "margin:2px 0 6px" }, t("set.lookHint")),
+      chk("codeSave", t("set.codeSave"), true),
       el("h3", {}, t("set.updates")),
       ...(upd && upd.store ? [el("p", {}, t("upd.current", { v: CK.VERSION })), el("p", { style: "color:#86efac" }, "✓ " + t("upd.store"))] : [
       el("p", {}, t("upd.current", { v: CK.VERSION }) + (upd && upd.latest ? " · " + t("upd.latest", { v: upd.latest }) : "")),
@@ -812,11 +950,16 @@
           setMsg(r && r.error ? t("upd.error", { e: r.error }) : updAvailable() ? t("upd.available", { v: upd.latest }) : t("upd.upToDate"));
         }),
         updAvailable() ? el("a", { href: upd.url, target: "_blank", rel: "noopener", style: "color:#86efac;font-size:12px" }, "⬇ " + t("upd.download") + " v" + upd.latest) : null),
+      CK.STORE_URL ? el("p", { style: "margin-top:6px" }, "🛒 " + t("upd.storeTip") + " ", el("a", { href: CK.STORE_URL, target: "_blank", rel: "noopener", style: "color:#fca5a5" }, t("upd.storeLink"))) : null,
       el("p", {}, t("upd.howTo"))]),
       el("h3", {}, t("set.backup")),
       el("p", {}, t("set.backupInfo")),
+      el("div", { class: "rowb" }, el("span", { style: "font-size:12px;color:#ccc" }, t("bak.every")),
+        select([["7", t("bak.d7")], ["14", t("bak.d14")], ["30", t("bak.d30")], ["0", t("bak.off")]], String(S.backupEvery ?? 7),
+          async v => { CK.store.data.settings.backupEvery = +v; await save(); renderBackup(); })),
+      el("p", {}, t("bak.last", { d: bak.lastBackup ? CK.fmtDate(bak.lastBackup, true) : t("bak.never") })),
       el("div", { class: "rowb" },
-        button("⬇ " + t("set.exportData"), () => CK.download(`chatkit-pro-backup-${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify({ app: "ChatKit Pro", version: CK.VERSION, folders: d.folders, chatFolder: d.chatFolder, stars: d.stars, prompts: d.prompts, bookmarks: d.bookmarks, notes: d.notes, chatNotes: d.chatNotes, rules: d.rules, settings: d.settings }, null, 2), "application/json")),
+        button("⬇ " + t("set.exportData"), exportBackup),
         button("⬆ " + t("set.importData"), () => fileIn.click()), fileIn),
       el("h3", {}, t("set.selections")),
       el("div", { class: "rowb" }, button(t("set.clearSel"), () => { LIST_TABS.forEach(k => { sel[k].clear(); saveSel(k); }); setMsg(t("msg.cleared")); })),
@@ -852,7 +995,7 @@
   }
 
   function togglePanel(force) {
-    const open = force ?? !panel.classList.contains("open");
+    const open = CK.on() && (force ?? !panel.classList.contains("open"));
     panel.classList.toggle("open", open);
     if (open) welcome();
     if (open) askUpdate(false); // raz na dobę (cache w tle)
@@ -915,6 +1058,7 @@
   $("#size").addEventListener("input", e => { view.size = +e.target.value; applyView(); });
   zoom.addEventListener("click", () => { zoom.style.display = "none"; });
   document.addEventListener("keydown", e => {
+    if (!CK.on()) return;
     if (e.altKey && e.shiftKey && e.code === "KeyK") { e.preventDefault(); togglePanel(); }
     else if (e.key === "Escape") {
       if (root.querySelector(".modal")) return;
@@ -930,21 +1074,39 @@
     if (panel.classList.contains("open") && current === "chats") setTimeout(() => quietRefresh(), 2500);
   }, 1500);
 
-  chrome.runtime.onMessage.addListener(msg => { if (msg && msg.type === "ck-toggle") togglePanel(msg.open); });
+  chrome.runtime.onMessage.addListener((msg, _s, reply) => {
+    if (msg && msg.type === "ck-toggle") togglePanel(msg.open);
+    if (msg && msg.type === "ck-ping") { reply({ ok: true }); return false; }
+  });
 
-  const applyFab = () => { $("#fab").style.display = CK.store.data.settings.showFab === false ? "none" : ""; };
+  // Wyłączona wtyczka: znika cały panel i przycisk; po włączeniu wraca bez przeładowania strony.
+  const applyFab = () => {
+    host.style.display = CK.on() ? "" : "none";
+    if (!CK.on() && panel.classList.contains("open")) panel.classList.remove("open");
+    $("#fab").style.display = CK.store.data.settings.showFab === false ? "none" : "";
+  };
 
   CK.ready.then(async () => {
     applyFab();
-    loadUpdate();
+    loadUpdate(); loadBackup();
+    CK.store.onChange(renderBackup);
     CK.store.onChange(applyFab);
-    try {
-      const { openPanelAt } = await chrome.storage.local.get("openPanelAt");
-      if (openPanelAt && Date.now() - openPanelAt < 30000) { await chrome.storage.local.remove("openPanelAt"); setTimeout(() => togglePanel(true), 300); }
-    } catch {}
+    // Przerwa po HTTP 429: komunikat w panelu z odliczaniem (operacje same ruszą po przerwie).
+    let rateTimer = null;
+    CK.limit.onChange((_ms, kind) => {
+      clearInterval(rateTimer);
+      const waiting = kind === "wait" || busy;
+      const show = () => {
+        const left = Math.ceil(CK.limit.pausedFor() / 1000);
+        if (left <= 0) { clearInterval(rateTimer); if ($("#msg").textContent.startsWith("⏸")) setMsg(""); return; }
+        setMsg("⏸ " + t(waiting || busy ? "rate.wait" : "rate.bg", { s: left }));
+        if (busy) $("#status").textContent = "⏳ " + t("rate.status", { s: left });
+      };
+      show(); rateTimer = setInterval(show, 1000);
+    });
     CK.store.onChange(() => {
       if (current === "chats") renderFolders();
-      if (current !== "lib" && !root.querySelector(".modal") && !root.activeElement?.matches?.("textarea, input[type=text], input[type=search]")) { renderFooter(); renderList(); }
+      if (current !== "lib" && !root.querySelector(".modal") && !root.activeElement?.matches?.("textarea, input[type=text], input[type=search], input[type=range]")) { renderFooter(); renderList(); }
     });
     const restored = takeRestore();
     switchTab(restored && restored.tab ? restored.tab : "chats");

@@ -6,7 +6,7 @@
 
   const host = document.createElement("div");
   host.id = "chatkit-pro-minimap";
-  document.documentElement.appendChild(host);
+  CK.keepAttached(host);
   const root = host.attachShadow({ mode: "open" });
   root.innerHTML = `
   <style>
@@ -46,6 +46,11 @@
     .note .tx { white-space: pre-wrap; color: #eee; }
     .note .meta { display: flex; gap: 6px; color: #777; font-size: 11px; margin-top: 4px; }
     .note .meta span:last-child { margin-left: auto; cursor: pointer; }
+    #stats { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; padding: 6px 10px; border-bottom: 1px solid #2a2a2a; color: #999; font-size: 11.5px; }
+    #stats:empty { display: none; }
+    #stats b { color: #ddd; font-weight: 600; }
+    #stats button { margin-left: auto; background: #2a2a2a; color: #eee; border: 1px solid #444; border-radius: 6px; padding: 3px 8px; cursor: pointer; font-size: 11.5px; }
+    #stats button:hover { border-color: #ef4444; }
     label.c { display: flex; gap: 4px; align-items: center; color: #aaa; font-size: 11.5px; white-space: nowrap; }
     #selbtn { position: fixed; z-index: 2147483642; display: none; gap: 4px; background: #1f1f1f; border: 1px solid #444; border-radius: 8px; padding: 3px; box-shadow: 0 4px 14px rgba(0,0,0,.4); }
     #selbtn button { background: #2f2f2f; color: #eee; border: 1px solid #444; border-radius: 6px; padding: 4px 8px; cursor: pointer; font-size: 12px; }
@@ -57,6 +62,7 @@
     <div class="hd"><b id="title"></b><button class="x" id="close">×</button></div>
     <div class="tabs"><button data-v="toc"></button><button data-v="marks"></button><button data-v="notes"></button></div>
     <div class="tools" id="tools"></div>
+    <div id="stats"></div>
     <div id="body"></div>
   </div>
   <div id="selbtn"><button id="selnote"></button><button id="selcopy"></button></div>
@@ -77,33 +83,29 @@
     for (const [k, v] of Object.entries(props)) {
       if (v == null) continue;
       if (k === "class") e.className = v; else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
-      else if (k === "html") e.innerHTML = v; else if (k in e) e[k] = v; else e.setAttribute(k, v);
+      else if (k in e) e[k] = v; else e.setAttribute(k, v);
     }
     return e;
   }
 
-  function highlight(text, query) {
-    const s = esc(text);
-    if (!query) return s;
-    const terms = query.toLowerCase().split(/\s+/).filter(Boolean).map(w => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
-    return terms.length ? s.replace(new RegExp("(" + terms.join("|") + ")", "gi"), "<mark>$1</mark>") : s;
-  }
+  const highlight = (text, query) => CK.highlight(text, query, "mark");
 
   async function load(force = false) {
     const id = CK.dom.convId();
-    if (!id) { convId = null; conv = null; msgs = []; return; }
+    if (!id) { convId = null; conv = null; msgs = []; renderStats(); return; }
     if (!force && id === convId && conv) return;
     if (CK.lastConv && CK.lastConv.id === id && !force) setConv(id, CK.lastConv.conv);
     else {
       if (loading) return;
       loading = true;
-      try { setConv(id, await CK.getConversation(id)); } catch (e) { msgs = []; } finally { loading = false; }
+      try { setConv(id, await CK.getConversation(id, { bg: true })); } catch (e) { msgs = []; } finally { loading = false; }
     }
   }
 
   function setConv(id, c) {
     convId = id; conv = c;
     msgs = CK.linearize(c);
+    renderStats();
     order = new Map(msgs.map((m, i) => [m.id, i]));
     if (mm.classList.contains("open")) render();
   }
@@ -119,14 +121,44 @@
     const bk = isBk(m.id);
     return el("div", { class: "e" + (m.role === "assistant" ? " a" : ""), onclick: () => CK.dom.scrollToMessage(m.id, order) },
       el("span", { class: "n" }, m.role === "user" ? (i + 1) + "." : "↳"),
-      el("span", { class: "s", html: highlight(snippet(m.text, 220), q) }),
+      el("span", { class: "s" }, highlight(snippet(m.text, 220), q)),
       el("span", { class: "act" },
         el("span", { class: bk ? "on" : "", title: t("mm.bookmark"), onclick: e => { e.stopPropagation(); toggleBookmark(m); } }, bk ? "🔖" : "🏷"),
         m.role === "user" ? el("span", { title: t("mm.savePrompt"), onclick: e => { e.stopPropagation(); CK.prompts.addFromText(m.text); } }, "💾") : null));
   }
 
+  // Liczniki rozmowy + pobieranie całego kodu z odpowiedzi.
+  function codeBlocks() {
+    const out = [];
+    for (const m of msgs) if (m.role === "assistant") for (const b of CK.extractCode(m.text)) out.push(b);
+    return out;
+  }
+  function downloadCode() {
+    const blocks = codeBlocks(), title = conv?.title || "code";
+    selRect = null;
+    if (!blocks.length) return toast(t("mm.noCode"));
+    if (blocks.length === 1) { CK.download(CK.codeFileName(title, blocks[0].lang, 0), blocks[0].code); return toast(t("code.saved")); }
+    const files = blocks.map((b, i) => {
+      const n = String(i + 1).padStart(2, "0"), ext = CK.codeExt(b.lang);
+      return { name: ext === "dockerfile" ? n + "-Dockerfile" : n + (b.lang ? "-" + CK.safeName(b.lang).toLowerCase() : "") + "." + ext, data: b.code };
+    });
+    CK.download(CK.safeName(title) + " - code.zip", CK.zip(files));
+    toast(t("mm.codeZip", { n: blocks.length }));
+  }
+  function renderStats() {
+    const box = $("#stats");
+    box.replaceChildren();
+    if (!convId || !msgs.length) return;
+    const st = CK.chatStats(msgs), n = codeBlocks().length;
+    const item = (v, l) => el("span", {}, el("b", {}, CK.fmtNum(v)), " " + l);
+    box.append(item(st.messages, t("mm.stMsgs")), item(st.words, t("mm.stWords")), item(st.chars, t("mm.stChars")),
+      el("span", { title: t("mm.stTokTip") }, el("b", {}, "~" + CK.fmtNum(st.tokens)), " " + t("mm.stTokens")));
+    if (n) box.append(el("button", { title: t("mm.codeTip"), onclick: downloadCode }, "⬇ " + t("mm.code", { n })));
+  }
+
   function render() {
     $("#title").textContent = conv?.title || t("mm.title");
+    renderStats();
     root.querySelectorAll(".tabs button").forEach(b => { b.classList.toggle("on", b.dataset.v === viewMode); b.textContent = t("mm.view." + b.dataset.v); });
     tools.replaceChildren();
     body.replaceChildren();
@@ -203,7 +235,7 @@
   function onSelection() {
     const btn = $("#selbtn");
     const s = document.getSelection();
-    if (!s || s.isCollapsed || !CK.dom.convId()) { btn.style.display = "none"; return; }
+    if (!CK.on() || !s || s.isCollapsed || !CK.dom.convId()) { btn.style.display = "none"; return; }
     const text = s.toString().trim();
     if (text.length < 3) { btn.style.display = "none"; return; }
     const node = s.anchorNode && (s.anchorNode.nodeType === 1 ? s.anchorNode : s.anchorNode.parentElement);
@@ -248,8 +280,9 @@
   });
 
   // ---------- sterowanie ----------
-  function visible() { return CK.store.data.settings.minimap !== false && !!CK.dom.convId(); }
+  function visible() { return CK.on() && CK.store.data.settings.minimap !== false && !!CK.dom.convId(); }
   function applyVisibility() {
+    host.style.display = CK.on() ? "" : "none";
     const v = visible();
     $("#tab").style.display = v && !mm.classList.contains("open") ? "block" : "none";
     if (!v) mm.classList.remove("open");
@@ -281,6 +314,6 @@
       applyVisibility();
       if (mm.classList.contains("open")) load().then(render);
     }, 1000);
-    document.addEventListener("keydown", e => { if (e.altKey && e.shiftKey && e.code === "KeyM") { e.preventDefault(); CK.minimap.toggle(); } }, true);
+    document.addEventListener("keydown", e => { if (CK.on() && e.altKey && e.shiftKey && e.code === "KeyM") { e.preventDefault(); CK.minimap.toggle(); } }, true);
   });
 })();

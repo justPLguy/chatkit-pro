@@ -1,5 +1,37 @@
 # Changelog
 
+## v1.2.0 — 2026-11-18
+### English
+- 🔴 **On/off switch** — the CK icon in the toolbar now turns ChatKit Pro on and off: red = on, grey = off (everything disappears from ChatGPT; click again and it comes back on the same page, no reload). The panel opens with the 🧰 button or Alt+Shift+K
+- 🐞 Fixed: after reloading ChatGPT the extension sometimes vanished from the page — it now restores itself automatically
+- 📦 **Export to ZIP** — one file per chat (Markdown, HTML or JSON) in a single ZIP; folder export uses the format you pick
+- ↔️ **Chat width and font size** — two sliders in Settings, applied live (great on wide monitors)
+- 💾 **Code blocks** — a “Save” button on every code block saves it as a file with the right extension (.py, .js, .json…); the minimap can download all code from a chat at once
+- 🔢 **Chat stats** in the minimap — messages, words, characters and estimated tokens
+- ✏️ **Bulk rename** — select chats and add a prefix/suffix (e.g. “[Work]”), remove a piece of text or replace it, with a live preview
+- 📚 **Prompts 2.0** — ⭐ favorites always on top, #tags with a filter bar, drag-and-drop ordering (⋮⋮), sorting by my order / most used / A–Z / newest
+- 💾 **Backup reminder** — once a week (or every 2 weeks / month / never) the panel reminds you to save a copy of your folders, stars, prompts and notes; one click downloads it
+- 🕒 **Clearer timestamps** — each one says whose message it is (👤 You in blue on the right, 🤖 ChatGPT in green on the left) and reads naturally: “Today, 01:30”, “Yesterday, 23:10”, weekday and short date for older messages
+- 🐞 Fixed: settings sliders and checkboxes sometimes ignored a second change until the panel was reopened
+- ⚡ **Far fewer requests to ChatGPT** — fixes “Too many requests” / “Unable to load conversation” (HTTP 429) that heavy users could hit. Timestamps no longer re-download an open chat every few seconds (one request per chat, and only after you stop on it); chats you just viewed are reused; background tabs make no requests; bulk actions run at a calmer pace
+- 🛑 **Respects ChatGPT's limits** — if ChatGPT answers “too many requests”, ChatKit Pro pauses all its requests in every tab (at least 60 s, as long as ChatGPT asks) instead of retrying; bulk actions resume by themselves after the pause and the panel shows a countdown
+- 🚫 Installing the extension no longer opens a ChatGPT tab
+### Polski
+- 🔴 **Włącznik** — ikona CK na pasku przeglądarki włącza i wyłącza ChatKit Pro: czerwona = włączona, szara = wyłączona (wszystko znika z ChatGPT; kliknij ponownie, a wróci na tej samej stronie, bez przeładowania). Panel otwierasz przyciskiem 🧰 albo Alt+Shift+K
+- 🐞 Naprawione: po odświeżeniu ChatGPT wtyczka czasem znikała ze strony — teraz sama się przywraca
+- 📦 **Eksport do ZIP** — osobny plik dla każdego czatu (Markdown, HTML albo JSON) w jednym ZIP-ie; eksport folderu używa wybranego formatu
+- ↔️ **Szerokość czatu i rozmiar czcionki** — dwa suwaki w ustawieniach, zmiany widać od razu (świetne na szerokich monitorach)
+- 💾 **Bloki kodu** — przycisk „Zapisz” przy każdym bloku zapisuje go do pliku z dobrym rozszerzeniem (.py, .js, .json…); w minimapie pobierzesz cały kod z czatu naraz
+- 🔢 **Liczniki czatu** w minimapie — wiadomości, słowa, znaki i przybliżona liczba tokenów
+- ✏️ **Masowa zmiana nazw** — zaznacz czaty i dodaj prefiks/sufiks (np. „[Praca]”), usuń fragment albo zamień go na inny, z podglądem na żywo
+- 📚 **Prompty 2.0** — ⭐ ulubione zawsze na górze, #tagi z paskiem filtrów, kolejność ustawiana przeciąganiem (⋮⋮), sortowanie: moja kolejność / najczęściej używane / A–Z / najnowsze
+- 💾 **Przypomnienie o kopii zapasowej** — co tydzień (albo co 2 tygodnie / co miesiąc / nigdy) panel przypomina o zapisaniu kopii folderów, gwiazdek, promptów i notatek; jeden klik i gotowe
+- 🕒 **Czytelniejsze znaczniki czasu** — każdy mówi, czyja to wiadomość (👤 Ty na niebiesko po prawej, 🤖 ChatGPT na zielono po lewej) i jest zrozumiały od razu: „Dziś, 01:30”, „Wczoraj, 23:10”, dzień tygodnia i krótka data przy starszych wiadomościach
+- 🐞 Naprawione: suwaki i przełączniki w ustawieniach czasem ignorowały kolejną zmianę do ponownego otwarcia panelu
+- ⚡ **Dużo mniej zapytań do ChatGPT** — naprawia „Too many requests” / „Nie można wczytać konwersacji” (HTTP 429), które mogły się pojawiać przy intensywnym używaniu. Znaczniki czasu nie pobierają już otwartego czatu co kilka sekund (jedno zapytanie na czat i dopiero, gdy się na nim zatrzymasz); przed chwilą oglądane czaty nie są pobierane ponownie; karty w tle nic nie wysyłają; operacje hurtowe idą spokojniejszym tempem
+- 🛑 **Szanuje limity ChatGPT** — gdy ChatGPT odpowie „za dużo zapytań”, ChatKit Pro wstrzymuje wszystkie swoje zapytania we wszystkich kartach (min. 60 s, tyle ile prosi ChatGPT) zamiast ponawiać; operacje hurtowe same ruszają po przerwie, a panel pokazuje odliczanie
+- 🚫 Instalacja wtyczki nie otwiera już karty z ChatGPT
+
 ## v1.1.0 — 2026-11-17
 ### English
 - Welcome card after installing — 5 quick tips to get started

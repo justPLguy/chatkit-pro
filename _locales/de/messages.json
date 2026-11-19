@@ -7,5 +7,11 @@
   },
   "appDesc": {
     "message": "ChatGPT-Chats massenhaft löschen und archivieren, Bibliothek, Ordner, Export, Prompts, Suche. Kostenlos, ohne Konto."
+  },
+  "actionOn": {
+    "message": "an (klicken zum Ausschalten)"
+  },
+  "actionOff": {
+    "message": "aus (klicken zum Einschalten)"
   }
 }

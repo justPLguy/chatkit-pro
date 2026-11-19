@@ -7,5 +7,11 @@
   },
   "appDesc": {
     "message": "Supprimez et archivez vos discussions ChatGPT en masse, Bibliothèque, dossiers, export, prompts, recherche. Gratuit."
+  },
+  "actionOn": {
+    "message": "activé (cliquez pour désactiver)"
+  },
+  "actionOff": {
+    "message": "désactivé (cliquez pour activer)"
   }
 }

@@ -57,8 +57,33 @@
 
   const VAR_RE = /\{\{\s*([^{}|]+?)\s*(?:\|\s*([^{}]*?)\s*)?\}\}/g;
 
+  const normTags = v => [...new Set((Array.isArray(v) ? v : String(v || "").split(/[,#;]+/)).map(x => String(x).trim().toLowerCase()).filter(Boolean))].slice(0, 12);
+
   const P = CK.prompts = {
     list: () => CK.store.data.prompts || [],
+    normTags,
+    tags() { const m = new Map(); for (const p of P.list()) for (const g of p.tags || []) m.set(g, (m.get(g) || 0) + 1); return [...m].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])); },
+    // Kolejność: ulubione zawsze na górze, potem wg wybranego sortowania (manual = kolejność w tablicy).
+    sorted(list, sort = "manual") {
+      const idx = new Map(P.list().map((p, i) => [p.id, i]));
+      const cmp = {
+        manual: (a, b) => idx.get(a.id) - idx.get(b.id),
+        uses: (a, b) => (b.uses || 0) - (a.uses || 0) || idx.get(a.id) - idx.get(b.id),
+        az: (a, b) => String(a.title).localeCompare(String(b.title), CK.locale),
+        new: (a, b) => (b.added || 0) - (a.added || 0)
+      }[sort] || ((a, b) => 0);
+      return [...list].sort((a, b) => (!!b.fav - !!a.fav) || cmp(a, b));
+    },
+    async toggleFav(id) { const p = P.list().find(x => x.id === id); if (!p) return; p.fav = !p.fav; await CK.store.save("prompts"); },
+    // Przenosi prompt `id` przed `beforeId` (albo na koniec, gdy beforeId = null).
+    async move(id, beforeId) {
+      const arr = P.list(), from = arr.findIndex(x => x.id === id);
+      if (from < 0 || id === beforeId) return;
+      const [it] = arr.splice(from, 1);
+      const to = beforeId ? arr.findIndex(x => x.id === beforeId) : -1;
+      if (to < 0) arr.push(it); else arr.splice(to, 0, it);
+      await CK.store.save("prompts");
+    },
     starter(lang) {
       return (STARTER[lang] || STARTER.en).map(([title, cat, text]) => ({ id: CK.uid("p"), title, cat, text, uses: 0, added: Date.now() }));
     },
@@ -108,28 +133,32 @@
       const f = {
         title: ui.el("input", { type: "text", value: p.title || "" }),
         cat: ui.el("input", { type: "text", value: p.cat || "", list: "ck-cats" }),
+        tags: ui.el("input", { type: "text", value: (p.tags || []).join(", "), placeholder: t("pr.tagsPh") }),
+        fav: ui.el("input", { type: "checkbox", checked: !!p.fav }),
         text: ui.el("textarea", { rows: 10, value: p.text || "" })
       };
       const res = await ui.modal(p.id ? t("pr.edit") : t("pr.new"), () => ui.el("div", { class: "form" },
         ui.el("label", {}, t("pr.fTitle"), f.title),
         ui.el("label", {}, t("pr.fCat"), f.cat, ui.el("datalist", { id: "ck-cats" }, cats.map(c => ui.el("option", { value: c })))),
+        ui.el("label", {}, t("pr.fTags"), f.tags),
+        ui.el("label", { class: "chk", style: "display:flex;gap:6px;align-items:center" }, f.fav, "⭐ " + t("pr.fFav")),
         ui.el("label", {}, t("pr.fText"), f.text),
         ui.el("p", { class: "muted" }, t("pr.varsHint"))),
-        [{ label: t("ui.cancel"), result: null }, { label: t("ui.save"), cls: "primary", value: () => (f.text.value.trim() ? { title: f.title.value.trim() || f.text.value.trim().slice(0, 50), cat: f.cat.value.trim(), text: f.text.value } : false) }]);
+        [{ label: t("ui.cancel"), result: null }, { label: t("ui.save"), cls: "primary", value: () => (f.text.value.trim() ? { title: f.title.value.trim() || f.text.value.trim().slice(0, 50), cat: f.cat.value.trim(), tags: normTags(f.tags.value), fav: f.fav.checked, text: f.text.value } : false) }]);
       if (res) await P.save({ ...p, ...res });
     },
     // Szybki wybór promptu (bez otwierania panelu).
     async picker() {
       const ui = CK.ui;
-      const items = [...P.list()].sort((a, b) => (b.uses || 0) - (a.uses || 0));
+      const items = P.sorted(P.list(), "uses");
       let chosen = null;
       const listBox = ui.el("div", { style: "max-height:50vh;overflow:auto;margin-top:8px" });
       const q = ui.el("input", { type: "search", placeholder: t("pr.search"), style: "width:100%" });
       const draw = () => {
         const s = q.value.trim().toLowerCase();
-        const vis = items.filter(p => !s || (p.title + " " + p.cat + " " + p.text).toLowerCase().includes(s));
+        const vis = items.filter(p => !s || (p.title + " " + p.cat + " " + (p.tags || []).join(" ") + " " + p.text).toLowerCase().includes(s));
         listBox.replaceChildren(...vis.slice(0, 50).map(p => ui.el("div", { class: "card", style: "cursor:pointer", onclick: () => { chosen = p; closeFn(true); } },
-          ui.el("div", { class: "h" }, ui.el("b", {}, p.title), p.cat ? ui.el("span", { class: "badge" }, p.cat) : null),
+          ui.el("div", { class: "h" }, ui.el("b", {}, (p.fav ? "⭐ " : "") + p.title), p.cat ? ui.el("span", { class: "badge" }, p.cat) : null),
           ui.el("div", { class: "body" }, p.text.slice(0, 160)))));
         if (!vis.length) listBox.append(ui.el("p", { class: "muted" }, t("pr.none")));
         return vis;
@@ -152,7 +181,7 @@
       for (const p of arr) {
         if (!p || !p.text || have.has(p.title + "\u0000" + p.text)) continue;
         CK.store.data.prompts = CK.store.data.prompts || [];
-        CK.store.data.prompts.push({ id: CK.uid("p"), title: p.title || p.text.slice(0, 50), cat: p.cat || "", text: p.text, uses: 0, added: Date.now() });
+        CK.store.data.prompts.push({ id: CK.uid("p"), title: p.title || p.text.slice(0, 50), cat: p.cat || "", tags: normTags(p.tags), fav: !!p.fav, text: p.text, uses: 0, added: Date.now() });
         n++;
       }
       await CK.store.save("prompts");
@@ -161,36 +190,70 @@
   };
 
   // ---------- zakładka w panelu ----------
-  const state = { q: "", cat: "" };
+  const state = { q: "", cat: "", tag: "", sort: null };
   function render(box, ui) {
     const { el, button, select } = ui;
     const all = P.list();
+    if (!state.sort) { try { state.sort = localStorage.getItem("ckp.prsort") || "manual"; } catch { state.sort = "manual"; } }
     const cats = [...new Set(all.map(p => p.cat).filter(Boolean))].sort();
     const fileIn = el("input", { type: "file", accept: ".json", style: "display:none", onchange: async e => {
       try { const n = await P.importJson(e.target.files[0]); ui.setMsg(t("pr.imported", { n })); } catch (err) { ui.setMsg(t("msg.badFile", { e: err.message })); }
     } });
     const q = el("input", { type: "search", placeholder: t("pr.search"), value: state.q });
-    const listBox = el("div");
-    const draw = () => {
-      const s = state.q.trim().toLowerCase();
-      const vis = all.filter(p => (!state.cat || p.cat === state.cat) && (!s || (p.title + " " + p.text).toLowerCase().includes(s)));
-      listBox.replaceChildren(...vis.map(p => el("div", { class: "card" },
-        el("div", { class: "h" }, el("b", {}, p.title), p.cat ? el("span", { class: "badge" }, p.cat) : null,
-          P.vars(p.text).length ? el("span", { class: "badge", title: P.vars(p.text).map(v => v.name).join(", ") }, "{{" + P.vars(p.text).length + "}}") : null,
+    const listBox = el("div"), tagBar = el("div", { class: "tagbar" });
+    let dragId = null;
+    const card = p => {
+      const vars = P.vars(p.text);
+      const c = el("div", { class: "card pr" + (p.fav ? " favd" : ""), "data-id": p.id },
+        el("div", { class: "h" },
+          el("span", { class: "drag", title: t("pr.dragTip"), draggable: "true" }, "⋮⋮"),
+          el("span", { class: "fav" + (p.fav ? " on" : ""), title: t("pr.favTip"), onclick: () => P.toggleFav(p.id) }, p.fav ? "★" : "☆"),
+          el("b", {}, p.title), p.cat ? el("span", { class: "badge" }, p.cat) : null,
+          vars.length ? el("span", { class: "badge", title: vars.map(v => v.name).join(", ") }, "{{" + vars.length + "}}") : null,
           el("span", { class: "muted" }, "×" + (p.uses || 0)),
           button("▶ " + t("pr.insert"), () => P.use(p), { class: "primary" }),
           el("span", { class: "ic", title: t("ui.copy"), onclick: () => ui.copy(p.text) }, "⧉"),
           el("span", { class: "ic", title: t("pr.edit"), onclick: () => P.edit(p) }, "✎"),
           el("span", { class: "ic", title: t("ui.delete"), onclick: async () => { if (confirm(t("pr.confirmDelete", { title: p.title }))) await P.remove(p.id); } }, "✕")),
-        el("div", { class: "body" }, p.text))));
+        (p.tags || []).length ? el("div", { class: "tags" }, p.tags.map(g => el("span", { class: "tag" + (state.tag === g ? " on" : ""), onclick: () => { state.tag = state.tag === g ? "" : g; draw(); } }, "#" + g))) : null,
+        el("div", { class: "body" }, p.text));
+      // przeciąganie (uchwyt ⋮⋮) — zmienia kolejność „Moja kolejność”
+      const h = c.querySelector(".drag");
+      h.addEventListener("dragstart", e => { dragId = p.id; c.classList.add("dragging"); e.dataTransfer.effectAllowed = "move"; try { e.dataTransfer.setData("text/plain", p.id); } catch {} });
+      h.addEventListener("dragend", () => { dragId = null; c.classList.remove("dragging"); listBox.querySelectorAll(".over").forEach(x => x.classList.remove("over")); });
+      c.addEventListener("dragover", e => { if (!dragId || dragId === p.id) return; e.preventDefault(); c.classList.add("over"); });
+      c.addEventListener("dragleave", () => c.classList.remove("over"));
+      c.addEventListener("drop", async e => {
+        e.preventDefault(); c.classList.remove("over");
+        const id = dragId; dragId = null;
+        if (!id || id === p.id) return;
+        if (state.sort !== "manual") { state.sort = "manual"; try { localStorage.setItem("ckp.prsort", "manual"); } catch {} }
+        await P.move(id, p.id);
+        ui.setMsg(t("pr.moved"));
+      });
+      return c;
+    };
+    const draw = () => {
+      const s = state.q.trim().toLowerCase();
+      const vis = P.sorted(all.filter(p => (!state.cat || p.cat === state.cat) && (!state.tag || (p.tags || []).includes(state.tag)) &&
+        (!s || (p.title + " " + (p.tags || []).join(" ") + " " + p.text).toLowerCase().includes(s))), state.sort);
+      listBox.replaceChildren(...vis.map(card));
       if (!vis.length) listBox.append(el("div", { class: "empty" }, all.length ? t("ui.noResults") : t("pr.empty")));
+      const tags = P.tags();
+      tagBar.replaceChildren();
+      if (tags.length) tagBar.append(el("span", { class: "muted" }, t("pr.tags") + ":"),
+        ...tags.map(([g, n]) => el("span", { class: "tag" + (state.tag === g ? " on" : ""), onclick: () => { state.tag = state.tag === g ? "" : g; draw(); } }, "#" + g + " " + n)),
+        state.tag ? el("span", { class: "ic", title: t("pr.clearTag"), onclick: () => { state.tag = ""; draw(); } }, "✕") : null);
     };
     q.addEventListener("input", e => { state.q = e.target.value; draw(); });
     box.append(el("div", { class: "pane" },
       el("div", { class: "rowb", style: "margin:0 0 10px" }, q,
         select([["", t("pr.allCats")], ...cats.map(c => [c, c])], state.cat, v => { state.cat = v; draw(); }),
+        select([["manual", t("pr.sortManual")], ["uses", t("pr.sortUses")], ["az", t("pr.sortAz")], ["new", t("pr.sortNew")]], state.sort,
+          v => { state.sort = v; try { localStorage.setItem("ckp.prsort", v); } catch {} draw(); }),
         button("＋ " + t("pr.new"), () => P.edit(), { class: "primary" })),
-      el("p", { class: "muted", style: "margin:0 0 10px" }, t("pr.howTo")),
+      tagBar,
+      el("p", { class: "muted", style: "margin:0 0 10px" }, t("pr.howTo") + " " + t("pr.howTo2")),
       listBox,
       el("div", { class: "rowb", style: "margin-top:12px" },
         button("⬇ " + t("pr.export"), () => P.exportJson()), button("⬆ " + t("pr.import"), () => fileIn.click()), fileIn,
@@ -208,10 +271,11 @@
 
     // Alt+Shift+P — szybki wybór promptu
     document.addEventListener("keydown", e => {
-      if (e.altKey && e.shiftKey && e.code === "KeyP") { e.preventDefault(); P.picker(); }
+      if (CK.on() && e.altKey && e.shiftKey && e.code === "KeyP") { e.preventDefault(); P.picker(); }
     }, true);
     // "//" w pustym polu wiadomości — szybki wybór
     document.addEventListener("input", e => {
+      if (!CK.on()) return;
       const c = CK.dom.composer();
       if (!c || !(e.target === c || c.contains(e.target))) return;
       if (CK.dom.composerText().trim() === "//") { CK.dom.insertIntoComposer("", true); P.picker(); }
