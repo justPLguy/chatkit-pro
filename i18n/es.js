@@ -236,11 +236,79 @@
 "rel.addFirefox": "Añadir a Firefox",
 "rel.store": "gratis · actualizaciones automáticas",
 "rel.review": "en revisión · muy pronto",
-"rel.replaced": "sustituida por", "rel.newer": "hay una versión más reciente",
+"rel.replaced": "sustituida por",
+"rel.newer": "hay una versión más reciente",
 "rel.gh": "GitHub (ZIP)",
 "rel.more": "Ver versiones anteriores ({n})",
 "rel.less": "Ver menos",
+"rel.updated": "ChatKit Pro se ha actualizado a {v} — estas son las novedades",
+"rel.close": "Cerrar",
 "_rel": {
+"1.3.0": {
+"intro": "La actualización más grande hasta ahora: salto rápido, etiquetas, proyectos, enlaces compartidos, 6 temas y 14 idiomas.",
+"items": [
+[
+"Salto rápido",
+"Alt+Shift+J (o ⌕ en el panel): escribe unas letras y abre cualquier chat, carpeta, etiqueta o prompt."
+],
+[
+"Etiquetas en los chats",
+"varias etiquetas por chat, filtro de etiquetas en el panel, #etiqueta en la búsqueda, arrastrar chats a una etiqueta."
+],
+[
+"Mover a un proyecto",
+"muchos chats a la vez a un proyecto de ChatGPT."
+],
+[
+"Gestor de enlaces compartidos",
+"todos los enlaces públicos a tus chats y documentos de Canvas en un solo lugar — elimina los que no deberían ser públicos."
+],
+[
+"Exportar para Obsidian / Notion",
+"Markdown con encabezado YAML: título, fechas, enlace, carpeta, etiquetas."
+],
+[
+"Exportar mensajes elegidos",
+"elige preguntas y respuestas de un chat — p. ej. solo tus propios prompts."
+],
+[
+"Contador de mensaje",
+"caracteres, palabras y ~tokens de lo que escribes, sobre el cuadro de mensaje."
+],
+[
+"6 temas del panel",
+"oscuro, negro (AMOLED), claro, negro y rojo, azul marino y morado."
+],
+[
+"14 idiomas",
+"español, portugués (Brasil), italiano, neerlandés, checo, ucraniano, turco, japonés, chino y coreano se suman al inglés, polaco, francés y alemán — con prompts iniciales."
+],
+[
+"«Novedades» tras actualizar",
+"esta página se abre una vez tras actualizar a una nueva versión (se puede desactivar en Ajustes)."
+],
+[
+"Archivar sin F5",
+"los chats archivados y eliminados desaparecen al instante de la barra lateral de ChatGPT."
+],
+[
+"Más ligero en chats largos",
+"las marcas de tiempo ya no ralentizan los chats con cientos de mensajes."
+],
+[
+"Marcas de tiempo al instante",
+"tu nuevo mensaje y la respuesta de ChatGPT reciben su hora enseguida."
+],
+[
+"Exportación actualizada",
+"la exportación siempre usa la versión más reciente del chat."
+],
+[
+"Pestañas del panel",
+"en los idiomas más largos la última pestaña ya no baja a una segunda fila."
+]
+]
+},
 "1.2.0": {
 "intro": "Una gran actualización: renombrado masivo, exportación a ZIP, guardado de código, ancho del chat… y muchas menos peticiones a ChatGPT.",
 "items": [

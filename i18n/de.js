@@ -236,11 +236,79 @@
 "rel.addFirefox": "Zu Firefox hinzufügen",
 "rel.store": "kostenlos · automatische Updates",
 "rel.review": "in Prüfung · bald verfügbar",
-"rel.replaced": "ersetzt durch", "rel.newer": "neuere Version verfügbar",
+"rel.replaced": "ersetzt durch",
+"rel.newer": "neuere Version verfügbar",
 "rel.gh": "GitHub (ZIP)",
 "rel.more": "Ältere Versionen anzeigen ({n})",
 "rel.less": "Weniger anzeigen",
+"rel.updated": "ChatKit Pro wurde auf {v} aktualisiert — das ist neu",
+"rel.close": "Schließen",
 "_rel": {
+"1.3.0": {
+"intro": "Das bisher größte Update: Schnellsprung, Tags, Projekte, geteilte Links, 6 Designs und 14 Sprachen.",
+"items": [
+[
+"Schnellsprung",
+"Alt+Shift+J (oder ⌕ im Panel): ein paar Buchstaben tippen und jeden Chat, Ordner, Tag oder Prompt öffnen."
+],
+[
+"Tags für Chats",
+"mehrere Tags pro Chat, Tag-Filter im Panel, #tag im Suchfeld, Chats auf einen Tag ziehen."
+],
+[
+"In ein Projekt verschieben",
+"viele Chats auf einmal in ein ChatGPT-Projekt."
+],
+[
+"Verwaltung geteilter Links",
+"alle öffentlichen Links zu deinen Chats und Canvas-Dokumenten an einem Ort — lösche, was nicht öffentlich sein soll."
+],
+[
+"Export für Obsidian / Notion",
+"Markdown mit YAML-Kopf: Titel, Daten, Link, Ordner, Tags."
+],
+[
+"Ausgewählte Nachrichten exportieren",
+"Fragen und Antworten aus einem Chat auswählen — z. B. nur deine eigenen Prompts."
+],
+[
+"Nachrichtenzähler",
+"Zeichen, Wörter und ~Tokens deines Textes, über dem Nachrichtenfeld."
+],
+[
+"6 Panel-Designs",
+"dunkel, schwarz (AMOLED), hell, schwarz-rot, marineblau und lila."
+],
+[
+"14 Sprachen",
+"Spanisch, Portugiesisch (Brasilien), Italienisch, Niederländisch, Tschechisch, Ukrainisch, Türkisch, Japanisch, Chinesisch und Koreanisch kommen zu Englisch, Polnisch, Französisch und Deutsch — samt Start-Prompts."
+],
+[
+"„Was ist neu“ nach einem Update",
+"diese Seite öffnet sich einmal nach dem Update auf eine neue Version (in den Einstellungen abschaltbar)."
+],
+[
+"Archivieren ohne F5",
+"archivierte und gelöschte Chats verschwinden sofort aus der ChatGPT-Seitenleiste."
+],
+[
+"Leichter in langen Chats",
+"Zeitstempel bremsen Chats mit Hunderten Nachrichten nicht mehr aus."
+],
+[
+"Sofortige Zeitstempel",
+"deine neue Nachricht und die Antwort von ChatGPT bekommen sofort ihre Uhrzeit."
+],
+[
+"Aktueller Export",
+"der Export nutzt immer die neueste Version eines Chats."
+],
+[
+"Panel-Tabs",
+"in längeren Sprachen rutscht der letzte Tab nicht mehr in eine zweite Zeile."
+]
+]
+},
 "1.2.0": {
 "intro": "Ein großes Update: Massen-Umbenennen, ZIP-Export, Code speichern, Chatbreite — und viel weniger Anfragen an ChatGPT.",
 "items": [

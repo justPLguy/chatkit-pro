@@ -236,11 +236,79 @@
 "rel.addFirefox": "Toevoegen aan Firefox",
 "rel.store": "gratis · automatische updates",
 "rel.review": "in beoordeling · binnenkort",
-"rel.replaced": "vervangen door", "rel.newer": "nieuwere versie beschikbaar",
+"rel.replaced": "vervangen door",
+"rel.newer": "nieuwere versie beschikbaar",
 "rel.gh": "GitHub (ZIP)",
 "rel.more": "Oudere versies tonen ({n})",
 "rel.less": "Minder tonen",
+"rel.updated": "ChatKit Pro is bijgewerkt naar {v} — dit is er nieuw",
+"rel.close": "Sluiten",
 "_rel": {
+"1.3.0": {
+"intro": "De grootste update tot nu toe: snel springen, tags, projecten, gedeelde links, 6 thema's en 14 talen.",
+"items": [
+[
+"Snel springen",
+"Alt+Shift+J (of ⌕ in het paneel): typ een paar letters en open elke chat, map, tag of prompt."
+],
+[
+"Tags op chats",
+"meerdere tags per chat, tagfilter in het paneel, #tag in het zoekveld, chats op een tag slepen."
+],
+[
+"Naar een project verplaatsen",
+"veel chats tegelijk naar een ChatGPT-project."
+],
+[
+"Beheer van gedeelde links",
+"alle openbare links naar je chats en Canvas-documenten op één plek — verwijder wat niet openbaar hoort te zijn."
+],
+[
+"Export voor Obsidian / Notion",
+"Markdown met YAML-kop: titel, datums, link, map, tags."
+],
+[
+"Gekozen berichten exporteren",
+"kies vragen en antwoorden uit één chat — bijv. alleen je eigen prompts."
+],
+[
+"Berichtteller",
+"tekens, woorden en ~tokens van wat je typt, boven het berichtveld."
+],
+[
+"6 paneelthema's",
+"donker, zwart (AMOLED), licht, zwart-rood, marineblauw en paars."
+],
+[
+"14 talen",
+"Spaans, Portugees (Brazilië), Italiaans, Nederlands, Tsjechisch, Oekraïens, Turks, Japans, Chinees en Koreaans komen bij Engels, Pools, Frans en Duits — inclusief startprompts."
+],
+[
+"„Wat is er nieuw” na een update",
+"deze pagina opent één keer na een update naar een nieuwe versie (uit te zetten in Instellingen)."
+],
+[
+"Archiveren zonder F5",
+"gearchiveerde en verwijderde chats verdwijnen meteen uit de ChatGPT-zijbalk."
+],
+[
+"Lichter in lange chats",
+"tijdstempels vertragen chats met honderden berichten niet meer."
+],
+[
+"Directe tijdstempels",
+"je nieuwe bericht en het antwoord van ChatGPT krijgen meteen hun tijd."
+],
+[
+"Actuele export",
+"de export gebruikt altijd de nieuwste versie van een chat."
+],
+[
+"Paneeltabbladen",
+"in langere talen valt het laatste tabblad niet meer naar een tweede regel."
+]
+]
+},
 "1.2.0": {
 "intro": "Een grote update: bulk hernoemen, ZIP-export, code opslaan, chatbreedte — en veel minder verzoeken aan ChatGPT.",
 "items": [

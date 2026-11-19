@@ -230,17 +230,85 @@
 "_desc.rel": "Historia zmian ChatKit Pro: co dodaje i naprawia każda wersja i gdzie ją pobrać (Chrome Web Store, Firefox Add-ons, GitHub).",
 "rel.latest": "Najnowsza",
 "rel.new": "Nowe",
-"rel.better": "Lepsze",
+"rel.better": "Ulepszone",
 "rel.fix": "Naprawione",
 "rel.addChrome": "Dodaj do Chrome",
 "rel.addFirefox": "Dodaj do Firefoksa",
 "rel.store": "za darmo · aktualizacje automatyczne",
 "rel.review": "w recenzji · wkrótce",
-"rel.replaced": "zastąpiona przez", "rel.newer": "dostępna nowsza wersja",
+"rel.replaced": "zastąpiona przez",
+"rel.newer": "dostępna nowsza wersja",
 "rel.gh": "GitHub (ZIP)",
 "rel.more": "Pokaż starsze wersje ({n})",
 "rel.less": "Pokaż mniej",
+"rel.updated": "ChatKit Pro zaktualizował się do {v} — oto co nowego",
+"rel.close": "Zamknij",
 "_rel": {
+"1.3.0": {
+"intro": "Największa aktualizacja do tej pory: szybki skok, tagi, projekty, udostępnione linki, 6 motywów i 14 języków.",
+"items": [
+[
+"Szybki skok",
+"Alt+Shift+J (albo ⌕ w panelu): wpisz kilka liter i otwórz dowolny czat, folder, tag albo prompt."
+],
+[
+"Tagi na czatach",
+"kilka tagów na czat, filtr tagów w panelu, #tag w wyszukiwarce, przeciąganie czatów na tag."
+],
+[
+"Przenoszenie do projektu",
+"wiele czatów naraz do projektu ChatGPT."
+],
+[
+"Menedżer udostępnionych linków",
+"wszystkie publiczne linki do Twoich czatów i wpisów z Canvas w jednym miejscu — usuń te, które nie powinny być publiczne."
+],
+[
+"Eksport do Obsidiana / Notion",
+"Markdown z nagłówkiem YAML: tytuł, daty, link, folder, tagi."
+],
+[
+"Eksport wybranych wiadomości",
+"wybierasz pytania i odpowiedzi z jednego czatu — np. tylko swoje prompty."
+],
+[
+"Licznik wiadomości",
+"znaki, słowa i ~tokeny tego, co piszesz, nad polem wiadomości."
+],
+[
+"6 motywów panelu",
+"ciemny, czarny (AMOLED), jasny, czarno-czerwony, granatowy i fioletowy."
+],
+[
+"14 języków",
+"do angielskiego, polskiego, francuskiego i niemieckiego dochodzą hiszpański, portugalski (Brazylia), włoski, niderlandzki, czeski, ukraiński, turecki, japoński, chiński i koreański — razem z promptami startowymi."
+],
+[
+"„Co nowego” po aktualizacji",
+"ta strona otwiera się raz po aktualizacji do nowej wersji (można wyłączyć w Ustawieniach)."
+],
+[
+"Archiwizacja bez F5",
+"zarchiwizowane i usunięte czaty od razu znikają z paska bocznego ChatGPT."
+],
+[
+"Lżej w długich czatach",
+"znaczniki czasu nie spowalniają już czatów z setkami wiadomości."
+],
+[
+"Znaczniki od razu",
+"Twoja nowa wiadomość i odpowiedź ChatGPT od razu dostają godzinę."
+],
+[
+"Świeży eksport",
+"eksport zawsze bierze najnowszą wersję czatu."
+],
+[
+"Zakładki panelu",
+"w dłuższych językach ostatnia zakładka nie spada już do drugiego wiersza."
+]
+]
+},
 "1.2.0": {
 "intro": "Duża aktualizacja: masowa zmiana nazw, eksport do ZIP, zapisywanie kodu, szerokość czatu — i dużo mniej zapytań do ChatGPT.",
 "items": [

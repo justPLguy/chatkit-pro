@@ -236,11 +236,79 @@
 "rel.addFirefox": "Přidat do Firefoxu",
 "rel.store": "zdarma · automatické aktualizace",
 "rel.review": "ve schvalování · již brzy",
-"rel.replaced": "nahrazena verzí", "rel.newer": "k dispozici je novější verze",
+"rel.replaced": "nahrazena verzí",
+"rel.newer": "k dispozici je novější verze",
 "rel.gh": "GitHub (ZIP)",
 "rel.more": "Zobrazit starší verze ({n})",
 "rel.less": "Zobrazit méně",
+"rel.updated": "ChatKit Pro se aktualizoval na {v} — tady je, co je nového",
+"rel.close": "Zavřít",
 "_rel": {
+"1.3.0": {
+"intro": "Zatím největší aktualizace: rychlý skok, štítky, projekty, sdílené odkazy, 6 motivů a 14 jazyků.",
+"items": [
+[
+"Rychlý skok",
+"Alt+Shift+J (nebo ⌕ v panelu): napište pár písmen a otevřete libovolný chat, složku, štítek nebo prompt."
+],
+[
+"Štítky u chatů",
+"více štítků na chat, filtr štítků v panelu, #štítek ve vyhledávání, přetažení chatů na štítek."
+],
+[
+"Přesun do projektu",
+"mnoho chatů najednou do projektu ChatGPT."
+],
+[
+"Správa sdílených odkazů",
+"všechny veřejné odkazy na vaše chaty a dokumenty Canvas na jednom místě — smažte ty, které nemají být veřejné."
+],
+[
+"Export pro Obsidian / Notion",
+"Markdown s hlavičkou YAML: název, data, odkaz, složka, štítky."
+],
+[
+"Export vybraných zpráv",
+"vyberte otázky a odpovědi z jednoho chatu — třeba jen vaše prompty."
+],
+[
+"Počítadlo zprávy",
+"znaky, slova a ~tokeny toho, co píšete, nad polem zprávy."
+],
+[
+"6 motivů panelu",
+"tmavý, černý (AMOLED), světlý, černočervený, námořnická modrá a fialový."
+],
+[
+"14 jazyků",
+"k angličtině, polštině, francouzštině a němčině přibyla španělština, portugalština (Brazílie), italština, nizozemština, čeština, ukrajinština, turečtina, japonština, čínština a korejština — včetně úvodních promptů."
+],
+[
+"„Co je nového“ po aktualizaci",
+"tato stránka se otevře jednou po aktualizaci na novou verzi (lze vypnout v Nastavení)."
+],
+[
+"Archivace bez F5",
+"archivované a smazané chaty hned zmizí z postranního panelu ChatGPT."
+],
+[
+"Lehčí v dlouhých chatech",
+"časy už nezpomalují chaty se stovkami zpráv."
+],
+[
+"Okamžité časy",
+"vaše nová zpráva i odpověď ChatGPT dostanou čas hned."
+],
+[
+"Aktuální export",
+"export vždy bere nejnovější verzi chatu."
+],
+[
+"Karty panelu",
+"v delších jazycích už poslední karta nepadá na druhý řádek."
+]
+]
+},
 "1.2.0": {
 "intro": "Velká aktualizace: hromadné přejmenování, export do ZIPu, ukládání kódu, šířka chatu — a mnohem méně požadavků na ChatGPT.",
 "items": [

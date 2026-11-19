@@ -236,11 +236,79 @@
 "rel.addFirefox": "Firefox'a ekle",
 "rel.store": "ücretsiz · otomatik güncellemeler",
 "rel.review": "incelemede · yakında",
-"rel.replaced": "yeni sürüm:", "rel.newer": "daha yeni sürüm mevcut",
+"rel.replaced": "yeni sürüm:",
+"rel.newer": "daha yeni sürüm mevcut",
 "rel.gh": "GitHub (ZIP)",
 "rel.more": "Eski sürümleri göster ({n})",
 "rel.less": "Daha az göster",
+"rel.updated": "ChatKit Pro {v} sürümüne güncellendi — işte yenilikler",
+"rel.close": "Kapat",
 "_rel": {
+"1.3.0": {
+"intro": "Şimdiye kadarki en büyük güncelleme: hızlı geçiş, etiketler, projeler, paylaşılan bağlantılar, 6 tema ve 14 dil.",
+"items": [
+[
+"Hızlı geçiş",
+"Alt+Shift+J (veya paneldeki ⌕): birkaç harf yaz, istediğin sohbeti, klasörü, etiketi veya prompt'u aç."
+],
+[
+"Sohbetlere etiket",
+"sohbet başına birden çok etiket, panelde etiket filtresi, aramada #etiket, sohbetleri bir etikete sürükleme."
+],
+[
+"Projeye taşıma",
+"birçok sohbeti tek seferde bir ChatGPT projesine taşı."
+],
+[
+"Paylaşılan bağlantı yöneticisi",
+"sohbetlerine ve Canvas belgelerine giden tüm herkese açık bağlantılar tek yerde — açık olmaması gerekenleri sil."
+],
+[
+"Obsidian / Notion için dışa aktarma",
+"YAML başlıklı Markdown: başlık, tarihler, bağlantı, klasör, etiketler."
+],
+[
+"Seçilen mesajları dışa aktarma",
+"bir sohbetten soruları ve yanıtları seç — örneğin yalnızca kendi prompt'larını."
+],
+[
+"Mesaj sayacı",
+"yazdığın metnin karakter, kelime ve ~token sayısı, mesaj kutusunun üstünde."
+],
+[
+"6 panel teması",
+"koyu, siyah (AMOLED), açık, siyah-kırmızı, lacivert ve mor."
+],
+[
+"14 dil",
+"İngilizce, Lehçe, Fransızca ve Almancaya İspanyolca, Portekizce (Brezilya), İtalyanca, Felemenkçe, Çekçe, Ukraynaca, Türkçe, Japonca, Çince ve Korece eklendi — başlangıç prompt'larıyla birlikte."
+],
+[
+"Güncellemeden sonra “Yenilikler”",
+"bu sayfa yeni bir sürüme güncellemeden sonra bir kez açılır (Ayarlar'dan kapatılabilir)."
+],
+[
+"F5 olmadan arşivleme",
+"arşivlenen ve silinen sohbetler ChatGPT kenar çubuğundan hemen kaybolur."
+],
+[
+"Uzun sohbetlerde daha hafif",
+"zaman damgaları yüzlerce mesajlık sohbetleri artık yavaşlatmıyor."
+],
+[
+"Anında zaman damgası",
+"yeni mesajın ve ChatGPT'nin yanıtı saatini hemen alır."
+],
+[
+"Güncel dışa aktarma",
+"dışa aktarma her zaman sohbetin en yeni sürümünü kullanır."
+],
+[
+"Panel sekmeleri",
+"daha uzun dillerde son sekme artık ikinci satıra düşmüyor."
+]
+]
+},
 "1.2.0": {
 "intro": "Büyük bir güncelleme: toplu yeniden adlandırma, ZIP'e aktarma, kod kaydetme, sohbet genişliği — ve ChatGPT'ye çok daha az istek.",
 "items": [

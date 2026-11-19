@@ -236,11 +236,79 @@
 "rel.addFirefox": "Ajouter à Firefox",
 "rel.store": "gratuit · mises à jour automatiques",
 "rel.review": "en cours d'examen · bientôt",
-"rel.replaced": "remplacée par", "rel.newer": "version plus récente disponible",
+"rel.replaced": "remplacée par",
+"rel.newer": "version plus récente disponible",
 "rel.gh": "GitHub (ZIP)",
 "rel.more": "Voir les versions précédentes ({n})",
 "rel.less": "Afficher moins",
+"rel.updated": "ChatKit Pro a été mis à jour vers {v} — voici les nouveautés",
+"rel.close": "Fermer",
 "_rel": {
+"1.3.0": {
+"intro": "La plus grosse mise à jour à ce jour : accès rapide, tags, projets, liens partagés, 6 thèmes et 14 langues.",
+"items": [
+[
+"Accès rapide",
+"Alt+Shift+J (ou ⌕ dans le panneau) : tapez quelques lettres et ouvrez n'importe quelle discussion, dossier, tag ou prompt."
+],
+[
+"Tags sur les discussions",
+"plusieurs tags par discussion, filtre de tags dans le panneau, #tag dans la recherche, glisser des discussions sur un tag."
+],
+[
+"Déplacer vers un projet",
+"plusieurs discussions d'un coup vers un projet ChatGPT."
+],
+[
+"Gestionnaire de liens partagés",
+"tous les liens publics vers vos discussions et documents Canvas au même endroit — supprimez ceux qui ne devraient pas être publics."
+],
+[
+"Export pour Obsidian / Notion",
+"Markdown avec en-tête YAML : titre, dates, lien, dossier, tags."
+],
+[
+"Export des messages choisis",
+"choisissez questions et réponses dans une discussion — par ex. seulement vos prompts."
+],
+[
+"Compteur de message",
+"caractères, mots et ~jetons de ce que vous tapez, au-dessus du champ de message."
+],
+[
+"6 thèmes de panneau",
+"sombre, noir (AMOLED), clair, noir et rouge, bleu marine et violet."
+],
+[
+"14 langues",
+"l'espagnol, le portugais (Brésil), l'italien, le néerlandais, le tchèque, l'ukrainien, le turc, le japonais, le chinois et le coréen rejoignent l'anglais, le polonais, le français et l'allemand — prompts de départ compris."
+],
+[
+"« Nouveautés » après une mise à jour",
+"cette page s'ouvre une fois après une mise à jour vers une nouvelle version (désactivable dans les Réglages)."
+],
+[
+"Archiver sans F5",
+"les discussions archivées et supprimées disparaissent tout de suite de la barre latérale de ChatGPT."
+],
+[
+"Plus léger dans les longues discussions",
+"l'horodatage ne ralentit plus les discussions de plusieurs centaines de messages."
+],
+[
+"Horodatage immédiat",
+"votre nouveau message et la réponse de ChatGPT reçoivent leur heure tout de suite."
+],
+[
+"Export à jour",
+"l'export utilise toujours la dernière version de la discussion."
+],
+[
+"Onglets du panneau",
+"dans les langues plus longues, le dernier onglet ne passe plus à la ligne."
+]
+]
+},
 "1.2.0": {
 "intro": "Une grosse mise à jour : renommage groupé, export ZIP, enregistrement du code, largeur de la discussion — et beaucoup moins de requêtes vers ChatGPT.",
 "items": [

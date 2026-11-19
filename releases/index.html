@@ -255,8 +255,19 @@
   .rel-get a.btn.old:hover { border-color: var(--dim); color: var(--muted); }
   .rel-get .btn.old small.newer { color: var(--text); font-weight: 600; margin-left: 2px; }
   .rel-get .btn.ghost.sm { color: var(--muted); }
-  .rel ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-  .rel li { display: grid; grid-template-columns: 104px 1fr; gap: 14px; align-items: baseline; color: var(--muted); font-size: 15px; }
+  .rel-upd { display: flex; align-items: center; gap: 12px; padding: 14px 18px; margin: 0 0 22px; border-radius: 14px; background: rgba(34,197,94,.12); border: 1px solid rgba(34,197,94,.45); color: #bbf7d0; font-weight: 600; font-size: 16px; }
+  .rel-upd span { flex: 1; }
+  .rel-upd-x { background: none; border: none; color: inherit; font-size: 22px; line-height: 1; cursor: pointer; opacity: .7; padding: 0 4px; }
+  .rel-upd-x:hover { opacity: 1; }
+  .rgrp { margin: 0 0 18px; }
+  .rgrp:last-child { margin-bottom: 0; }
+  .rgrp-h { display: flex; align-items: center; gap: 8px; margin: 0 0 10px; font-size: inherit; }
+  .rgrp-n { font-size: 12px; font-weight: 600; color: var(--dim); }
+  .rel ul { list-style: none; margin: 0; padding: 0 0 0 14px; display: grid; gap: 9px; border-left: 2px solid var(--line); }
+  .rgrp.new ul { border-left-color: rgba(34,197,94,.45); }
+  .rgrp.better ul { border-left-color: rgba(59,130,246,.5); }
+  .rgrp.fix ul { border-left-color: rgba(249,115,22,.5); }
+  .rel li { color: var(--muted); font-size: 15px; line-height: 1.55; }
   .rel li b { color: var(--text); font-weight: 600; }
   .rtag { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; border-radius: 6px; padding: 3px 8px; justify-self: start; white-space: nowrap; }
   .rtag.new { background: rgba(34,197,94,.13); color: #86efac; }      /* NOWE = zielone */
@@ -264,7 +275,7 @@
   .rtag.fix { background: rgba(249,115,22,.15); color: #fdba74; }     /* NAPRAWIONE = pomarańczowe */
   .rel-more { margin-top: 18px; text-align: center; }
   .rel-more .btn { cursor: pointer; background: none; color: var(--text); font-family: inherit; }
-  @media (max-width: 600px) { .rel { padding: 20px; } .rel li { grid-template-columns: 1fr; gap: 4px; } .rel-get .btn { flex: 1 1 100%; flex-wrap: wrap; gap: 4px 10px; } }
+  @media (max-width: 600px) { .rel { padding: 20px; } .rel ul { padding-left: 10px; } .rel-get .btn { flex: 1 1 100%; flex-wrap: wrap; gap: 4px 10px; } }
 
   /* wybór języka + Donate */
   .langsel { position: relative; }
@@ -420,6 +431,28 @@ document.querySelectorAll("[data-ver]").forEach(b => { b.textContent = "v" + CON
    tłumaczenia są w i18n/<kod>.js w _rel["wersja"] (intro + items w tej samej kolejności). */
 const RELEASES = [
   {
+    v: "1.3.0", date: "2026-11-19",
+    stores: { chrome: "review", firefox: "review" }, gh: false,
+    intro: "The biggest update so far: quick jump, tags, projects, shared links, 6 themes and 14 languages.",
+    items: [
+      ["new", ["Quick jump", "Alt+Shift+J (or ⌕ in the panel): type a few letters and open any chat, folder, tag or prompt."]],
+      ["new", ["Tags on chats", "several tags per chat, a tag filter in the panel, #tag in the search box, drag chats onto a tag."]],
+      ["new", ["Move to a project", "move many chats to a ChatGPT project at once."]],
+      ["new", ["Shared links manager", "every public link to your chats and Canvas docs in one place — delete the ones that shouldn't be public."]],
+      ["new", ["Export for Obsidian / Notion", "Markdown with a YAML header: title, dates, link, folder, tags."]],
+      ["new", ["Export selected messages", "pick questions and answers from one chat — e.g. only your own prompts."]],
+      ["new", ["Message counter", "characters, words and ~tokens of what you're typing, above the message box."]],
+      ["new", ["6 panel themes", "dark, black (AMOLED), light, black & red, navy and purple."]],
+      ["new", ["14 languages", "Spanish, Portuguese (Brazil), Italian, Dutch, Czech, Ukrainian, Turkish, Japanese, Chinese and Korean join English, Polish, French and German — starter prompts included."]],
+      ["new", ["“What's new” after an update", "this page opens once after an update to a new version (can be turned off in Settings)."]],
+      ["better", ["Archive without F5", "archived and deleted chats disappear from the ChatGPT sidebar right away."]],
+      ["better", ["Lighter in long chats", "timestamps no longer slow down chats with hundreds of messages."]],
+      ["better", ["Instant timestamps", "your new message and ChatGPT's reply get their time right away."]],
+      ["better", ["Fresh exports", "export always uses the latest version of a chat."]],
+      ["fix", ["Panel tabs", "in longer languages the last tab no longer drops to a second row."]]
+    ]
+  },
+  {
     v: "1.2.0", date: "2026-11-18",
     stores: { chrome: "live", firefox: "review" }, gh: true,
     intro: "A big update: bulk rename, ZIP export, code saving, chat width — and far fewer requests to ChatGPT.",
@@ -459,14 +492,24 @@ const RELEASES = [
 
 const REL_EN = { "rel.latest": "Latest", "rel.new": "New", "rel.better": "Improved", "rel.fix": "Fixed",
   "rel.addChrome": "Add to Chrome", "rel.addFirefox": "Add to Firefox", "rel.store": "free · auto-updates",
-  "rel.review": "in review · coming soon", "rel.replaced": "replaced by", "rel.newer": "newer version available", "rel.gh": "GitHub (ZIP)", "rel.more": "Show older versions ({n})", "rel.less": "Show fewer" };
+  "rel.review": "in review · coming soon", "rel.updated": "ChatKit Pro has been updated to {v} — here's what's new", "rel.close": "Close", "rel.replaced": "replaced by", "rel.newer": "newer version available", "rel.gh": "GitHub (ZIP)", "rel.more": "Show older versions ({n})", "rel.less": "Show fewer" };
 const REL_SHOW = 5; // ile wersji widać od razu (reszta pod „Pokaż starsze”)
-let relOpen = false, relLang = "en";
+let relOpen = false, relLang = "en", relUpdClosed = false;
 function renderReleases(lang) {
   relLang = lang || "en";
   const D = (window.CKI18N && CKI18N[relLang]) || {}, R = D._rel || {};
   const T = new Proxy({}, { get: (_, k) => D["rel." + k] != null ? D["rel." + k] : REL_EN["rel." + k] });
   const list = document.getElementById("relList"); if (!list) return;
+  // Pasek po aktualizacji: wtyczka otwiera tę stronę z ?updated=X.Y.Z (tylko wtedy go widać)
+  const upd = new URLSearchParams(location.search).get("updated");
+  let bar = document.getElementById("relUpd");
+  if (upd && /^\d+(\.\d+){1,3}$/.test(upd) && !relUpdClosed) {
+    if (!bar) { bar = document.createElement("div"); bar.id = "relUpd"; bar.className = "rel-upd"; list.before(bar); }
+    const x = document.createElement("button"); x.type = "button"; x.className = "rel-upd-x"; x.textContent = "×"; x.title = T.close;
+    x.addEventListener("click", () => { relUpdClosed = true; bar.remove(); });
+    const txt = document.createElement("span"); txt.textContent = "🎉 " + String(T.updated).replace("{v}", "v" + upd);
+    bar.replaceChildren(txt, x);
+  }
   const el = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
   const url = { chrome: CONFIG.CHROME_STORE, firefox: CONFIG.FIREFOX_STORE };
   // najnowsza wersja opublikowana w danym sklepie (tylko ona dostaje przycisk „Dodaj do …”)
@@ -507,14 +550,22 @@ function renderReleases(lang) {
       get.append(g);
     }
     card.append(get);
-    const ul = el("ul");
-    r.items.forEach(([type, en], i) => {
-      const t = (RT.items && RT.items[i]) || en, li = el("li");
-      const body = el("span"); body.append(el("b", null, t[0]), document.createTextNode(" — " + t[1]));
-      li.append(el("span", "rtag " + type, T[type]), body);
-      ul.append(li);
-    });
-    card.append(ul);
+    // Zmiany pogrupowane: najpierw NOWE, potem ULEPSZONE, na końcu NAPRAWIONE (kolejność w danych bez znaczenia).
+    for (const type of ["new", "better", "fix"]) {
+      const its = r.items.map((it, i) => [it, i]).filter(([[ty]]) => ty === type);
+      if (!its.length) continue;
+      const grp = el("div", "rgrp " + type);
+      grp.append(el("h3", "rgrp-h", null));
+      grp.lastChild.append(el("span", "rtag " + type, T[type]), el("span", "rgrp-n", String(its.length)));
+      const ul = el("ul");
+      for (const [[, en], i] of its) {
+        const t = (RT.items && RT.items[i]) || en, li = el("li");
+        li.append(el("b", null, t[0]), document.createTextNode(" — " + t[1]));
+        ul.append(li);
+      }
+      grp.append(ul);
+      card.append(grp);
+    }
     list.append(card);
   });
   const more = document.getElementById("relMore"), hiddenN = Math.max(0, RELEASES.length - REL_SHOW);
@@ -523,7 +574,11 @@ function renderReleases(lang) {
 }
 document.querySelector("#relMore button").addEventListener("click", () => { relOpen = !relOpen; renderReleases(relLang); });
 // link do konkretnej wersji, np. #v1-1-0 — rozwiń starsze, jeśli trzeba
-if (/^#v\d/.test(location.hash)) { relOpen = true; addEventListener("load", () => document.querySelector(location.hash)?.scrollIntoView()); }
+// po aktualizacji przewijamy do paska „zaktualizowano” (jest tuż nad wpisem nowej wersji)
+if (/^#v\d/.test(location.hash)) { relOpen = true; addEventListener("load", () => setTimeout(() => {
+  const bar = document.getElementById("relUpd");
+  if (bar) scrollTo({ top: bar.getBoundingClientRect().top + scrollY - 84 }); else document.querySelector(location.hash)?.scrollIntoView();
+}, 60)); }
 
 /* ===== Języki / Languages =====
    EN jest w HTML; pozostałe języki w plikach i18n/<kod>.js (ładowane dopiero po wybraniu języka).
