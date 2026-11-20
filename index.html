@@ -163,6 +163,7 @@
   .card:hover { border-color: var(--line2); transform: translateY(-2px); }
   .card .ic { width: 42px; height: 42px; border-radius: 10px; background: var(--redsoft); display: grid; place-items: center; font-size: 21px; margin-bottom: 14px; }
   .card h3 { margin: 0 0 6px; font-size: 17px; }
+  .newb { display: inline-block; vertical-align: middle; margin-left: 8px; font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 2px 7px; border-radius: 6px; background: rgba(34,197,94,.13); color: #86efac; }
   .card p { margin: 0; color: var(--muted); font-size: 15px; }
 
   .spot { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; margin-bottom: 84px; }
@@ -299,9 +300,9 @@
 <header class="hero" id="top">
   <div class="wrap">
     <div>
-      <a class="pill" href="releases/" title="What's new"><b>v1.2</b><span data-i18n="hero.pill">Free · open source · no account</span></a>
+      <a class="pill" href="releases/" title="What's new"><b>v1.3</b><span data-i18n="hero.pill">Free · open source · no account</span></a>
       <h1 data-i18n-html="hero.title">Your ChatGPT, <em>finally organized.</em></h1>
-      <p class="lead" data-i18n="hero.lead">Delete hundreds of chats in seconds, clean up the image Library, sort conversations into folders, export them, and work faster with prompts, a minimap and full-text search. Every feature free — forever.</p>
+      <p class="lead" data-i18n="hero.lead">Delete hundreds of chats in seconds, clean up the image Library, sort conversations into folders, tags and projects, export them, and jump to any chat in a second. Every feature free — forever.</p>
       <div class="dl solo">
         <a class="btn soon store" data-store="chrome"><span class="bl"><img class="blogo" src="assets/chrome.png" alt="" data-fb="🌐"><span data-live="st.addChrome" data-live-en="Add to Chrome">Chrome Web Store</span></span><small><span class="if-live">Chrome Web Store · </span><b data-ver="chromeStore"></b> · <span data-i18n="st.soon">In review · link soon</span></small></a>
       </div>
@@ -313,7 +314,7 @@
         <a class="btn ghost" href="#features" data-i18n="cta.see">See what it does</a>
       </div>
       <div class="trust">
-        <span data-i18n="trust.1">No paywalls</span><span data-i18n="trust.2">Data stays in your browser</span><span data-i18n="trust.3">EN · PL · FR · DE</span>
+        <span data-i18n="trust.1">No paywalls</span><span data-i18n="trust.2">Data stays in your browser</span><span data-i18n="trust.3">14 languages</span>
       </div>
     </div>
 
@@ -348,10 +349,10 @@
 
 <div class="wrap">
   <div class="numbers">
-    <div><b>12+</b><span data-i18n="num.1">tools in one panel</span></div>
+    <div><b>20+</b><span data-i18n="num.1">tools in one panel</span></div>
     <div><b>0 €</b><span data-i18n="num.2">price, forever</span></div>
     <div><b>0</b><span data-i18n="num.3">servers of our own</span></div>
-    <div><b>4</b><span data-i18n="num.4">languages</span></div>
+    <div><b>14</b><span data-i18n="num.4">languages</span></div>
   </div>
 </div>
 
@@ -389,20 +390,23 @@
   <div class="wrap">
     <p class="kicker" data-i18n="f.k">Features</p>
     <h2 data-i18n="f.h">Everything you wished ChatGPT had.</h2>
-    <p class="sub" data-i18n="f.sub">One panel, opened with the toolbar icon. No sign-up, no limits, no “Pro” tier.</p>
+    <p class="sub" data-i18n="f.sub">One panel, opened with the 🧰 button or Alt+Shift+K. No sign-up, no limits, no “Pro” tier.</p>
     <div class="grid">
-      <div class="card"><div class="ic">📦</div><h3 data-i18n="f1.h">Bulk delete & archive</h3><p data-i18n="f1.p">Select any number of chats with checkboxes and Shift+click. Delete, archive, restore from the archive — in one go.</p></div>
-      <div class="card"><div class="ic">🖼️</div><h3 data-i18n="f2.h">Library cleanup</h3><p data-i18n="f2.p">Deleting a chat doesn't delete its files. Bulk delete or download images, sort by size, filter AI-generated vs uploaded.</p></div>
-      <div class="card"><div class="ic">🗂️</div><h3 data-i18n="f3.h">Folders & stars</h3><p data-i18n="f3.p">Nested, colored folders with drag & drop. Stars and folder colors also appear in the ChatGPT sidebar.</p></div>
-      <div class="card"><div class="ic">📤</div><h3 data-i18n="f4.h">Export</h3><p data-i18n="f4.p">Selected chats or a whole folder to Markdown, HTML or PDF — with the date and time of every message.</p></div>
-      <div class="card"><div class="ic">⏰</div><h3 data-i18n="f5.h">Timestamps</h3><p data-i18n="f5.p">See exactly when each message was sent, and the exact last-update time of every chat — not just “Yesterday”.</p></div>
-      <div class="card"><div class="ic">📚</div><h3 data-i18n="f6.h">Prompt library</h3><p data-i18n="f6.p">Save reusable prompts with {{variables}}, insert them with Alt+Shift+P or by typing // in the message box.</p></div>
-      <div class="card"><div class="ic">🗺️</div><h3 data-i18n="f7.h">Minimap</h3><p data-i18n="f7.p">A clickable outline of long conversations, with in-chat search. Jump to any message, even 200 messages up.</p></div>
-      <div class="card"><div class="ic">🔖</div><h3 data-i18n="f8.h">Bookmarks & notes</h3><p data-i18n="f8.p">Bookmark key answers, add notes to a chat or to a selected excerpt, and find them all in one place.</p></div>
-      <div class="card"><div class="ic">🔍</div><h3 data-i18n="f9.h">Full-text search</h3><p data-i18n="f9.p">Find a conversation by a sentence from the middle of it. The index is built locally in your browser.</p></div>
-      <div class="card"><div class="ic">🧹</div><h3 data-i18n="f10.h">Cleanup rules</h3><p data-i18n="f10.p">“Chats older than 90 days without a star → archive.” Preview what matches before anything happens.</p></div>
-      <div class="card"><div class="ic">📊</div><h3 data-i18n="f11.h">Statistics</h3><p data-i18n="f11.p">How many chats and files you have, how much space the Library uses, and what takes up the most.</p></div>
-      <div class="card"><div class="ic">🌙</div><h3 data-i18n="f12.h">Classic dark & 4 languages</h3><p data-i18n="f12.p">Bring back the softer gray dark mode. Interface in English, Polish, French and German.</p></div>
+      <div class="card"><div class="ic">📦</div><h3><span data-i18n="f1.h">Bulk actions</span></h3><p data-i18n="f1.p">Select any number of chats (Shift+click for ranges) and delete, archive, restore or rename them in one go — the ChatGPT sidebar updates right away.</p></div>
+      <div class="card"><div class="ic">🖼️</div><h3><span data-i18n="f2.h">Library cleanup</span></h3><p data-i18n="f2.p">Deleting a chat doesn't delete its files. Bulk delete or download images, sort by size, filter AI-generated vs uploaded.</p></div>
+      <div class="card"><div class="ic">🗂️</div><h3><span data-i18n="f3.h">Folders, tags &amp; stars</span></h3><p data-i18n="f3.p">Nested, colored folders with drag &amp; drop, #tags on chats and stars — also marked in the ChatGPT sidebar.</p></div>
+      <div class="card"><div class="ic">⚡</div><h3><span data-i18n="f4.h">Quick jump</span> <span class="newb" data-i18n="f.new">New</span></h3><p data-i18n="f4.p">Press Alt+Shift+J, type a few letters and jump to any chat, folder, tag or prompt.</p></div>
+      <div class="card"><div class="ic">📂</div><h3><span data-i18n="f5.h">ChatGPT projects</span> <span class="newb" data-i18n="f.new">New</span></h3><p data-i18n="f5.p">Move many chats to a ChatGPT project at once, instead of one by one.</p></div>
+      <div class="card"><div class="ic">🔗</div><h3><span data-i18n="f6.h">Shared links</span> <span class="newb" data-i18n="f.new">New</span></h3><p data-i18n="f6.p">See every public link to your chats and Canvas docs, and delete the ones that shouldn't be public anymore.</p></div>
+      <div class="card"><div class="ic">📤</div><h3><span data-i18n="f7.h">Export</span></h3><p data-i18n="f7.p">Markdown, HTML, PDF, a ZIP with one file per chat, or Markdown + YAML for Obsidian / Notion — even only the messages you pick.</p></div>
+      <div class="card"><div class="ic">⏰</div><h3><span data-i18n="f8.h">Timestamps</span></h3><p data-i18n="f8.p">“You · Today, 14:32” above every message and the exact last-update time of every chat. Light even in very long chats.</p></div>
+      <div class="card"><div class="ic">📚</div><h3><span data-i18n="f9.h">Prompt library</span></h3><p data-i18n="f9.p">Prompts with {{variables}}, #tags and ⭐ favorites. Insert with Alt+Shift+P or by typing // — starter pack in 14 languages.</p></div>
+      <div class="card"><div class="ic">🗺️</div><h3><span data-i18n="f10.h">Minimap, stats &amp; code</span></h3><p data-i18n="f10.p">Outline and in-chat search for long conversations, chat stats, a “Save” button on every code block and a counter above the message box.</p></div>
+      <div class="card"><div class="ic">🔖</div><h3><span data-i18n="f11.h">Bookmarks &amp; notes</span></h3><p data-i18n="f11.p">Bookmark key answers, add notes to a chat or to a selected excerpt, and find them all in one place.</p></div>
+      <div class="card"><div class="ic">🔍</div><h3><span data-i18n="f12.h">Full-text search</span></h3><p data-i18n="f12.p">Find a conversation by a sentence from the middle of it. The index is built locally in your browser.</p></div>
+      <div class="card"><div class="ic">🧹</div><h3><span data-i18n="f13.h">Cleanup rules &amp; statistics</span></h3><p data-i18n="f13.p">“Chats older than 90 days without a star → archive” — with a preview. Plus stats on chats, files and the Library.</p></div>
+      <div class="card"><div class="ic">🎨</div><h3><span data-i18n="f14.h">Themes &amp; look</span> <span class="newb" data-i18n="f.new">New</span></h3><p data-i18n="f14.p">6 panel themes, chat width and font size sliders, and the classic gray dark mode for ChatGPT.</p></div>
+      <div class="card"><div class="ic">🌍</div><h3><span data-i18n="f15.h">14 languages, light on ChatGPT</span></h3><p data-i18n="f15.p">Interface in 14 languages. Few requests, an automatic pause when ChatGPT says “too many requests”, and an on/off switch on the icon.</p></div>
     </div>
   </div>
 </section>
@@ -496,6 +500,8 @@ Keep key numbers and names.
         <tr><td data-i18n="c.r5">Prompt library with variables</td><td class="n">—</td><td class="y">✓</td><td class="us y">✓</td></tr>
         <tr><td data-i18n="c.r6">Full-text search in all chats</td><td class="n">—</td><td class="p" data-i18n="c.often4">often paid</td><td class="us y">✓</td></tr>
         <tr><td data-i18n="c.r7">Cleanup rules & statistics</td><td class="n">—</td><td class="n" data-i18n="c.rare">rare</td><td class="us y">✓</td></tr>
+        <tr><td data-i18n="c.r11">Tags, quick jump & ChatGPT projects</td><td class="n">—</td><td class="p" data-i18n="c.often">often paid</td><td class="us y">✓</td></tr>
+        <tr><td data-i18n="c.r12">Shared links manager</td><td class="n">—</td><td class="n" data-i18n="c.rare">rare</td><td class="us y">✓</td></tr>
         <tr><td data-i18n="c.r8">Open source</td><td class="n">—</td><td class="n" data-i18n="c.rare">rare</td><td class="us y">✓</td></tr>
         <tr><td data-i18n="c.r9">Account / sign-up required</td><td class="n">—</td><td class="p" data-i18n="c.often5">often</td><td class="us y" data-i18n="c.no">No</td></tr>
         <tr><td data-i18n="c.r10">Price</td><td>—</td><td class="p" data-i18n="c.sub2">subscription</td><td class="us y">0 €</td></tr>
@@ -592,7 +598,7 @@ Keep key numbers and names.
 
 <footer>
   <div class="wrap">
-    <span><b style="color:var(--text)">ChatKit Pro</b> by JustPLGuy · v1.2.0</span>
+    <span><b style="color:var(--text)">ChatKit Pro</b> by JustPLGuy · v1.3.0</span>
     <a data-href="repo" target="_blank" rel="noopener">GitHub</a>
     <a href="releases/" data-i18n="nav.rel">What's new</a>
     <a data-href="releases" target="_blank" rel="noopener">GitHub Releases</a>
@@ -610,10 +616,10 @@ Keep key numbers and names.
    Gdy strona jest gdzie indziej — wpisz tu "uzytkownik/repo". */
 const CONFIG = {
   REPO: "justPLguy/chatkit-pro",
-  CHROME_TAG: "chrome-v1.2.0",
+  CHROME_TAG: "chrome-v1.3.0",
   FIREFOX_TAG: "firefox-v1.1.0",
   // Wersje pokazywane pod przyciskami (osobno dla GitHuba i sklepów):
-  VERSIONS: { chromeGh: "1.2.0", firefoxGh: "1.1.0", chromeStore: "1.2.0", firefoxStore: "1.1.0" },
+  VERSIONS: { chromeGh: "1.3.0", firefoxGh: "1.1.0", chromeStore: "1.3.0", firefoxStore: "1.3.0" },
   // Po akceptacji wklej tu linki do sklepów — przyciski same zmienią się w aktywne:
   CHROME_STORE: "https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh",   // np. "https://chromewebstore.google.com/detail/pehdgnogfmaeeldpjdmadfpankacofhh"
   FIREFOX_STORE: ""   // np. "https://addons.mozilla.org/firefox/addon/chatkit-pro-by-justplguy/"

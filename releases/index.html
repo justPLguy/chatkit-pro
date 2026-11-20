@@ -372,10 +372,10 @@
    Gdy strona jest gdzie indziej — wpisz tu "uzytkownik/repo". */
 const CONFIG = {
   REPO: "justPLguy/chatkit-pro",
-  CHROME_TAG: "chrome-v1.2.0",
+  CHROME_TAG: "chrome-v1.3.0",
   FIREFOX_TAG: "firefox-v1.1.0",
   // Wersje pokazywane pod przyciskami (osobno dla GitHuba i sklepów):
-  VERSIONS: { chromeGh: "1.2.0", firefoxGh: "1.1.0", chromeStore: "1.2.0", firefoxStore: "1.1.0" },
+  VERSIONS: { chromeGh: "1.3.0", firefoxGh: "1.1.0", chromeStore: "1.3.0", firefoxStore: "1.3.0" },
   // Po akceptacji wklej tu linki do sklepów — przyciski same zmienią się w aktywne:
   CHROME_STORE: "https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh",   // np. "https://chromewebstore.google.com/detail/pehdgnogfmaeeldpjdmadfpankacofhh"
   FIREFOX_STORE: ""   // np. "https://addons.mozilla.org/firefox/addon/chatkit-pro-by-justplguy/"
@@ -432,7 +432,7 @@ document.querySelectorAll("[data-ver]").forEach(b => { b.textContent = "v" + CON
 const RELEASES = [
   {
     v: "1.3.0", date: "2026-11-19",
-    stores: { chrome: "review", firefox: "review" }, gh: false,
+    stores: { chrome: "live", firefox: "review" }, gh: true,
     intro: "The biggest update so far: quick jump, tags, projects, shared links, 6 themes and 14 languages.",
     items: [
       ["new", ["Quick jump", "Alt+Shift+J (or ⌕ in the panel): type a few letters and open any chat, folder, tag or prompt."]],
@@ -454,7 +454,7 @@ const RELEASES = [
   },
   {
     v: "1.2.0", date: "2026-11-18",
-    stores: { chrome: "live", firefox: "review" }, gh: true,
+    stores: { chrome: "live" }, gh: true,
     intro: "A big update: bulk rename, ZIP export, code saving, chat width — and far fewer requests to ChatGPT.",
     items: [
       ["better", ["Gentle on ChatGPT", "far fewer requests, so no more “Too many requests” / “Unable to load conversation”. If ChatGPT asks for a break, ChatKit Pro pauses in every tab and the panel shows a countdown."]],
@@ -473,7 +473,7 @@ const RELEASES = [
   },
   {
     v: "1.1.0", date: "2026-11-17",
-    stores: { chrome: "live", firefox: "review" }, gh: true,
+    stores: { chrome: "live" }, gh: true,
     intro: "The first version in the Chrome Web Store and the first one for Firefox. Everything you need to clean up and organize ChatGPT:",
     items: [
       ["new", ["Bulk actions", "select any number of chats (Shift+click for ranges) and delete, archive, restore, star or move them to folders."]],
