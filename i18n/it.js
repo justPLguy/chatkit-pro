@@ -278,6 +278,19 @@
 "f15.p": "Interfaccia in 14 lingue. Poche richieste, pausa automatica quando ChatGPT dice «troppe richieste» e interruttore sull'icona.",
 "c.r12": "Gestione dei link condivisi",
 "_rel": {
+"1.3.1": {
+"intro": "Una correzione dell'indice di ricerca nel testo con molte chat.",
+"items": [
+[
+"L'indice si completa da solo",
+"dopo il limite di ChatGPT rallenta, aspetta di più e riprova — clicca «Crea» e lascia la scheda aperta; i progressi si salvano dopo ogni chat."
+],
+[
+"Ricerca nel testo con molte chat",
+"la creazione dell'indice non va più in loop sul limite di richieste di ChatGPT («troppe richieste» ogni minuto) e non blocca più ChatGPT."
+]
+]
+},
 "1.3.0": {
 "intro": "L'aggiornamento più grande finora: salto rapido, tag, progetti, link condivisi, 6 temi e 14 lingue.",
 "items": [

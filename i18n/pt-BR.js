@@ -278,6 +278,19 @@
 "f15.p": "Interface em 14 idiomas. Poucas requisições, pausa automática quando o ChatGPT diz “muitas solicitações” e interruptor no ícone.",
 "c.r12": "Gerenciador de links compartilhados",
 "_rel": {
+"1.3.1": {
+"intro": "Uma correção do índice de busca no texto com muitos chats.",
+"items": [
+[
+"O índice termina sozinho",
+"depois do limite do ChatGPT ele desacelera, espera mais e tenta de novo — clique em “Criar” e deixe a aba aberta; o progresso é salvo após cada chat."
+],
+[
+"Busca no texto com muitos chats",
+"a criação do índice não fica mais em loop no limite de requisições do ChatGPT (“muitas solicitações” a cada minuto) e não bloqueia mais o próprio ChatGPT."
+]
+]
+},
 "1.3.0": {
 "intro": "A maior atualização até agora: salto rápido, tags, projetos, links compartilhados, 6 temas e 14 idiomas.",
 "items": [

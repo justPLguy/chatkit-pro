@@ -278,6 +278,19 @@
 "f15.p": "Oberfläche in 14 Sprachen. Wenige Anfragen, automatische Pause bei „zu vielen Anfragen“ und ein An/Aus-Schalter am Symbol.",
 "c.r12": "Verwaltung geteilter Links",
 "_rel": {
+"1.3.1": {
+"intro": "Eine Korrektur für den Volltext-Index bei vielen Chats.",
+"items": [
+[
+"Index läuft von allein durch",
+"nach dem ChatGPT-Limit wird er langsamer, wartet länger und versucht es erneut — „Index erstellen“ klicken und den Tab offen lassen; der Fortschritt wird nach jedem Chat gespeichert."
+],
+[
+"Volltextsuche bei vielen Chats",
+"der Indexaufbau hängt nicht mehr in einer Schleife am Anfrage-Limit von ChatGPT („zu viele Anfragen“ jede Minute) und blockiert ChatGPT selbst nicht mehr."
+]
+]
+},
 "1.3.0": {
 "intro": "Das bisher größte Update: Schnellsprung, Tags, Projekte, geteilte Links, 6 Designs und 14 Sprachen.",
 "items": [

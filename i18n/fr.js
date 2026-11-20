@@ -278,6 +278,19 @@
 "f15.p": "Interface en 14 langues. Peu de requêtes, pause automatique quand ChatGPT dit « trop de requêtes », et interrupteur sur l'icône.",
 "c.r12": "Gestionnaire de liens partagés",
 "_rel": {
+"1.3.1": {
+"intro": "Un correctif pour l'index de recherche plein texte avec beaucoup de discussions.",
+"items": [
+[
+"L'index se construit tout seul",
+"après la limite de ChatGPT, il ralentit, attend plus longtemps et réessaie — cliquez sur « Construire » et laissez l'onglet ouvert ; la progression est enregistrée après chaque discussion."
+],
+[
+"Recherche plein texte avec beaucoup de discussions",
+"la construction de l'index ne tourne plus en boucle sur la limite de requêtes de ChatGPT (« trop de requêtes » chaque minute) et ne bloque plus ChatGPT."
+]
+]
+},
 "1.3.0": {
 "intro": "La plus grosse mise à jour à ce jour : accès rapide, tags, projets, liens partagés, 6 thèmes et 14 langues.",
 "items": [

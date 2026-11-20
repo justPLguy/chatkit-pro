@@ -278,6 +278,19 @@
 "f15.p": "14 dilde arayüz. Az istek, ChatGPT “çok fazla istek” dediğinde otomatik mola ve simgede açma/kapama anahtarı.",
 "c.r12": "Paylaşılan bağlantı yöneticisi",
 "_rel": {
+"1.3.1": {
+"intro": "Çok sayıda sohbette tam metin arama dizini için düzeltme.",
+"items": [
+[
+"Dizin kendi kendine tamamlanır",
+"ChatGPT sınırından sonra yavaşlar, daha uzun bekler ve yeniden dener — “Dizini oluştur”a tıkla ve sekmeyi açık bırak; ilerleme her sohbetten sonra kaydedilir."
+],
+[
+"Çok sohbette tam metin arama",
+"dizin oluşturma artık ChatGPT'nin istek sınırında döngüye girmiyor (her dakika “çok fazla istek”) ve ChatGPT'nin kendisini engellemiyor."
+]
+]
+},
 "1.3.0": {
 "intro": "Şimdiye kadarki en büyük güncelleme: hızlı geçiş, etiketler, projeler, paylaşılan bağlantılar, 6 tema ve 14 dil.",
 "items": [

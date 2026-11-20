@@ -278,6 +278,19 @@
 "f15.p": "Interface in 14 talen. Weinig verzoeken, automatische pauze bij „te veel verzoeken” en een aan/uit-schakelaar op het pictogram.",
 "c.r12": "Beheer van gedeelde links",
 "_rel": {
+"1.3.1": {
+"intro": "Een oplossing voor de zoekindex bij veel chats.",
+"items": [
+[
+"Index loopt vanzelf door",
+"na de limiet van ChatGPT gaat hij langzamer, wacht langer en probeert opnieuw — klik op „Index maken” en laat het tabblad open; de voortgang wordt na elke chat opgeslagen."
+],
+[
+"Zoeken in volledige tekst bij veel chats",
+"het bouwen van de index blijft niet meer hangen op de verzoeklimiet van ChatGPT („te veel verzoeken” elke minuut) en blokkeert ChatGPT zelf niet meer."
+]
+]
+},
 "1.3.0": {
 "intro": "De grootste update tot nu toe: snel springen, tags, projecten, gedeelde links, 6 thema's en 14 talen.",
 "items": [

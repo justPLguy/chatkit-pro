@@ -278,6 +278,19 @@
 "f15.p": "Interfejs w 14 językach. Mało zapytań, automatyczna przerwa, gdy ChatGPT mówi „za dużo zapytań”, i włącznik na ikonie.",
 "c.r12": "Menedżer udostępnionych linków",
 "_rel": {
+"1.3.1": {
+"intro": "Poprawka indeksu „Szukaj w treści” przy dużej liczbie czatów.",
+"items": [
+[
+"Indeks sam do końca",
+"po limicie ChatGPT zwalnia, czeka dłużej i ponawia — kliknij „Zbuduj” i zostaw kartę otwartą; postęp zapisuje się po każdym czacie."
+],
+[
+"Szukaj w treści przy wielu czatach",
+"budowa indeksu nie wpada już w pętlę na limicie zapytań ChatGPT („za dużo zapytań” co minutę) i nie blokuje samego ChatGPT."
+]
+]
+},
 "1.3.0": {
 "intro": "Największa aktualizacja do tej pory: szybki skok, tagi, projekty, udostępnione linki, 6 motywów i 14 języków.",
 "items": [

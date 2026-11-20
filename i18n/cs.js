@@ -278,6 +278,19 @@
 "f15.p": "Rozhraní ve 14 jazycích. Málo požadavků, automatická pauza při „příliš mnoha požadavcích“ a vypínač na ikoně.",
 "c.r12": "Správa sdílených odkazů",
 "_rel": {
+"1.3.1": {
+"intro": "Oprava indexu fulltextového hledání při velkém počtu chatů.",
+"items": [
+[
+"Index doběhne sám",
+"po limitu ChatGPT zpomalí, počká déle a zkusí to znovu — klikněte na „Vytvořit“ a nechte kartu otevřenou; postup se ukládá po každém chatu."
+],
+[
+"Fulltextové hledání při mnoha chatech",
+"vytváření indexu už neuvízne ve smyčce na limitu požadavků ChatGPT („příliš mnoho požadavků“ každou minutu) a neblokuje samotné ChatGPT."
+]
+]
+},
 "1.3.0": {
 "intro": "Zatím největší aktualizace: rychlý skok, štítky, projekty, sdílené odkazy, 6 motivů a 14 jazyků.",
 "items": [
