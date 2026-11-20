@@ -28,6 +28,7 @@
   const SETTLE = 1500, REFETCH_GAP = 20000, MAX_REFETCH = 30;
   let convId = null, times = new Map(), fetching = false, lastFetch = 0, timer = null, mode = "-";
   let fetchedFor = null, knownMissing = new Set(), lastMissing = new Set(), refetches = 0, settleTimer = null;
+  let local = new Map(), stampOn = false; // czasy nadane lokalnie nowym wiadomościom (do czasu, aż poda je ChatGPT)
   const visible = () => document.visibilityState !== "hidden";
 
   async function refresh(fresh = false) {
@@ -46,6 +47,7 @@
       CK.emitConv && CK.emitConv(conv, id); // minimapa korzysta z tej samej odpowiedzi
       paint();
       knownMissing = new Set(lastMissing); // tych wiadomości nie ma w odpowiedzi — nie pytamy o nie ponownie
+      stampOn = true; // od teraz nowe wiadomości dostają czas lokalnie (stare bez czasu zostają w knownMissing)
     } catch (e) {
       console.debug("[ChatKit Pro] znaczniki czasu:", e.message);
       // 429: spróbujemy raz po przerwie; inne błędy (404, 5xx): odpuszczamy ten czat
@@ -54,17 +56,37 @@
     finally { fetching = false; }
   }
 
+  // Podpisy z pamięci: formatowanie daty (Intl) dla 1000 wiadomości co 3 s kosztowało najwięcej po naprawie messages().
+  // Pamięć czyścimy przy zmianie dnia („Dziś”/„Wczoraj”) i języka.
+  let labels = new Map(), labelsKey = "";
+  function labelFor(role, t) {
+    const key = new Date().toDateString() + "|" + CK.lang;
+    if (key !== labelsKey) { labels = new Map(); labelsKey = key; }
+    const k = role + "|" + t;
+    let l = labels.get(k);
+    if (!l) { l = (role === "user" ? "👤 " + CK.t("ts.you") : "🤖 ChatGPT") + " · " + CK.fmtStamp(t); labels.set(k, l); }
+    return l;
+  }
+
   function paint() {
     ensureStyle();
     const msgs = CK.dom.messages();
     const keep = new Set();
     let ok = 0, missing = 0;
     lastMissing = new Set();
+    // Nowa wiadomość w już pobranym czacie (Twoja wysłana albo właśnie generowana odpowiedź): bierzemy aktualną godzinę
+    // od razu, bez kolejnego zapytania do ChatGPT. Tylko dwie ostatnie wiadomości i tylko te, których nie było przy pobraniu.
+    if (stampOn && fetchedFor === convId) {
+      const now = Date.now() / 1000;
+      msgs.slice(-2).forEach(m => {
+        if (!m.ids.some(id => times.has(id) || local.has(id)) && !knownMissing.has(m.ids.join(","))) local.set(m.ids[0], now);
+      });
+    }
     for (const m of msgs) {
       if (m.el.getAttribute("data-ck-role") !== m.role) m.el.setAttribute("data-ck-role", m.role);
-      const t = m.ids.map(id => times.get(id)).find(Boolean);
+      const t = m.ids.map(id => times.get(id) || local.get(id)).find(Boolean);
       if (!t) { missing++; lastMissing.add(m.ids.join(",")); continue; }
-      const label = (m.role === "user" ? "👤 " + CK.t("ts.you") : "🤖 ChatGPT") + " · " + CK.fmtStamp(t);
+      const label = labelFor(m.role, t);
       if (m.el.getAttribute(ATTR) !== label) m.el.setAttribute(ATTR, label);
       keep.add(m.el); ok++;
     }
@@ -86,7 +108,7 @@
     const id = CK.dom.convId();
     if (id !== convId) {
       if (settleTimer && settleTimer.id === id) return; // już czekamy na ten czat
-      convId = null; times = new Map(); clearAll(); fetchedFor = null; knownMissing = new Set(); refetches = 0;
+      convId = null; times = new Map(); clearAll(); fetchedFor = null; knownMissing = new Set(); local = new Map(); stampOn = false; refetches = 0;
       if (settleTimer) clearTimeout(settleTimer.t);
       settleTimer = null;
       if (!id) return;

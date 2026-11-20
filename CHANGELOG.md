@@ -1,5 +1,39 @@
 # Changelog
 
+## v1.3.0 — 2026-11-19
+### English
+- 📂 **Move chats to a ChatGPT project in bulk** — select chats, click 📂 Project and pick the project
+- 🔗 **Shared links manager** (Cleanup tab) — see every public link to your chats and Canvas docs, copy or open it, and delete the ones you no longer want public (the chats stay)
+- ⌕ **Quick jump** — press `Alt+Shift+J` (or ⌕ in the panel), type a few letters and jump to any chat, folder, tag or prompt. Works without Polish/French accents (“zolw” finds “Żółw”); `#tag` filters
+- 🏷 **Tags on chats** — give a chat several tags (#work, #code…), filter by tag in the panel, type `#tag` in the search box, drag chats onto a tag; rename or delete tags in one place
+- 🔢 **Counter above the message box** — characters, words and ~tokens of what you're typing (turn off in ⚙ Settings)
+- 📝 **Export for Obsidian / Notion** — Markdown with a YAML header (title, dates, link, folder, tags, star); one file or a ZIP with a file per chat
+- ✂️ **Export only the messages you pick** — choose questions and answers from one chat (e.g. only your own prompts)
+- ⚡ **Archive and delete without F5** — archived and deleted chats disappear from the ChatGPT sidebar right away
+- 🔄 Export always uses the latest version of a chat (no 2-minute cache)
+- 🎨 **6 panel themes** in ⚙ Settings — dark (default), black (AMOLED), light, black & red, navy, purple
+- 🆕 **“What's new” after an update** — after updating to a new version, the “What's new” page opens once in your language (can be turned off in ⚙ Settings)
+- ⚡ **Lighter in very long chats** — timestamps used to slow the page down in chats with hundreds of messages (measured: with 1,000 messages from ~120–140 ms of work per second down to ~3 ms); the result is identical
+- 🌍 **10 new languages** — Spanish, Portuguese (Brazil), Italian, Dutch, Czech, Ukrainian, Turkish, Japanese, Chinese (Simplified) and Korean — 14 in total. The language follows ChatGPT automatically (or pick it in ⚙ Settings); dates and numbers use the local format
+- 🏷 The extension's name and description in the store are translated into all 14 languages
+- 🐞 Fixed: in longer languages (e.g. French, German) the last panel tab dropped to a second row — tabs now always fit in one row
+### Polski
+- 📂 **Masowe przenoszenie czatów do projektu ChatGPT** — zaznacz czaty, kliknij 📂 Projekt i wybierz projekt
+- 🔗 **Menedżer udostępnionych linków** (zakładka Sprzątanie) — wszystkie publiczne linki do Twoich czatów i wpisów z Canvas w jednym miejscu: kopiowanie, otwieranie i usuwanie tych, które nie powinny być publiczne (same czaty zostają)
+- ⌕ **Szybki skok** — `Alt+Shift+J` (albo ⌕ w panelu), wpisz kilka liter i przejdź do dowolnego czatu, folderu, tagu albo promptu. Działa bez polskich znaków („zolw” znajdzie „Żółw”); `#tag` filtruje
+- 🏷 **Tagi na czatach** — czat może mieć kilka tagów (#praca, #kod…), filtr po tagu w panelu, `#tag` w wyszukiwarce, przeciąganie czatów na tag; zmiana nazwy i usuwanie tagów w jednym miejscu
+- 🔢 **Licznik nad polem wiadomości** — znaki, słowa i ~tokeny tego, co piszesz (wyłączysz w ⚙ Ustawieniach)
+- 📝 **Eksport do Obsidiana / Notion** — Markdown z nagłówkiem YAML (tytuł, daty, link, folder, tagi, gwiazdka); jeden plik albo ZIP z plikiem na czat
+- ✂️ **Eksport tylko wybranych wiadomości** — wybierasz pytania i odpowiedzi z jednego czatu (np. tylko swoje prompty)
+- ⚡ **Archiwizacja i usuwanie bez F5** — zarchiwizowane i usunięte czaty od razu znikają z paska bocznego ChatGPT
+- 🔄 Eksport zawsze bierze najnowszą wersję czatu (bez 2-minutowej pamięci podręcznej)
+- 🎨 **6 motywów panelu** w ⚙ Ustawieniach — ciemny (domyślny), czarny (AMOLED), jasny, czarno-czerwony, granatowy, fioletowy
+- 🆕 **„Co nowego” po aktualizacji** — po aktualizacji do nowej wersji raz otwiera się strona „Co nowego” w Twoim języku (można wyłączyć w ⚙ Ustawieniach)
+- ⚡ **Lżej w bardzo długich czatach** — znaczniki czasu spowalniały stronę w czatach z setkami wiadomości (pomiar: przy 1000 wiadomości z ok. 120–140 ms pracy na sekundę do ok. 3 ms); wynik bez zmian
+- 🌍 **10 nowych języków** — hiszpański, portugalski (Brazylia), włoski, niderlandzki, czeski, ukraiński, turecki, japoński, chiński (uproszczony) i koreański — razem 14. Język dopasowuje się sam do ChatGPT (albo wybierz go w ⚙ Ustawieniach); daty i liczby w lokalnym formacie
+- 🏷 Nazwa i opis wtyczki w sklepie przetłumaczone na wszystkie 14 języków
+- 🐞 Naprawione: w dłuższych językach (np. francuski, niemiecki) ostatnia zakładka panelu spadała do drugiego wiersza — teraz zakładki zawsze mieszczą się w jednym
+
 ## v1.2.0 — 2026-11-18
 ### English
 - 🔴 **On/off switch** — the CK icon in the toolbar now turns ChatKit Pro on and off: red = on, grey = off (everything disappears from ChatGPT; click again and it comes back on the same page, no reload). The panel opens with the 🧰 button or Alt+Shift+K

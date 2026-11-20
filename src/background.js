@@ -104,8 +104,37 @@ async function checkUpdate(force = false) {
   return res;
 }
 
-chrome.runtime.onInstalled.addListener(async ({ reason } = {}) => {
+// ===================== „Co nowego” po aktualizacji (od 1.3.0) =====================
+// Po aktualizacji do nowej wersji (zmiana X.Y, nie poprawka X.Y.Z) otwieramy raz stronę „Co nowego” w języku wtyczki.
+// Instalacja nie otwiera niczego. Wyłączysz to w ⚙ Ustawieniach („Pokaż »Co nowego« po aktualizacji”).
+const WHATS_NEW = "https://justplguy.github.io/chatkit-pro/releases/";
+const SITE_LANGS = ["en", "pl", "fr", "de", "es", "pt-BR", "it", "nl", "cs", "uk", "tr", "ja", "zh-CN", "ko"];
+const minorOf = v => String(v || "").split(".").slice(0, 2).map(n => parseInt(n, 10) || 0).join(".");
+function siteLang(pref) {
+  for (const l of [pref, chrome.i18n && chrome.i18n.getUILanguage && chrome.i18n.getUILanguage()]) {
+    if (!l || l === "auto") continue;
+    if (SITE_LANGS.includes(l)) return l;
+    const c = String(l).slice(0, 2).toLowerCase();
+    if (c === "pt") return "pt-BR";
+    if (c === "zh") return "zh-CN";
+    if (SITE_LANGS.includes(c)) return c;
+  }
+  return "en";
+}
+async function showWhatsNew(previousVersion) {
+  const current = chrome.runtime.getManifest().version;
+  if (!previousVersion || minorOf(previousVersion) === minorOf(current) || cmpVersion(current, previousVersion) <= 0) return false;
+  const { settings } = await chrome.storage.local.get("settings");
+  if (settings && settings.whatsNew === false) return false;
+  const anchor = "#v" + current.split(".").slice(0, 3).join("-");
+  // updated=… → strona pokazuje pasek „ChatKit Pro zaktualizował się do vX”
+  await chrome.tabs.create({ url: `${WHATS_NEW}?lang=${encodeURIComponent(siteLang(settings && settings.lang))}&updated=${encodeURIComponent(current)}${anchor}` });
+  return true;
+}
+
+chrome.runtime.onInstalled.addListener(async ({ reason, previousVersion } = {}) => {
   // Instalacja nie otwiera żadnej karty (od 1.2.0) — karta powitalna pokaże się przy pierwszym otwarciu panelu na ChatGPT.
+  if (reason === "update") { try { await showWhatsNew(previousVersion); } catch (e) { console.warn("[ChatKit Pro] co nowego", e.message); } }
   if (chrome.alarms && !(await isStoreInstall())) chrome.alarms.create("ck-update", { periodInMinutes: 24 * 60 });
   checkUpdate(true);
 });

@@ -35,13 +35,42 @@
     },
 
     // Wiadomości aktualnie obecne na stronie: [{ el, id, ids, role }], bez duplikatów, w kolejności DOM.
+    // Od 1.3.0: kontenery liczone w jednym przejściu (mapa przodków), a nie querySelectorAll na każdym poziomie
+    // dla każdej wiadomości — przy 1000 wiadomościach to było ~0,5 s na wywołanie (wynik ten sam, patrz containerOf).
     messages() {
       const out = [], seenIds = new Set(), seenEls = new Set();
-      for (const h of document.querySelectorAll(HOLDER_SEL)) {
+      const holders = [...document.querySelectorAll(HOLDER_SEL)];
+      const hInfo = new Map(), rInfo = new Map(); // przodek -> { v: pierwsza wartość, multi: czy są różne }
+      const mark = (map, start, v) => {
+        for (let p = start.parentElement; p && p !== document.documentElement; p = p.parentElement) {
+          const x = map.get(p);
+          if (!x) map.set(p, { v, multi: false });
+          else if (!x.multi && x.v !== v) x.multi = true;
+          else break; // nic się nie zmienia — przodkowie wyżej mają już tę wartość (albo są „multi”)
+        }
+      };
+      const keys = new Map();
+      for (const h of holders) { const k = holderIds(h).join(","); keys.set(h, k); mark(hInfo, h, k); }
+      for (const r of document.querySelectorAll(ROLE_SEL)) mark(rInfo, r, roleOf(r));
+      const containerFast = holder => {
+        const myIds = keys.get(holder);
+        let el = holder;
+        for (let i = 0; i < 14; i++) {
+          const p = el.parentElement;
+          if (!p || p === document.body || p.matches("main, [role='main']")) break;
+          const hi = hInfo.get(p);
+          if (hi && (hi.multi || hi.v !== myIds)) break; // zawiera inną wiadomość
+          const ri = rInfo.get(p);
+          if (ri && ri.multi) break; // zawiera wiadomości dwóch ról
+          el = p;
+        }
+        return el;
+      };
+      for (const h of holders) {
         if (h.closest("#chatkit-pro-host, nav")) continue;
         const ids = holderIds(h);
         if (!ids.length || ids.some(id => seenIds.has(id))) continue;
-        const el = containerOf(h);
+        const el = containerFast(h);
         if (seenEls.has(el)) continue;
         ids.forEach(id => seenIds.add(id)); seenEls.add(el);
         const r = el.matches(ROLE_SEL) ? el : el.querySelector(ROLE_SEL);
@@ -95,7 +124,7 @@
     },
 
     composer() {
-      return document.querySelector("#prompt-textarea, [contenteditable='true'].ProseMirror, form textarea");
+      return document.querySelector("#prompt-textarea, #mobile-composer-prompt, textarea[name='prompt'], [contenteditable='true'].ProseMirror, form textarea");
     },
 
     // Wstawia tekst do pola wiadomości ChatGPT (ProseMirror albo textarea).

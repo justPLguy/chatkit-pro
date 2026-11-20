@@ -155,6 +155,103 @@
     return r.ok;
   };
 
+  // ---------- motywy panelu (od 1.3.0) ----------
+  // Kolory panelu i minimapy to zmienne --ck-* z domyślną wartością (motyw „Ciemny”); inne motywy je nadpisują.
+  CK.THEMES = ["dark", "black", "light", "blackred", "navy", "purple"];
+  CK.themeCss = `:host { color-scheme: dark; }\n:host([data-ck-theme="black"]) { color-scheme: dark; --ck-bg: #000000; --ck-bg2: #0b0b0b; --ck-bg3: #141414; --ck-bg4: #1a1a1a; --ck-bg5: #242424; --ck-line: #1e1e1e; --ck-line2: #2c2c2c; --ck-bg0: #000; }\n:host([data-ck-theme="light"]) { color-scheme: light; --ck-bg: #ffffff; --ck-bg2: #f6f6f7; --ck-bg3: #f0f0f2; --ck-bg4: #ececef; --ck-bg5: #e1e1e6; --ck-line: #e4e4e8; --ck-line2: #cfcfd6; --ck-bg0: #eeeeef; --ck-tx: #1f2328; --ck-tx2: #30343a; --ck-mut: #4b5058; --ck-mut2: #646a73; --ck-mut3: #8a9099; --ck-strong: #000000; --ck-acc: #dc2626; --ck-acc2: #b91c1c; --ck-acc3: #b91c1c; --ck-acctx: #c81e1e; --ck-sel: #fde4e4; --ck-actv: #fdeeee; }\n:host([data-ck-theme="blackred"]) { color-scheme: dark; --ck-bg: #0a0a0a; --ck-bg2: #120909; --ck-bg3: #1a0d0d; --ck-bg4: #221111; --ck-bg5: #311717; --ck-line: #2a1414; --ck-line2: #3d1c1c; --ck-bg0: #050505; --ck-tx: #f4f4f5; --ck-acc: #ff2b2b; --ck-acc2: #e11d1d; --ck-acc3: #c41414; --ck-acctx: #ff5a5a; --ck-sel: #4a1212; --ck-actv: #360e0e; }\n:host([data-ck-theme="navy"]) { color-scheme: dark; --ck-bg: #0f172a; --ck-bg2: #131d33; --ck-bg3: #17223b; --ck-bg4: #1c2945; --ck-bg5: #243453; --ck-line: #1f2b45; --ck-line2: #2d3c5e; --ck-bg0: #0b1220; --ck-tx: #e2e8f0; --ck-tx2: #cbd5e1; --ck-mut: #a5b1c2; --ck-mut2: #8593a8; --ck-mut3: #64748b; --ck-acc: #3b82f6; --ck-acc2: #2563eb; --ck-acc3: #1d4ed8; --ck-acctx: #60a5fa; --ck-sel: #1e3a66; --ck-actv: #1a2d52; }\n:host([data-ck-theme="purple"]) { color-scheme: dark; --ck-bg: #17141f; --ck-bg2: #1c1826; --ck-bg3: #221d2e; --ck-bg4: #282236; --ck-bg5: #332b45; --ck-line: #2c2540; --ck-line2: #3c3256; --ck-bg0: #110e18; --ck-tx: #ece8f5; --ck-tx2: #d6cfe6; --ck-mut: #b4aac8; --ck-mut2: #968ab0; --ck-mut3: #776c90; --ck-acc: #a855f7; --ck-acc2: #9333ea; --ck-acc3: #7e22ce; --ck-acctx: #c084fc; --ck-sel: #3b2560; --ck-actv: #2e1f4a; }\n:host([data-ck-theme="light"]) #upd { color: #166534; } :host([data-ck-theme="light"]) #bak { color: #92400e; } :host([data-ck-theme="light"]) .rnrow b { color: #15803d; } :host([data-ck-theme="light"]) #msg { color: #b45309; } :host([data-ck-theme="light"]) .star.on, :host([data-ck-theme="light"]) .card.pr .fav.on { color: #d97706; }`;
+  CK.applyTheme = (host, root) => {
+    if (!root.querySelector("style[data-ck-theme]")) { const st = document.createElement("style"); st.setAttribute("data-ck-theme", ""); st.textContent = CK.themeCss; root.prepend(st); }
+    const th = (CK.store && CK.store.data && CK.store.data.settings.uiTheme) || "dark";
+    if (host.getAttribute("data-ck-theme") !== th) host.setAttribute("data-ck-theme", th);
+  };
+
+  // ---------- Projekty ChatGPT (od 1.3.0) ----------
+  // Lista: linki projektów z paska bocznego ChatGPT (/g/g-p-…) + lista z API paska bocznego (jeśli odpowie).
+  // Przeniesienie czatu: PATCH /conversation/{id} z { gizmo_id: "g-p-…" } — tak samo robi ChatGPT.
+  CK.projects = {
+    fromSidebar() {
+      const map = new Map();
+      document.querySelectorAll('a[href*="/g/g-p-"]').forEach(a => {
+        if (a.closest("#chatkit-pro-host")) return;
+        const m = a.getAttribute("href").match(/\/g\/(g-p-[a-z0-9]+)/i);
+        if (m && !/\/c\//.test(a.getAttribute("href"))) { const name = a.textContent.trim(); if (name && !map.has(m[1])) map.set(m[1], name); }
+      });
+      return map;
+    },
+    async list() {
+      const map = CK.projects.fromSidebar();
+      try {
+        const r = await CK.withRetry(() => CK.api("/gizmos/snorlax/sidebar?conversations_per_gizmo=0"));
+        if (r.ok) {
+          // szukamy obiektów { id: "g-p-…", display: { name } } w dowolnym miejscu odpowiedzi
+          const walk = (o, d = 0) => {
+            if (!o || typeof o !== "object" || d > 6) return;
+            if (typeof o.id === "string" && o.id.startsWith("g-p-") && o.display && o.display.name) map.set(o.id, o.display.name);
+            for (const v of Object.values(o)) walk(v, d + 1);
+          };
+          walk(await r.json());
+        }
+      } catch (e) { console.debug("[ChatKit Pro] projekty z API:", e.message); }
+      return [...map].map(([id, name]) => ({ id, name })).sort((a, b) => a.name.localeCompare(b.name, CK.lang));
+    },
+    move: (chatId, projectId) => CK.patchConversation(chatId, { gizmo_id: projectId })
+  };
+
+  // ---------- Udostępnione linki (od 1.3.0) ----------
+  // Lista: GET /backend-api/shared_conversations?order=created (czaty) + GET /backend-api/shared_textdocs (wpisy z Canvas)
+  // — to samo, co pokazuje ChatGPT w Ustawieniach → Kontrole danych → Udostępnione linki.
+  CK.shares = {
+    norm(it) {
+      const id = it.id || it.share_id;
+      return id ? { id, kind: "chat", title: it.title || it.conversation_title || CK.t("untitled"), conv: it.conversation_id || null,
+        created: it.create_time || it.created_at || it.update_time || null, url: "https://chatgpt.com/share/" + id } : null;
+    },
+    normDoc(it) {
+      const id = it.id || it.post_id || it.share_id || it.textdoc_share_id;
+      if (!id) return null;
+      const url = it.url || it.share_url || it.public_url || "https://chatgpt.com/s/" + id;
+      return { id, kind: "doc", title: it.title || it.name || it.textdoc_title || CK.t("untitled"), conv: it.conversation_id || null,
+        created: it.create_time || it.created_at || it.update_time || it.updated_at || null, url };
+    },
+    async docs() {
+      const r = await CK.withRetry(() => CK.api("/shared_textdocs"));
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      const j = await r.json();
+      const arr = Array.isArray(j) ? j : (j.items || j.shared_textdocs || j.textdocs || j.posts || j.shares || []);
+      return arr.map(CK.shares.normDoc).filter(Boolean);
+    },
+    async all(onProgress) {
+      const chats = await CK.shares.list(onProgress);
+      let docs = [];
+      try { docs = await CK.shares.docs(); } catch (e) { console.debug("[ChatKit Pro] wpisy z Canvas:", e.message); }
+      const ts = x => CK.toDate(x.created)?.getTime() || 0;
+      return [...chats, ...docs].sort((a, b) => ts(b) - ts(a));
+    },
+    async list(onProgress) {
+      const out = [], seen = new Set();
+      let offset = 0;
+      for (let page = 0; page < 50; page++) {
+        const r = await CK.withRetry(() => CK.api("/shared_conversations?order=created" + (offset ? `&offset=${offset}&limit=100` : "")));
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        const j = await r.json();
+        const items = (j.items || j.shares || []).map(CK.shares.norm).filter(x => x && !seen.has(x.id));
+        items.forEach(x => { seen.add(x.id); out.push(x); });
+        onProgress && onProgress(out.length);
+        const total = typeof j.total === "number" ? j.total : null;
+        if (!items.length || total == null || out.length >= total) break;
+        offset = out.length; await CK.sleep(500);
+      }
+      return out;
+    },
+    // Usunięcie linku (jak kosz w Ustawieniach ChatGPT): czat → DELETE /backend-api/share/{id},
+    // wpis z Canvas → DELETE /backend-api/share/post/{id}. Ponowienie jest bezpieczne (drugi DELETE = 404).
+    async remove(id, kind = "chat") {
+      const path = (kind === "doc" ? "/share/post/" : "/share/") + encodeURIComponent(id);
+      const r = await CK.withRetry(() => CK.api(path, { method: "DELETE" }));
+      return r.ok || r.status === 404; // 404 = linku już nie ma
+    }
+  };
+
   // ---------- rozmowa -> lista wiadomości ----------
   function partsToText(content) {
     if (!content) return "";
@@ -163,7 +260,7 @@
     return (content.parts || []).map(p => {
       if (typeof p === "string") return p;
       if (p && typeof p.text === "string") return p.text;
-      if (p && p.content_type === "image_asset_pointer") return "[obraz]";
+      if (p && p.content_type === "image_asset_pointer") return "[" + CK.t("exp.image") + "]";
       return "";
     }).filter(Boolean).join("\n");
   }
@@ -199,14 +296,14 @@
     const d = CK.toDate(t);
     if (!d) return "";
     return withTime
-      ? d.toLocaleString(CK.locale || "pl-PL", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" })
-      : d.toLocaleDateString(CK.locale || "pl-PL", { year: "numeric", month: "2-digit", day: "2-digit" });
+      ? d.toLocaleString(CK.locale || "en-GB", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" })
+      : d.toLocaleDateString(CK.locale || "en-GB", { year: "numeric", month: "2-digit", day: "2-digit" });
   };
   CK.fmtSize = b => {
     if (!b) return "";
     const u = ["B", "KB", "MB", "GB"];
     let i = 0; while (b >= 1024 && i < u.length - 1) { b /= 1024; i++; }
-    return b.toLocaleString(CK.locale || "pl-PL", { maximumFractionDigits: i ? 1 : 0, minimumFractionDigits: i ? 1 : 0 }) + " " + u[i];
+    return b.toLocaleString(CK.locale || "en-GB", { maximumFractionDigits: i ? 1 : 0, minimumFractionDigits: i ? 1 : 0 }) + " " + u[i];
   };
   CK.esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   CK.safeName = s => String(s || "export").replace(/[\\/:*?"<>|]+/g, "_").slice(0, 80).trim() || "export";
@@ -334,7 +431,7 @@
   CK.fmtStamp = (t, nowD = new Date()) => {
     const d = CK.toDate(t);
     if (!d) return "";
-    const loc = CK.locale || "pl-PL";
+    const loc = CK.locale || "en-GB";
     const time = d.toLocaleTimeString(loc, { hour: "2-digit", minute: "2-digit" });
     const day = x => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
     const diff = Math.round((day(nowD) - day(d)) / 86400000);
@@ -343,12 +440,13 @@
     const opts = d.getFullYear() === nowD.getFullYear() ? { weekday: "short", day: "numeric", month: "short" } : { day: "numeric", month: "short", year: "numeric" };
     return d.toLocaleDateString(loc, opts) + ", " + time;
   };
-  CK.fmtNum = n => Number(n).toLocaleString(CK.locale || "pl-PL");
+  CK.fmtNum = n => Number(n).toLocaleString(CK.locale || "en-GB");
 
   // ---------- pamięć (foldery, gwiazdki, ustawienia) ----------
   const DEFAULTS = () => ({
     folders: [],            // [{id, name, color, parent}]
     chatFolder: {},         // chatId -> folderId
+    chatTags: {},           // chatId -> ["tag", …] (od 1.3.0)
     stars: {},              // chatId -> true
     prompts: null,          // [{id, title, text, cat, uses}] — null = jeszcze nie zainicjowane (pakiet startowy)
     bookmarks: {},          // "convId:msgId" -> {conv, msg, convTitle, snippet, role, time, added}
@@ -356,7 +454,7 @@
     chatNotes: {},          // convId -> tekst notatki do całego czatu
     rules: [],              // [{id, name, target, olderDays, keepStarred, keepFoldered, onlyAI, action}]
     enabled: true,          // włącznik całej wtyczki (ikona na pasku przeglądarki)
-    settings: { timestamps: true, showFab: true, lang: "auto", classicDark: false, minimap: true, sidebarMarks: true, chatWidth: 0, fontSize: 0, codeSave: true, backupEvery: 7 }
+    settings: { timestamps: true, showFab: true, lang: "auto", classicDark: false, minimap: true, sidebarMarks: true, chatWidth: 0, fontSize: 0, codeSave: true, backupEvery: 7, composerCount: true, uiTheme: "dark", whatsNew: true }
   });
 
   CK.store = {
@@ -390,10 +488,45 @@
   });
 
   // ---------- foldery ----------
+  // ---------- tagi czatów (od 1.3.0): małe litery, bez #, maks. 12 na czat ----------
+  const normTag = x => String(x || "").trim().replace(/^#+/, "").replace(/\s+/g, "-").toLowerCase().slice(0, 40);
+  CK.tags = {
+    norm: v => [...new Set((Array.isArray(v) ? v : String(v || "").split(/[,;#\s]+/)).map(normTag).filter(Boolean))].slice(0, 12),
+    of: id => CK.store.data.chatTags[id] || [],
+    // wszystkie tagi z liczbą czatów, najczęstsze pierwsze
+    all() {
+      const m = new Map();
+      for (const arr of Object.values(CK.store.data.chatTags)) for (const g of arr) m.set(g, (m.get(g) || 0) + 1);
+      return [...m].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], CK.lang));
+    },
+    async add(ids, tags) {
+      const add = CK.tags.norm(tags); if (!add.length || !ids.length) return;
+      const d = CK.store.data.chatTags;
+      for (const id of ids) d[id] = CK.tags.norm([...(d[id] || []), ...add]);
+      await CK.store.save("chatTags");
+    },
+    async remove(ids, tags) {
+      const rm = new Set(CK.tags.norm(tags)), d = CK.store.data.chatTags;
+      for (const id of ids) { if (!d[id]) continue; d[id] = d[id].filter(g => !rm.has(g)); if (!d[id].length) delete d[id]; }
+      await CK.store.save("chatTags");
+    },
+    async rename(from, to) {
+      const a = normTag(from), b = normTag(to); if (!a || !b || a === b) return;
+      const d = CK.store.data.chatTags;
+      for (const id of Object.keys(d)) if (d[id].includes(a)) d[id] = CK.tags.norm(d[id].map(g => (g === a ? b : g)));
+      await CK.store.save("chatTags");
+    },
+    async drop(ids) {
+      const d = CK.store.data.chatTags; let ch = false;
+      for (const id of ids) if (d[id]) { delete d[id]; ch = true; }
+      if (ch) await CK.store.save("chatTags");
+    }
+  };
+
   CK.folders = {
     all: () => CK.store.data.folders,
     get: id => CK.store.data.folders.find(f => f.id === id),
-    children: parent => CK.store.data.folders.filter(f => (f.parent || null) === (parent || null)).sort((a, b) => a.name.localeCompare(b.name, "pl")),
+    children: parent => CK.store.data.folders.filter(f => (f.parent || null) === (parent || null)).sort((a, b) => a.name.localeCompare(b.name, CK.lang || "en")),
     subtree(id) {
       const out = new Set([id]);
       let added = true;

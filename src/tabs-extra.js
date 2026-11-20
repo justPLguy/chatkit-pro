@@ -41,14 +41,14 @@
             button("↗ " + t("ui.open"), () => CK.goto(n.conv, n.msg)),
             el("span", { class: "ic", title: t("ui.delete"), onclick: async () => { d.notes = d.notes.filter(x => x.id !== n.id); await CK.store.save("notes"); } }, "✕")),
           n.quote ? el("div", { class: "quote" }, "„" + n.quote + "”") : null,
-          el("div", { class: "body", style: "color:#eee" }, n.text)));
+          el("div", { class: "body", style: "color:var(--ck-tx, #eee)" }, n.text)));
         if (!arr.length) listBox.append(el("div", { class: "empty" }, t("nt.noNotes")));
       } else {
         const titles = new Map((CK.sources.chats.items || []).map(c => [c.key, c.title]));
         const arr = Object.entries(d.chatNotes).filter(([id, txt]) => match(txt + " " + (titles.get(id) || "")));
         for (const [id, txt] of arr) listBox.append(el("div", { class: "card" },
           el("div", { class: "h" }, el("b", {}, titles.get(id) || id.slice(0, 8) + "…"), button("↗ " + t("ui.open"), () => CK.goto(id))),
-          el("div", { class: "body", style: "color:#eee" }, txt)));
+          el("div", { class: "body", style: "color:var(--ck-tx, #eee)" }, txt)));
         if (!arr.length) listBox.append(el("div", { class: "empty" }, t("nt.noChatNotes")));
       }
     };
@@ -200,7 +200,63 @@
       el("div", { class: "rowb", style: "margin:0 0 12px" },
         button("＋ " + t("cl.new"), () => editRule({}, ui), { class: "primary" }),
         button(t("cl.addPresets"), async () => { CK.store.data.rules.push(...PRESETS().map(p => ({ id: CK.uid("r"), ...p }))); await CK.store.save("rules"); })),
-      listBox));
+      listBox, renderShares(ui)));
+  }
+
+  // ---------- udostępnione linki (prywatność) ----------
+  const sh = { items: null, sel: new Set(), loading: false };
+  function renderShares(ui) {
+    const { el, button } = ui;
+    const card = el("div", { class: "card", style: "margin-top:16px" });
+    const draw = () => {
+      const prevScroll = card.querySelector(".shlist")?.scrollTop || 0;
+      card.replaceChildren(el("div", { class: "h" }, el("b", {}, "🔗 " + t("sh.title")),
+        button(sh.items ? "⟳ " + t("sh.reload") : t("sh.load"), load, { class: sh.items ? "" : "primary", disabled: sh.loading })));
+      card.append(el("p", { class: "muted", style: "margin:6px 0" }, t("sh.howTo")));
+      if (!sh.items) return;
+      if (!sh.items.length) { card.append(el("div", { class: "empty" }, t("sh.none"))); return; }
+      const all = sh.items.every(x => sh.sel.has(x.id));
+      card.append(el("div", { class: "rowb", style: "margin:4px 0 6px;gap:6px" },
+        button(all ? t("ui.deselect") : t("sh.selectAll"), () => { if (all) sh.sel.clear(); else sh.items.forEach(x => sh.sel.add(x.id)); draw(); }),
+        el("span", { class: "muted" }, t("sh.count", { n: sh.items.length, sel: sh.sel.size })), el("span", { class: "sp" }),
+        CK.shares.remove ? button("🗑 " + t("sh.delete"), removeSel, { class: "danger", disabled: !sh.sel.size || sh.loading }) : null));
+      const list = el("div", { class: "shlist", style: "max-height:40vh;overflow:auto" });
+      for (const x of sh.items) {
+        // jak w liście czatów: klik w wiersz zaznacza (pole wyboru w .item nie łapie kliknięć)
+        const cb = el("input", { type: "checkbox", checked: sh.sel.has(x.id), tabIndex: -1 });
+        const toggle = e => { if (e.target.closest("a, .ic")) return; sh.sel.has(x.id) ? sh.sel.delete(x.id) : sh.sel.add(x.id); draw(); };
+        list.append(el("div", { class: "item" + (sh.sel.has(x.id) ? " sel" : ""), style: "cursor:pointer", onclick: toggle }, cb,
+          el("span", { class: "t", title: x.url }, x.title, el("span", { class: "badge", style: "margin-left:6px" }, x.kind === "doc" ? t("sh.typeDoc") : t("sh.typeChat"))),
+          el("span", { class: "d" }, CK.fmtDate(x.created, true)),
+          el("span", { class: "ic", title: t("sh.copy"), onclick: () => ui.copy(x.url, t("msg.linkCopied")) }, "📋"),
+          el("a", { class: "ic", href: x.url, target: "_blank", rel: "noopener", title: t("sh.open") }, "↗")));
+      }
+      card.append(list);
+      list.scrollTop = prevScroll;
+    };
+    async function load() {
+      sh.loading = true; draw();
+      try { sh.items = await CK.shares.all(n => ui.setMsg(t("ui.loadingN", { n }))); sh.sel = new Set([...sh.sel].filter(id => sh.items.some(x => x.id === id))); ui.setMsg(""); }
+      catch (e) { ui.setMsg(t("msg.error", { e: e.message })); }
+      sh.loading = false; draw();
+    }
+    async function removeSel() {
+      const pick = sh.items.filter(x => sh.sel.has(x.id)), ids = pick.map(x => x.id);
+      if (!ids.length || !confirm(t("sh.confirm", { n: ids.length }))) return;
+      let ok = 0, fail = 0;
+      sh.loading = true;
+      await ui.safe(async () => {
+        for (const { id, kind } of pick) {
+          if (await CK.shares.remove(id, kind)) { ok++; sh.sel.delete(id); sh.items = sh.items.filter(x => x.id !== id); } else fail++;
+          ui.progress(ok + fail, ids.length, t("sh.deleting"));
+          await CK.sleep(400);
+        }
+      });
+      sh.loading = false; draw();
+      ui.setMsg(t("sh.done", { ok, fail: fail ? t("msg.failPart", { n: fail }) : "" }));
+    }
+    draw();
+    return card;
   }
 
   // =================== Statystyki ===================

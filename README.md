@@ -3,7 +3,7 @@
 <h1 align="center">ChatKit Pro by JustPLGuy — Chrome</h1>
 
 <p align="center">
-<b>v1.2.0</b> · Chrome / Edge / Brave / Opera · MIT<br>
+<b>v1.3.0</b> · Chrome / Edge / Brave / Opera · MIT<br>
 <a href="https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh"><b>🛒 Add to Chrome (Chrome Web Store)</b></a><br>
 Free, open-source power tools for ChatGPT.<br>
 <a href="#-english">🇬🇧 English</a> · <a href="#-polski">🇵🇱 Polski</a>
@@ -20,7 +20,7 @@ Free, open-source power tools for ChatGPT.<br>
 **Recommended:** [**Add to Chrome — Chrome Web Store**](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh) — one click, automatic updates. Works in Chrome, Edge, Brave and Opera.
 
 **Manual install from GitHub (2 minutes):**
-1. Download **`ChatKit-Pro-Chrome-v1.2.0.zip`** from **[Releases](../../releases)** (not “Code → Download ZIP”) and unzip it.
+1. Download **`ChatKit-Pro-Chrome-v1.3.0.zip`** from **[Releases](../../releases)** (not “Code → Download ZIP”) and unzip it.
 2. Open `chrome://extensions` and switch on **Developer mode** (top-right).
 3. Click **Load unpacked** and pick the unzipped folder (the one that contains `manifest.json`).
 4. Pin the extension: 🧩 → 📌 next to **ChatKit Pro by JustPLGuy**.
@@ -33,18 +33,19 @@ Free, open-source power tools for ChatGPT.<br>
 ### What's inside
 | Area | Features |
 |---|---|
-| **Chats** | bulk delete / archive / star / move to folder / rename (prefix, suffix, replace), Shift+click ranges, filters (title, older than X days, starred), exact date & time |
+| **Chats** | bulk delete / archive / star / move to folder / rename (prefix, suffix, replace), Shift+click ranges, filters (title, older than X days, starred), #tags, move to a ChatGPT project, exact date & time |
 | **Archive** | browse, restore or delete archived chats |
 | **Library** | bulk delete & download images/files, thumbnail grid, size sort, AI / uploaded / project filters, size counter |
-| **Folders & stars** | nested colored folders, drag & drop, marks in the ChatGPT sidebar, export a whole folder |
-| **Export** | Markdown, HTML, PDF — with per-message timestamps; ZIP with one file per chat (Markdown / HTML / JSON) |
-| **In the chat** | timestamps above messages, minimap (outline + search), bookmarks, notes on excerpts, chat stats (messages, words, characters, ~tokens), “Save” button on code blocks, download all code from a chat |
+| **Quick jump** | `Alt+Shift+J`: jump to any chat, folder, tag or prompt by typing a few letters |
+| **Folders, tags & stars** | tags on chats (filter, `#tag` search), nested colored folders, drag & drop, marks in the ChatGPT sidebar, export a whole folder |
+| **Export** | Markdown, HTML, PDF — with per-message timestamps; ZIP with one file per chat (Markdown / HTML / JSON); Markdown + YAML for Obsidian / Notion; only the messages you pick |
+| **In the chat** | timestamps above messages, minimap (outline + search), bookmarks, notes on excerpts, chat stats (messages, words, characters, ~tokens), “Save” button on code blocks, download all code from a chat, counter above the message box (characters, words, ~tokens) |
 | **Prompts** | library with `{{variables}}`, categories, #tags, ⭐ favorites on top, drag-and-drop order, import/export, starter pack, quick insert |
 | **Search** | full-text search across all chats (local index) |
-| **Cleanup** | rules like “chats older than 90 days without a star → archive”, with preview |
+| **Cleanup** | rules like “chats older than 90 days without a star → archive”, with preview; shared links manager (see and delete public links) |
 | **Statistics** | chats, files, Library size, chats per month, largest files |
 | **Backup** | export / import all extension data as JSON, reminder every week (configurable) |
-| **Look** | chat width and font size sliders, classic gray dark mode, 4 languages (EN, PL, FR, DE) |
+| **Look** | 6 panel themes, chat width and font size sliders, classic gray dark mode, 14 languages (EN, PL, FR, DE, ES, PT-BR, IT, NL, CS, UK, TR, JA, ZH-CN, KO) |
 
 ### Shortcuts
 | Keys | Action |
@@ -53,6 +54,7 @@ Free, open-source power tools for ChatGPT.<br>
 | CK icon in the toolbar | turn ChatKit Pro on / off (red / grey) |
 | `Alt+Shift+P` or `//` in an empty message box | quick prompt |
 | `Alt+Shift+M` | chat minimap |
+| `Alt+Shift+J` | quick jump (chats, folders, tags, prompts) |
 | `Shift` + click | select a range |
 | `Esc` | close |
 
@@ -111,7 +113,7 @@ Bug reports, ideas, questions: **[GitHub Issues](../../issues)** or **[justplguy
 **Polecane:** [**Dodaj do Chrome — Chrome Web Store**](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh) — jedno kliknięcie, aktualizacje automatyczne. Działa w Chrome, Edge, Brave i Operze.
 
 **Instalacja ręczna z GitHuba (2 minuty):**
-1. Pobierz **`ChatKit-Pro-Chrome-v1.2.0.zip`** z **[Releases](../../releases)** (nie „Code → Download ZIP”) i rozpakuj.
+1. Pobierz **`ChatKit-Pro-Chrome-v1.3.0.zip`** z **[Releases](../../releases)** (nie „Code → Download ZIP”) i rozpakuj.
 2. Otwórz `chrome://extensions` i włącz **Tryb dewelopera** (prawy górny róg).
 3. Kliknij **Załaduj rozpakowane** i wskaż rozpakowany folder (ten z plikiem `manifest.json`).
 4. Przypnij wtyczkę: 🧩 → 📌 przy **ChatKit Pro by JustPLGuy**.
@@ -124,18 +126,19 @@ Bug reports, ideas, questions: **[GitHub Issues](../../issues)** or **[justplguy
 ### Co jest w środku
 | Obszar | Funkcje |
 |---|---|
-| **Czaty** | masowe usuwanie / archiwizacja / gwiazdki / foldery / zmiana nazw (prefiks, sufiks, zamiana), Shift+klik, filtry (tytuł, starsze niż X dni, z gwiazdką), dokładna data i godzina |
+| **Czaty** | masowe usuwanie / archiwizacja / gwiazdki / foldery / zmiana nazw (prefiks, sufiks, zamiana), Shift+klik, filtry (tytuł, starsze niż X dni, z gwiazdką), #tagi, przenoszenie do projektu ChatGPT, dokładna data i godzina |
 | **Archiwum** | przeglądanie, przywracanie i usuwanie zarchiwizowanych czatów |
 | **Biblioteka** | masowe usuwanie i pobieranie zdjęć/plików, siatka miniatur, sortowanie po rozmiarze, filtry AI / wgrane / projekty, licznik miejsca |
-| **Foldery i gwiazdki** | zagnieżdżone, kolorowe, przeciąganie, oznaczenia w pasku bocznym ChatGPT, eksport folderu |
-| **Eksport** | Markdown, HTML, PDF — z godziną każdej wiadomości; ZIP z osobnym plikiem dla każdego czatu (Markdown / HTML / JSON) |
-| **W czacie** | znaczniki czasu, minimapa (spis treści + wyszukiwanie), zakładki, notatki do fragmentów, liczniki czatu (wiadomości, słowa, znaki, ~tokeny), przycisk „Zapisz” przy blokach kodu, pobieranie całego kodu z czatu |
+| **Szybki skok** | `Alt+Shift+J`: przejście do dowolnego czatu, folderu, tagu albo promptu po kilku literach |
+| **Foldery, tagi i gwiazdki** | tagi na czatach (filtr, `#tag` w wyszukiwarce), zagnieżdżone foldery, kolorowe, przeciąganie, oznaczenia w pasku bocznym ChatGPT, eksport folderu |
+| **Eksport** | Markdown, HTML, PDF — z godziną każdej wiadomości; ZIP z osobnym plikiem dla każdego czatu (Markdown / HTML / JSON); Markdown + YAML dla Obsidiana / Notion; tylko wybrane wiadomości |
+| **W czacie** | znaczniki czasu, minimapa (spis treści + wyszukiwanie), zakładki, notatki do fragmentów, liczniki czatu (wiadomości, słowa, znaki, ~tokeny), przycisk „Zapisz” przy blokach kodu, pobieranie całego kodu z czatu, licznik nad polem wiadomości (znaki, słowa, ~tokeny) |
 | **Prompty** | biblioteka ze zmiennymi `{{...}}`, kategorie, #tagi, ⭐ ulubione na górze, kolejność przeciąganiem, import/eksport, pakiet startowy, szybkie wstawianie |
 | **Wyszukiwanie** | w treści wszystkich czatów (lokalny indeks) |
-| **Sprzątanie** | reguły typu „czaty starsze niż 90 dni bez gwiazdki → archiwum”, z podglądem |
+| **Sprzątanie** | reguły typu „czaty starsze niż 90 dni bez gwiazdki → archiwum”, z podglądem; menedżer udostępnionych linków (podgląd i usuwanie publicznych linków) |
 | **Statystyki** | czaty, pliki, rozmiar Biblioteki, czaty wg miesięcy, największe pliki |
 | **Kopia zapasowa** | eksport / import wszystkich danych wtyczki (JSON), przypomnienie co tydzień (do ustawienia) |
-| **Wygląd** | suwaki szerokości czatu i rozmiaru czcionki, klasyczny szary tryb ciemny, 4 języki (PL, EN, FR, DE) |
+| **Wygląd** | 6 motywów panelu, suwaki szerokości czatu i rozmiaru czcionki, klasyczny szary tryb ciemny, 14 języków (PL, EN, FR, DE, ES, PT-BR, IT, NL, CS, UK, TR, JA, ZH-CN, KO) |
 
 ### Skróty
 | Klawisze | Akcja |
@@ -144,6 +147,7 @@ Bug reports, ideas, questions: **[GitHub Issues](../../issues)** or **[justplguy
 | ikona CK na pasku | włącz / wyłącz ChatKit Pro (czerwona / szara) |
 | `Alt+Shift+P` albo `//` w pustym polu wiadomości | szybki prompt |
 | `Alt+Shift+M` | minimapa czatu |
+| `Alt+Shift+J` | szybki skok (czaty, foldery, tagi, prompty) |
 | `Shift` + klik | zaznacz zakres |
 | `Esc` | zamknij |
 

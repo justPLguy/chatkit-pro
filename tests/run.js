@@ -44,6 +44,10 @@ w.fetch = (url, opts = {}) => {
   if (url.match(/\/backend-api\/conversation\/[^/?]+$/)) return opts.method === "PATCH" ? res({ success: true }) : res(conv);
   if (url.endsWith("/files/library")) { const b = JSON.parse(opts.body); return res(b.cursor ? lib2 : lib1); }
   if (url.includes("delete-batch")) return res({});
+  if (url.match(/\/backend-api\/share\/(post\/)?[^/?]+$/) && opts.method === "DELETE") return res({});
+  if (url.includes("/shared_textdocs")) return res({ items: [{ id: "t_doc1", title: "Wpis z Canvas", create_time: "2026-11-12T10:00:00Z" }] });
+  if (url.includes("/shared_conversations")) return res({ items: [{ id: "sh1", title: "Udostępniony A", conversation_id: "c1", create_time: "2026-11-10T10:00:00Z" }, { id: "sh2", title: "Udostępniony B", conversation_id: "c2", create_time: "2026-11-11T10:00:00Z" }], total: 2 });
+  if (url.includes("/gizmos/snorlax/sidebar")) return res({ items: [{ gizmo: { gizmo: { id: "g-p-api1", display: { name: "Projekt z API" } } }, conversations: { items: [] } }], cursor: null });
   if (url.includes("/backend-api/files/download/")) return res({ status: "success", download_url: "https://files.oaiusercontent.com/f?sig=1" });
   return res({}, 404);
 };
@@ -225,7 +229,7 @@ const assert = (c, m) => { if (!c) { console.error("FAIL:", m); process.exitCode
   // reguły sprzątania
   tab("Sprzątanie").click(); await sleep(100);
   btn("Dodaj przykładowe reguły").click(); await sleep(200);
-  assert(w.CK.store.data.rules.length === 2 && $$(".card").length === 2, "przykładowe reguły dodane");
+  assert(w.CK.store.data.rules.length === 2 && $$(".card").length === 3 && $$(".card")[2].textContent.includes("Udostępnione linki"), "przykładowe reguły dodane");
 
   // statystyki
   tab("Statystyki").click(); await sleep(100);
@@ -380,6 +384,109 @@ const assert = (c, m) => { if (!c) { console.error("FAIL:", m); process.exitCode
     assert(offOk && onOk, "włącznik: wyłączenie chowa wszystko, włączenie przywraca bez przeładowania");
     host.remove(); mmHost.remove(); await sleep(50);
     assert(host.isConnected && mmHost.isConnected, "strażnik: ChatGPT usunął elementy wtyczki → wracają");
+  }
+
+  // 1.3.0: nowa wiadomość w otwartym czacie dostaje czas od razu (bez ponownego pobierania)
+  {
+    const b0 = calls.length;
+    const nm = w.document.createElement("div");
+    nm.setAttribute("data-message-id", "m9"); nm.setAttribute("data-message-author-role", "user"); nm.textContent = "Nowa wiadomość";
+    w.document.body.appendChild(nm); await sleep(3300);
+    const got = calls.slice(b0).filter(c => c.url.includes("/conversation/")).length;
+    assert(nm.hasAttribute("data-ck-ts") && /👤/.test(nm.getAttribute("data-ck-ts")) && got === 0, "znaczniki: nowa wiadomość od razu z godziną, bez zapytania");
+    nm.remove();
+  }
+  // 1.3.0: chowanie w pasku bocznym po archiwizacji/usunięciu (bez F5)
+  {
+    const NAV = "22222222-2222-3333-4444-555555555555";
+    w.CK.sidebarGone([NAV]); await sleep(30);
+    const link = w.document.querySelector(`nav a[href="/c/${NAV}"]`);
+    const hidden = link.closest("[data-ck-gone]");
+    const css = w.document.getElementById("chatkit-pro-sidebar").textContent;
+    assert(hidden && css.includes("[data-ck-gone]") && w.location.pathname.includes("11111111"), "pasek boczny: zarchiwizowany/usunięty czat znika od razu (otwarty czat zostaje)");
+  }
+  // 1.3.0: tagi
+  {
+    const T = w.CK.tags;
+    await T.add(["c1", "c3"], "#Praca, kod");
+    await T.add(["c3"], ["Pomysły na  wakacje"]);
+    const ok1 = JSON.stringify(T.of("c1")) === JSON.stringify(["praca", "kod"]) && T.of("c3").includes("pomysły-na-wakacje") && T.all()[0][1] === 2;
+    await T.rename("kod", "code"); await T.remove(["c1"], "praca");
+    const ok2 = JSON.stringify(T.of("c1")) === JSON.stringify(["code"]) && T.of("c3").includes("code") && !("c2" in w.CK.store.data.chatTags);
+    assert(ok1 && ok2, "tagi: dodawanie, normalizacja, zmiana nazwy, usuwanie");
+    w.CK.ui.showTag("code"); await sleep(100);
+    const vis = $$("#list .item").map(r => r.textContent);
+    assert(vis.length === 2 && vis.every(x => x.includes("#code")) && $$("#folders .frow.active").some(r => r.textContent.includes("#code")), "tagi: filtr w panelu i znaczki w wierszach");
+    w.CK.ui.filters.chats.tag = ""; w.CK.ui.filters.chats.q = "#pomy"; w.CK.ui.rerender(); await sleep(50);
+    assert($$("#list .item").length === 1, "tagi: „#tag” w wyszukiwarce");
+    w.CK.ui.filters.chats.q = ""; w.CK.ui.rerender();
+    assert(storage.chatTags && storage.chatTags.c3.length === 3 && !storage.chatTags.c2, "tagi: zapisane w chrome.storage");
+  }
+  // 1.3.0: szybki skok
+  {
+    const r = w.CK.palette.results("sredni");
+    const r2 = w.CK.palette.results("#code").filter(x => x.kind === "chat").map(x => x.id).sort().join();
+    const r3 = w.CK.palette.results("folder test");
+    assert(r[0] && r[0].kind === "chat" && r[0].id === "c3" && r2 === "c1,c3" && r3.some(x => x.kind === "folder"), "szybki skok: bez polskich znaków, #tag, foldery");
+  }
+  // 1.3.0: licznik przy polu wiadomości
+  {
+    const a = w.CK.countText("Ala ma kota."), b = w.CK.countText("日本語のテキスト");
+    assert(a.chars === 12 && a.words === 3 && a.tokens === 3 && b.tokens === 8, "licznik: znaki, słowa, ~tokeny (też CJK)");
+  }
+  // 1.3.0: eksport z nagłówkiem YAML + wybrane wiadomości (świeże pobranie)
+  {
+    w.CK.store.data.stars.c1 = true;
+    const fm = w.CK._export.toFrontmatter({ id: "c1", title: 'Plan "Q4"', create_time: now, update_time: now, msgs: w.CK.linearize(conv) });
+    assert(fm.startsWith("---\ntitle: \"Plan \\\"Q4\\\"\"") && fm.includes("tags:\n  - \"chatgpt\"\n  - \"code\"") && fm.includes("starred: true") && fm.includes("## 👤"), "eksport: Markdown z nagłówkiem YAML (tytuł, tagi, gwiazdka)");
+    const b0 = calls.length, d0 = downloads.length;
+    let seen = 0;
+    const res2 = await w.CK.exportChats(["c3"], "pick", () => {}, null, { pick: async c => { seen = c.msgs.length; return { msgs: c.msgs.slice(0, 1), format: "obs" }; } });
+    const got = calls.slice(b0).filter(c => /\/conversation\/c3$/.test(c.url)).length;
+    assert(res2.ok === 1 && seen === 2 && got === 1 && downloads.length > d0, "eksport: wybrane wiadomości, czat pobrany na świeżo");
+  }
+
+  // 1.3.0: przenoszenie do Projektu ChatGPT
+  {
+    const a = w.document.createElement("a"); a.href = "/g/g-p-dom1/project"; a.textContent = "Projekt z paska";
+    w.document.querySelector("nav").appendChild(a);
+    const list = await w.CK.projects.list();
+    const b0 = calls.length;
+    const ok = await w.CK.projects.move("c2", "g-p-dom1");
+    const p = calls.slice(b0).find(c => c.method === "PATCH");
+    assert(list.map(x => x.id).sort().join() === "g-p-api1,g-p-dom1" && list.some(x => x.name === "Projekt z paska") && ok && p && JSON.parse(p.body).gizmo_id === "g-p-dom1" && p.url.endsWith("/conversation/c2"),
+      "projekty: lista z paska i API, przeniesienie PATCH gizmo_id");
+    a.remove();
+  }
+
+  // 1.3.0: udostępnione linki — lista
+  {
+    const list = await w.CK.shares.list();
+    assert(list.length === 2 && list[0].url === "https://chatgpt.com/share/sh1" && list[1].title === "Udostępniony B", "udostępnione linki: lista z /shared_conversations");
+    const b0 = calls.length, ok = await w.CK.shares.remove("sh1");
+    const d = calls.slice(b0).filter(c => c.method === "DELETE");
+    assert(ok && d.length === 1 && d[0].url.endsWith("/backend-api/share/sh1"), "udostępnione linki: usuwanie DELETE /share/{id}");
+    const all = await w.CK.shares.all();
+    const b1 = calls.length, ok2 = await w.CK.shares.remove("t_doc1", "doc");
+    const d2 = calls.slice(b1).filter(c => c.method === "DELETE");
+    assert(all.length === 3 && all[0].kind === "doc" && all[0].id === "t_doc1" && ok2 && d2[0].url.endsWith("/backend-api/share/post/t_doc1"), "udostępnione linki: wpisy z Canvas (lista + DELETE /share/post/{id})");
+  }
+
+  // 1.3.0: pakiet startowy promptów we wszystkich 14 językach
+  {
+    const langs = Object.keys(w.CK.I18N), P = w.CK.prompts;
+    const bad = langs.filter(l => { const s = P.starter(l); return s.length !== 10 || s.some(p => !p.title || !p.text || !P.vars(p.text).length); });
+    const notEn = langs.filter(l => l !== "en" && P.starter(l)[0].title === P.starter("en")[0].title);
+    assert(langs.length === 14 && !bad.length && !notEn.length, "prompty: pakiet startowy w 14 językach (bez angielskiego zastępstwa)");
+    // niezmienione prompty startowe idą za językiem, zmienione zostają
+    const before = w.CK.store.data.prompts;
+    const pl = P.starter("pl").map(({ starter, sidx, ...x }) => x); // jak z 1.2.0 (bez znacznika)
+    pl[1].text += " (moja zmiana)"; pl[2].uses = 7; pl[2].fav = true;
+    w.CK.store.data.prompts = pl;
+    const n = await P.retranslate("it");
+    const it = P.starter("it");
+    assert(n === 9 && pl[0].title === it[0].title && pl[1].title === "Popraw tekst" && pl[1].text.endsWith("(moja zmiana)") && pl[2].title === it[2].title && pl[2].uses === 7 && pl[2].fav, "prompty: zmiana języka tłumaczy niezmienione prompty startowe, zmienione zostają");
+    w.CK.store.data.prompts = before;
   }
 
   // niezalogowany: czytelny komunikat zamiast błędu

@@ -12,49 +12,49 @@
   <style>
     :host { all: initial; }
     * { box-sizing: border-box; font-family: system-ui, -apple-system, Segoe UI, sans-serif; }
-    #tab { position: fixed; right: 0; top: 40%; z-index: 2147483640; background: #2a2a2a; color: #ddd; border: 1px solid #444; border-right: none;
+    #tab { position: fixed; right: 0; top: 40%; z-index: 2147483640; background: var(--ck-bg3, #2a2a2a); color: var(--ck-tx2, #ddd); border: 1px solid var(--ck-line2, #444); border-right: none;
       border-radius: 8px 0 0 8px; padding: 10px 5px; cursor: pointer; font-size: 13px; writing-mode: vertical-rl; display: none; opacity: .75; }
-    #tab:hover { opacity: 1; background: #333; }
-    #mm { position: fixed; right: 0; top: 70px; bottom: 90px; width: 300px; z-index: 2147483641; background: #1f1f1f; color: #eee;
-      border: 1px solid #3a3a3a; border-right: none; border-radius: 10px 0 0 10px; display: none; flex-direction: column; font-size: 12.5px;
+    #tab:hover { opacity: 1; background: var(--ck-line, #333); }
+    #mm { position: fixed; right: 0; top: 70px; bottom: 90px; width: 300px; z-index: 2147483641; background: var(--ck-bg, #1f1f1f); color: var(--ck-tx, #eee);
+      border: 1px solid var(--ck-bg5, #3a3a3a); border-right: none; border-radius: 10px 0 0 10px; display: none; flex-direction: column; font-size: 12.5px;
       box-shadow: -6px 0 24px rgba(0,0,0,.35); }
     #mm.open { display: flex; }
-    .hd { display: flex; align-items: center; gap: 6px; padding: 8px 10px; border-bottom: 1px solid #333; }
+    .hd { display: flex; align-items: center; gap: 6px; padding: 8px 10px; border-bottom: 1px solid var(--ck-line, #333); }
     .hd b { flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 12.5px; }
-    .tabs { display: flex; border-bottom: 1px solid #333; }
-    .tabs button { flex: 1; background: none; border: none; color: #aaa; padding: 7px 4px; cursor: pointer; font-size: 12px; border-bottom: 2px solid transparent; }
-    .tabs button.on { color: #fff; border-bottom-color: #ef4444; }
-    .tools { padding: 7px 10px; display: flex; gap: 6px; align-items: center; border-bottom: 1px solid #2a2a2a; }
-    input[type=search], textarea { width: 100%; background: #2a2a2a; border: 1px solid #444; color: #eee; border-radius: 6px; padding: 5px 7px; font-size: 12px; font-family: inherit; }
+    .tabs { display: flex; border-bottom: 1px solid var(--ck-line, #333); }
+    .tabs button { flex: 1; background: none; border: none; color: var(--ck-mut, #aaa); padding: 7px 4px; cursor: pointer; font-size: 12px; border-bottom: 2px solid transparent; }
+    .tabs button.on { color: var(--ck-strong, #fff); border-bottom-color: var(--ck-acc, #ef4444); }
+    .tools { padding: 7px 10px; display: flex; gap: 6px; align-items: center; border-bottom: 1px solid var(--ck-bg3, #2a2a2a); }
+    input[type=search], textarea { width: 100%; background: var(--ck-bg3, #2a2a2a); border: 1px solid var(--ck-line2, #444); color: var(--ck-tx, #eee); border-radius: 6px; padding: 5px 7px; font-size: 12px; font-family: inherit; }
     textarea { resize: vertical; min-height: 70px; line-height: 1.45; }
-    .x, .ib { background: none; border: none; color: #bbb; cursor: pointer; font-size: 15px; padding: 0 3px; }
-    .x:hover, .ib:hover { color: #fff; }
+    .x, .ib { background: none; border: none; color: var(--ck-mut, #bbb); cursor: pointer; font-size: 15px; padding: 0 3px; }
+    .x:hover, .ib:hover { color: var(--ck-strong, #fff); }
     #body { flex: 1; overflow-y: auto; }
-    .e { display: flex; gap: 6px; padding: 6px 10px; border-bottom: 1px solid #262626; cursor: pointer; align-items: flex-start; }
-    .e:hover { background: #2a2a2a; }
-    .e .n { color: #777; min-width: 22px; font-size: 11px; padding-top: 1px; }
-    .e .s { flex: 1; color: #ddd; line-height: 1.35; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; word-break: break-word; }
-    .e.a .s { color: #999; }
+    .e { display: flex; gap: 6px; padding: 6px 10px; border-bottom: 1px solid var(--ck-bg2, #262626); cursor: pointer; align-items: flex-start; }
+    .e:hover { background: var(--ck-bg3, #2a2a2a); }
+    .e .n { color: var(--ck-mut3, #777); min-width: 22px; font-size: 11px; padding-top: 1px; }
+    .e .s { flex: 1; color: var(--ck-tx2, #ddd); line-height: 1.35; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; word-break: break-word; }
+    .e.a .s { color: var(--ck-mut2, #999); }
     .e .act { display: flex; gap: 2px; opacity: .35; }
     .e:hover .act, .e .act .on { opacity: 1; }
     .act span { cursor: pointer; padding: 0 2px; }
     .act .on { color: #fbbf24; }
     mark { background: #854d0e; color: #fff; border-radius: 2px; }
-    .muted { color: #888; padding: 10px; font-size: 12px; line-height: 1.5; }
-    .note { margin: 8px 10px; border: 1px solid #333; border-radius: 8px; padding: 7px 9px; background: #242424; }
-    .note .q { border-left: 3px solid #ef4444; padding-left: 7px; color: #ccc; font-style: italic; white-space: pre-wrap; margin-bottom: 4px; cursor: pointer; }
-    .note .tx { white-space: pre-wrap; color: #eee; }
-    .note .meta { display: flex; gap: 6px; color: #777; font-size: 11px; margin-top: 4px; }
+    .muted { color: var(--ck-mut2, #888); padding: 10px; font-size: 12px; line-height: 1.5; }
+    .note { margin: 8px 10px; border: 1px solid var(--ck-line, #333); border-radius: 8px; padding: 7px 9px; background: var(--ck-bg2, #242424); }
+    .note .q { border-left: 3px solid var(--ck-acc, #ef4444); padding-left: 7px; color: var(--ck-tx2, #ccc); font-style: italic; white-space: pre-wrap; margin-bottom: 4px; cursor: pointer; }
+    .note .tx { white-space: pre-wrap; color: var(--ck-tx, #eee); }
+    .note .meta { display: flex; gap: 6px; color: var(--ck-mut3, #777); font-size: 11px; margin-top: 4px; }
     .note .meta span:last-child { margin-left: auto; cursor: pointer; }
-    #stats { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; padding: 6px 10px; border-bottom: 1px solid #2a2a2a; color: #999; font-size: 11.5px; }
+    #stats { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; padding: 6px 10px; border-bottom: 1px solid var(--ck-bg3, #2a2a2a); color: var(--ck-mut2, #999); font-size: 11.5px; }
     #stats:empty { display: none; }
-    #stats b { color: #ddd; font-weight: 600; }
-    #stats button { margin-left: auto; background: #2a2a2a; color: #eee; border: 1px solid #444; border-radius: 6px; padding: 3px 8px; cursor: pointer; font-size: 11.5px; }
-    #stats button:hover { border-color: #ef4444; }
-    label.c { display: flex; gap: 4px; align-items: center; color: #aaa; font-size: 11.5px; white-space: nowrap; }
-    #selbtn { position: fixed; z-index: 2147483642; display: none; gap: 4px; background: #1f1f1f; border: 1px solid #444; border-radius: 8px; padding: 3px; box-shadow: 0 4px 14px rgba(0,0,0,.4); }
-    #selbtn button { background: #2f2f2f; color: #eee; border: 1px solid #444; border-radius: 6px; padding: 4px 8px; cursor: pointer; font-size: 12px; }
-    #selbtn button:hover { background: #3a3a3a; }
+    #stats b { color: var(--ck-tx2, #ddd); font-weight: 600; }
+    #stats button { margin-left: auto; background: var(--ck-bg3, #2a2a2a); color: var(--ck-tx, #eee); border: 1px solid var(--ck-line2, #444); border-radius: 6px; padding: 3px 8px; cursor: pointer; font-size: 11.5px; }
+    #stats button:hover { border-color: var(--ck-acc, #ef4444); }
+    label.c { display: flex; gap: 4px; align-items: center; color: var(--ck-mut, #aaa); font-size: 11.5px; white-space: nowrap; }
+    #selbtn { position: fixed; z-index: 2147483642; display: none; gap: 4px; background: var(--ck-bg, #1f1f1f); border: 1px solid var(--ck-line2, #444); border-radius: 8px; padding: 3px; box-shadow: 0 4px 14px rgba(0,0,0,.4); }
+    #selbtn button { background: var(--ck-bg4, #2f2f2f); color: var(--ck-tx, #eee); border: 1px solid var(--ck-line2, #444); border-radius: 6px; padding: 4px 8px; cursor: pointer; font-size: 12px; }
+    #selbtn button:hover { background: var(--ck-bg5, #3a3a3a); }
     #toast { position: fixed; z-index: 2147483643; display: none; background: #16a34a; color: #fff; border-radius: 8px; padding: 6px 12px; font-size: 12.5px; font-weight: 600; box-shadow: 0 4px 14px rgba(0,0,0,.4); }
   </style>
   <div id="tab"></div>
@@ -302,6 +302,7 @@
 
   let lastPath = location.pathname;
   CK.ready.then(() => {
+    CK.applyTheme(host, root); CK.store.onChange(() => CK.applyTheme(host, root));
     labelSel();
     CK.store.onChange(labelSel);
     applyVisibility();

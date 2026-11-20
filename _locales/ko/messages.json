@@ -1,0 +1,17 @@
+{
+  "appName": {
+    "message": "ChatKit Pro by JustPLGuy"
+  },
+  "appShortName": {
+    "message": "ChatKit Pro"
+  },
+  "appDesc": {
+    "message": "ChatGPT 채팅 일괄 삭제·보관, 라이브러리 정리, 폴더, 내보내기, 프롬프트, 미니맵, 검색. 무료."
+  },
+  "actionOn": {
+    "message": "켜짐 (클릭하면 끔)"
+  },
+  "actionOff": {
+    "message": "꺼짐 (클릭하면 켬)"
+  }
+}

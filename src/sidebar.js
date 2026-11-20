@@ -54,16 +54,44 @@
     navObs.observe(nav, { childList: true, subtree: true, characterData: true });
     applyRenames();
   };
+  // Usunięte / zarchiwizowane z panelu: od razu chowamy je w pasku bocznym (bez F5). Pilnujemy 10 min,
+  // gdyby ChatGPT przerysował listę ze swojej pamięci podręcznej; po tym czasie i tak ma już nową listę.
+  const goneCss = "[data-ck-gone]{display:none !important}\n";
+  const gone = new Map(); // id -> until
+  function applyGone() {
+    if (!gone.size) return;
+    const now = Date.now();
+    for (const [id, until] of gone) if (until < now) gone.delete(id);
+    document.querySelectorAll('nav a[href*="/c/"]').forEach(a => {
+      const m = a.getAttribute("href").match(/\/c\/([0-9a-f-]{36})/i);
+      const hide = !!(m && gone.has(m[1]));
+      // element listy: <li> albo najwyższy rodzic, który zawiera tylko ten jeden link
+      let box = a.closest("li");
+      if (!box) { box = a; while (box.parentElement && box.parentElement.tagName !== "NAV" && box.parentElement.querySelectorAll('a[href*="/c/"]').length === 1) box = box.parentElement; }
+      if (hide) { if (!box.hasAttribute("data-ck-gone")) box.setAttribute("data-ck-gone", ""); }
+      else if (box.hasAttribute("data-ck-gone")) box.removeAttribute("data-ck-gone");
+    });
+  }
+  CK.sidebarGone = ids => {
+    if (!ids.length) return;
+    const until = Date.now() + 600000;
+    for (const id of ids) gone.set(id, until);
+    if (!style.isConnected) CK.keepAttached(style);
+    style.textContent = goneCss + (CK.store.data.settings.sidebarMarks !== false && CK.on() ? buildCss() : "");
+    applyGone();
+  };
+
   // Poproś ChatGPT o odświeżenie listy (jak po powrocie do karty).
   CK.nudgeChatGPT = () => {
     try { document.dispatchEvent(new Event("visibilitychange")); window.dispatchEvent(new Event("focus")); } catch {}
   };
 
   function paint() {
-    applyRenames();
+    applyRenames(); applyGone();
     const on = CK.store.data.settings.sidebarMarks !== false && CK.on();
     if (!style.isConnected) CK.keepAttached(style);
-    style.textContent = on ? buildCss() : "";
+    const css = goneCss + (on ? buildCss() : "");
+    if (style.textContent !== css) style.textContent = css;
     const { stars, chatFolder } = CK.store.data;
     document.querySelectorAll('nav a[href*="/c/"]').forEach(a => {
       const m = a.getAttribute("href").match(/\/c\/([0-9a-f-]{36})/i);
@@ -79,7 +107,7 @@
   CK.ready.then(() => {
     paint();
     CK.store.onChange(paint);
-    new MutationObserver(() => { if (renamed.size) applyRenames(); clearTimeout(timer); timer = setTimeout(paint, 400); })
+    new MutationObserver(() => { if (renamed.size) applyRenames(); if (gone.size) applyGone(); clearTimeout(timer); timer = setTimeout(paint, 400); })
       .observe(document.body, { childList: true, subtree: true });
   });
 })();

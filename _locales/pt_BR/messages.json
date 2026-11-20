@@ -1,0 +1,17 @@
+{
+  "appName": {
+    "message": "ChatKit Pro by JustPLGuy"
+  },
+  "appShortName": {
+    "message": "ChatKit Pro"
+  },
+  "appDesc": {
+    "message": "Exclua e arquive chats do ChatGPT em massa, limpe a Biblioteca, pastas, exportação, prompts, minimapa e busca. Grátis."
+  },
+  "actionOn": {
+    "message": "LIGADO (clique para desligar)"
+  },
+  "actionOff": {
+    "message": "DESLIGADO (clique para ligar)"
+  }
+}
