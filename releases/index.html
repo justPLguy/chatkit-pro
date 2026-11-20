@@ -546,7 +546,7 @@ function renderReleases(lang) {
       if (a) get.append(a);
     }
     if (r.gh) {
-      const g = el("a", "btn ghost sm", T.gh); g.href = GH + "/releases?q=" + r.v + "&expanded=true"; g.target = "_blank"; g.rel = "noopener";
+      const g = el("a", "btn ghost sm", T.gh); g.href = GH + "/releases"; g.target = "_blank"; g.rel = "noopener";
       get.append(g);
     }
     card.append(get);
