@@ -278,6 +278,47 @@
 "f15.p": "Interface em 14 idiomas. Poucas requisições, pausa automática quando o ChatGPT diz “muitas solicitações” e interruptor no ícone.",
 "c.r12": "Gerenciador de links compartilhados",
 "_rel": {
+"1.4.0": {
+"intro": "Biblioteca 2.0: todos os seus arquivos, arquivos de chats excluídos e prévia da lixeira — além de tirar chats de projetos e copiar links.",
+"items": [
+[
+"Arquivos na Biblioteca",
+"novo seletor: Imagens / Arquivos / Imagens + arquivos — PDFs, documentos, planilhas, vídeo, áudio, compactados e código, com ícone do tipo, tamanho e data."
+],
+[
+"Filtro por tipo",
+"PDF, documentos, planilhas, apresentações, texto, código, compactados, vídeo, áudio, outros."
+],
+[
+"Arquivos de chats excluídos",
+"excluir um chat não exclui os arquivos dele — o ChatKit Pro os encontra, mostra quanto espaço ocupam e os remove de uma vez."
+],
+[
+"Prévia da lixeira",
+"o que há na lixeira da Biblioteca e quanto espaço ocupa (só leitura)."
+],
+[
+"Fora do projeto",
+"📂 Projeto → “Sem projeto” devolve os chats aos chats normais."
+],
+[
+"Copiar links",
+"os chats selecionados vão para a área de transferência como “título — link”."
+],
+[
+"Arquivo → chat",
+"abra o chat de onde veio um arquivo (↗ ou clique duplo); arquivos de chats excluídos são marcados."
+],
+[
+"Aviso de seleção oculta",
+"a confirmação avisa quando itens selecionados estão ocultos pelos filtros."
+],
+[
+"Mensagem clara após excluir",
+"arquivos excluídos vão para “Excluídos recentemente” na Biblioteca — agora dito claramente."
+]
+]
+},
 "1.3.1": {
 "intro": "Uma correção do índice de busca no texto com muitos chats.",
 "items": [

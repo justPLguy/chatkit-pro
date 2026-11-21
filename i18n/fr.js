@@ -278,6 +278,47 @@
 "f15.p": "Interface en 14 langues. Peu de requêtes, pause automatique quand ChatGPT dit « trop de requêtes », et interrupteur sur l'icône.",
 "c.r12": "Gestionnaire de liens partagés",
 "_rel": {
+"1.4.0": {
+"intro": "Bibliothèque 2.0 : tous vos fichiers, les fichiers des discussions supprimées et un aperçu de la corbeille — plus le retrait des discussions d'un projet et la copie des liens.",
+"items": [
+[
+"Fichiers dans la Bibliothèque",
+"nouveau sélecteur : Images / Fichiers / Images + fichiers — PDF, documents, tableurs, vidéo, audio, archives et code, avec icône de type, taille et date."
+],
+[
+"Filtre par type",
+"PDF, documents, tableurs, présentations, texte, code, archives, vidéo, audio, autres."
+],
+[
+"Fichiers des discussions supprimées",
+"supprimer une discussion ne supprime pas ses fichiers — ChatKit Pro les trouve, montre la place qu'ils prennent et les supprime d'un coup."
+],
+[
+"Aperçu de la corbeille",
+"ce que contient la corbeille de la Bibliothèque et la place occupée (lecture seule)."
+],
+[
+"Sortir d'un projet",
+"📂 Projet → « Sans projet » remet les discussions parmi les discussions normales."
+],
+[
+"Copier les liens",
+"les discussions sélectionnées vont dans le presse-papiers sous la forme « titre — lien »."
+],
+[
+"Fichier → discussion",
+"ouvrez la discussion d'où vient un fichier (↗ ou double-clic) ; les fichiers des discussions supprimées sont signalés."
+],
+[
+"Alerte sélection masquée",
+"la confirmation indique quand des éléments sélectionnés sont masqués par les filtres."
+],
+[
+"Message clair après suppression",
+"les fichiers supprimés vont dans « Récemment supprimés » de la Bibliothèque — c'est désormais dit clairement."
+]
+]
+},
 "1.3.1": {
 "intro": "Un correctif pour l'index de recherche plein texte avec beaucoup de discussions.",
 "items": [

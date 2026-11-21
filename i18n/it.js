@@ -278,6 +278,47 @@
 "f15.p": "Interfaccia in 14 lingue. Poche richieste, pausa automatica quando ChatGPT dice «troppe richieste» e interruttore sull'icona.",
 "c.r12": "Gestione dei link condivisi",
 "_rel": {
+"1.4.0": {
+"intro": "Libreria 2.0: tutti i tuoi file, i file delle chat eliminate e l'anteprima del cestino — in più togliere chat dai progetti e copiare i link.",
+"items": [
+[
+"File nella Libreria",
+"nuovo selettore: Immagini / File / Immagini + file — PDF, documenti, fogli di calcolo, video, audio, archivi e codice, con icona del tipo, dimensione e data."
+],
+[
+"Filtro per tipo",
+"PDF, documenti, fogli di calcolo, presentazioni, testo, codice, archivi, video, audio, altro."
+],
+[
+"File delle chat eliminate",
+"eliminare una chat non elimina i suoi file — ChatKit Pro li trova, mostra quanto spazio occupano e li elimina in un colpo."
+],
+[
+"Anteprima del cestino",
+"cosa c'è nel cestino della Libreria e quanto spazio occupa (sola lettura)."
+],
+[
+"Fuori dal progetto",
+"📂 Progetto → «Nessun progetto» riporta le chat tra quelle normali."
+],
+[
+"Copia link",
+"le chat selezionate vanno negli appunti come «titolo — link»."
+],
+[
+"File → chat",
+"apri la chat da cui proviene un file (↗ o doppio clic); i file delle chat eliminate sono segnalati."
+],
+[
+"Avviso selezione nascosta",
+"la conferma avvisa quando alcuni elementi selezionati sono nascosti dai filtri."
+],
+[
+"Messaggio chiaro dopo l'eliminazione",
+"i file eliminati finiscono in “Eliminati di recente” nella Libreria — ora detto chiaramente."
+]
+]
+},
 "1.3.1": {
 "intro": "Una correzione dell'indice di ricerca nel testo con molte chat.",
 "items": [

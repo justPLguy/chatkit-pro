@@ -431,8 +431,24 @@ document.querySelectorAll("[data-ver]").forEach(b => { b.textContent = "v" + CON
    tłumaczenia są w i18n/<kod>.js w _rel["wersja"] (intro + items w tej samej kolejności). */
 const RELEASES = [
   {
+    v: "1.4.0", date: "2026-11-21",
+    stores: { chrome: "review", firefox: "review" }, gh: false,
+    intro: "Library 2.0: all your files, files from deleted chats and a trash preview — plus taking chats out of projects and copying links.",
+    items: [
+      ["new", ["Files in the Library", "a new switch: Images / Files / Images + files — PDFs, documents, spreadsheets, video, audio, archives and code, each with a type icon, size and date."]],
+      ["new", ["File-type filter", "PDF, documents, spreadsheets, presentations, text, code, archives, video, audio, other."]],
+      ["new", ["Files from deleted chats", "deleting a chat doesn't delete its files — ChatKit Pro finds them, shows how much space they take and removes them in one go."]],
+      ["new", ["Trash preview", "see what's in the Library trash and how much space it takes (read-only)."]],
+      ["new", ["Out of a project", "📂 Project → “No project” takes chats back to regular chats."]],
+      ["new", ["Copy links", "the selected chats go to the clipboard as “title — link”."]],
+      ["better", ["File → chat", "open the chat a file came from (↗ or a double-click); files from deleted chats are marked."]],
+      ["better", ["Hidden selection warning", "the confirmation tells you when some selected items are hidden by filters."]],
+      ["better", ["Clear message after deleting", "deleted files go to “Recently deleted” in the Library — now said plainly."]]
+    ]
+  },
+  {
     v: "1.3.1", date: "2026-11-20",
-    stores: { chrome: "live", firefox: "review" }, gh: true,
+    stores: { chrome: "live" }, gh: true,
     intro: "A fix for the full-text search index with many chats.",
     items: [
       ["better", ["Index finishes on its own", "after ChatGPT's limit it slows down, waits longer and retries — click “Build” and leave the tab open; progress is saved after every chat."]],

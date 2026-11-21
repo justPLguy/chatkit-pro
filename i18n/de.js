@@ -278,6 +278,47 @@
 "f15.p": "Oberfläche in 14 Sprachen. Wenige Anfragen, automatische Pause bei „zu vielen Anfragen“ und ein An/Aus-Schalter am Symbol.",
 "c.r12": "Verwaltung geteilter Links",
 "_rel": {
+"1.4.0": {
+"intro": "Bibliothek 2.0: alle Dateien, Dateien aus gelöschten Chats und eine Papierkorb-Vorschau — dazu Chats aus Projekten nehmen und Links kopieren.",
+"items": [
+[
+"Dateien in der Bibliothek",
+"neuer Umschalter: Bilder / Dateien / Bilder + Dateien — PDFs, Dokumente, Tabellen, Video, Audio, Archive und Code, jeweils mit Typ-Symbol, Größe und Datum."
+],
+[
+"Dateityp-Filter",
+"PDF, Dokumente, Tabellen, Präsentationen, Text, Code, Archive, Video, Audio, Andere."
+],
+[
+"Dateien aus gelöschten Chats",
+"ein gelöschter Chat löscht seine Dateien nicht — ChatKit Pro findet sie, zeigt den belegten Platz und entfernt sie auf einmal."
+],
+[
+"Papierkorb-Vorschau",
+"was im Bibliotheks-Papierkorb liegt und wie viel Platz es belegt (nur ansehen)."
+],
+[
+"Raus aus dem Projekt",
+"📂 Projekt → „Kein Projekt“ macht Chats wieder zu normalen Chats."
+],
+[
+"Links kopieren",
+"die ausgewählten Chats landen als „Titel — Link“ in der Zwischenablage."
+],
+[
+"Datei → Chat",
+"den Chat öffnen, aus dem eine Datei stammt (↗ oder Doppelklick); Dateien aus gelöschten Chats sind markiert."
+],
+[
+"Warnung bei ausgeblendeter Auswahl",
+"die Bestätigung sagt, wenn ausgewählte Einträge durch Filter verborgen sind."
+],
+[
+"Klare Meldung nach dem Löschen",
+"gelöschte Dateien landen unter „Kürzlich gelöscht“ in der Bibliothek — jetzt klar gesagt."
+]
+]
+},
 "1.3.1": {
 "intro": "Eine Korrektur für den Volltext-Index bei vielen Chats.",
 "items": [

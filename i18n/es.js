@@ -278,6 +278,47 @@
 "f15.p": "Interfaz en 14 idiomas. Pocas peticiones, pausa automática cuando ChatGPT dice «demasiadas solicitudes» e interruptor en el icono.",
 "c.r12": "Gestor de enlaces compartidos",
 "_rel": {
+"1.4.0": {
+"intro": "Biblioteca 2.0: todos tus archivos, archivos de chats eliminados y vista previa de la papelera — además de sacar chats de proyectos y copiar enlaces.",
+"items": [
+[
+"Archivos en la Biblioteca",
+"nuevo selector: Imágenes / Archivos / Imágenes + archivos — PDF, documentos, hojas de cálculo, vídeo, audio, comprimidos y código, con icono de tipo, tamaño y fecha."
+],
+[
+"Filtro por tipo",
+"PDF, documentos, hojas de cálculo, presentaciones, texto, código, comprimidos, vídeo, audio, otros."
+],
+[
+"Archivos de chats eliminados",
+"eliminar un chat no elimina sus archivos — ChatKit Pro los encuentra, muestra cuánto ocupan y los elimina de una vez."
+],
+[
+"Vista previa de la papelera",
+"qué hay en la papelera de la Biblioteca y cuánto ocupa (solo lectura)."
+],
+[
+"Fuera del proyecto",
+"📂 Proyecto → «Sin proyecto» devuelve los chats a los chats normales."
+],
+[
+"Copiar enlaces",
+"los chats seleccionados van al portapapeles como «título — enlace»."
+],
+[
+"Archivo → chat",
+"abre el chat del que procede un archivo (↗ o doble clic); los archivos de chats eliminados están marcados."
+],
+[
+"Aviso de selección oculta",
+"la confirmación avisa cuando hay elementos seleccionados ocultos por los filtros."
+],
+[
+"Mensaje claro tras eliminar",
+"los archivos eliminados van a «Eliminados recientemente» de la Biblioteca — ahora se dice claramente."
+]
+]
+},
 "1.3.1": {
 "intro": "Una corrección del índice de búsqueda de texto completo con muchos chats.",
 "items": [

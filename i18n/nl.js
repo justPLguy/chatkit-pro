@@ -278,6 +278,47 @@
 "f15.p": "Interface in 14 talen. Weinig verzoeken, automatische pauze bij „te veel verzoeken” en een aan/uit-schakelaar op het pictogram.",
 "c.r12": "Beheer van gedeelde links",
 "_rel": {
+"1.4.0": {
+"intro": "Bibliotheek 2.0: al je bestanden, bestanden uit verwijderde chats en een voorbeeld van de prullenbak — plus chats uit projecten halen en links kopiëren.",
+"items": [
+[
+"Bestanden in de Bibliotheek",
+"nieuwe schakelaar: Afbeeldingen / Bestanden / Afbeeldingen + bestanden — PDF's, documenten, spreadsheets, video, audio, archieven en code, met type-icoon, grootte en datum."
+],
+[
+"Bestandstypefilter",
+"PDF, documenten, spreadsheets, presentaties, tekst, code, archieven, video, audio, overig."
+],
+[
+"Bestanden uit verwijderde chats",
+"een chat verwijderen verwijdert de bestanden niet — ChatKit Pro vindt ze, toont hoeveel ruimte ze innemen en verwijdert ze in één keer."
+],
+[
+"Voorbeeld van de prullenbak",
+"wat er in de prullenbak van de Bibliotheek zit en hoeveel ruimte het inneemt (alleen bekijken)."
+],
+[
+"Uit het project",
+"📂 Project → „Geen project” zet chats terug bij de gewone chats."
+],
+[
+"Links kopiëren",
+"de geselecteerde chats gaan naar het klembord als „titel — link”."
+],
+[
+"Bestand → chat",
+"open de chat waar een bestand vandaan komt (↗ of dubbelklik); bestanden uit verwijderde chats zijn gemarkeerd."
+],
+[
+"Waarschuwing bij verborgen selectie",
+"de bevestiging meldt wanneer geselecteerde items door filters verborgen zijn."
+],
+[
+"Duidelijk bericht na verwijderen",
+"verwijderde bestanden gaan naar ‘Onlangs verwijderd’ in de Bibliotheek — nu duidelijk gezegd."
+]
+]
+},
 "1.3.1": {
 "intro": "Een oplossing voor de zoekindex bij veel chats.",
 "items": [

@@ -278,6 +278,47 @@
 "f15.p": "14 dilde arayüz. Az istek, ChatGPT “çok fazla istek” dediğinde otomatik mola ve simgede açma/kapama anahtarı.",
 "c.r12": "Paylaşılan bağlantı yöneticisi",
 "_rel": {
+"1.4.0": {
+"intro": "Kitaplık 2.0: tüm dosyaların, silinen sohbetlerin dosyaları ve çöp kutusu önizlemesi — ayrıca sohbetleri projeden çıkarma ve bağlantı kopyalama.",
+"items": [
+[
+"Kitaplıkta dosyalar",
+"yeni seçici: Görseller / Dosyalar / Görseller + dosyalar — PDF, belge, tablo, video, ses, arşiv ve kod; tür simgesi, boyut ve tarihle."
+],
+[
+"Dosya türü filtresi",
+"PDF, belgeler, tablolar, sunumlar, metin, kod, arşivler, video, ses, diğer."
+],
+[
+"Silinen sohbetlerin dosyaları",
+"sohbeti silmek dosyalarını silmez — ChatKit Pro onları bulur, ne kadar yer kapladığını gösterir ve tek seferde kaldırır."
+],
+[
+"Çöp kutusu önizlemesi",
+"Kitaplık çöp kutusunda ne olduğu ve ne kadar yer kapladığı (yalnızca görüntüleme)."
+],
+[
+"Projeden çıkar",
+"📂 Proje → “Proje yok” sohbetleri normal sohbetlere geri taşır."
+],
+[
+"Bağlantıları kopyala",
+"seçili sohbetler panoya “başlık — bağlantı” olarak kopyalanır."
+],
+[
+"Dosya → sohbet",
+"bir dosyanın geldiği sohbeti aç (↗ veya çift tık); silinen sohbetlerin dosyaları işaretlenir."
+],
+[
+"Gizli seçim uyarısı",
+"seçilenlerin bir kısmı filtrelerle gizliyse onay penceresi bunu söyler."
+],
+[
+"Silme sonrası net mesaj",
+"silinen dosyalar Kitaplıktaki “Son silinenler”e taşınır — artık açıkça yazıyor."
+]
+]
+},
 "1.3.1": {
 "intro": "Çok sayıda sohbette tam metin arama dizini için düzeltme.",
 "items": [

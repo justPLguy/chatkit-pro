@@ -278,6 +278,47 @@
 "f15.p": "Rozhraní ve 14 jazycích. Málo požadavků, automatická pauza při „příliš mnoha požadavcích“ a vypínač na ikoně.",
 "c.r12": "Správa sdílených odkazů",
 "_rel": {
+"1.4.0": {
+"intro": "Knihovna 2.0: všechny soubory, soubory ze smazaných chatů a náhled koše — navíc vyjímání chatů z projektů a kopírování odkazů.",
+"items": [
+[
+"Soubory v Knihovně",
+"nový přepínač: Obrázky / Soubory / Obrázky + soubory — PDF, dokumenty, tabulky, video, zvuk, archivy a kód, s ikonou typu, velikostí a datem."
+],
+[
+"Filtr typu souboru",
+"PDF, dokumenty, tabulky, prezentace, text, kód, archivy, video, zvuk, ostatní."
+],
+[
+"Soubory ze smazaných chatů",
+"smazání chatu nesmaže jeho soubory — ChatKit Pro je najde, ukáže, kolik zabírají, a smaže je najednou."
+],
+[
+"Náhled koše",
+"co je v koši Knihovny a kolik místa zabírá (jen náhled)."
+],
+[
+"Ven z projektu",
+"📂 Projekt → „Bez projektu“ vrátí chaty mezi běžné chaty."
+],
+[
+"Kopírování odkazů",
+"vybrané chaty se zkopírují do schránky jako „název — odkaz“."
+],
+[
+"Soubor → chat",
+"otevřete chat, ze kterého soubor pochází (↗ nebo dvojklik); soubory ze smazaných chatů jsou označené."
+],
+[
+"Upozornění na skrytý výběr",
+"potvrzení řekne, když jsou některé vybrané položky skryté filtry."
+],
+[
+"Jasná zpráva po smazání",
+"smazané soubory jdou do „Nedávno smazaných“ v Knihovně — nyní řečeno jasně."
+]
+]
+},
 "1.3.1": {
 "intro": "Oprava indexu fulltextového hledání při velkém počtu chatů.",
 "items": [

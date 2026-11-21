@@ -278,6 +278,47 @@
 "f15.p": "Interfejs w 14 językach. Mało zapytań, automatyczna przerwa, gdy ChatGPT mówi „za dużo zapytań”, i włącznik na ikonie.",
 "c.r12": "Menedżer udostępnionych linków",
 "_rel": {
+"1.4.0": {
+"intro": "Biblioteka 2.0: wszystkie pliki, pliki z usuniętych czatów i podgląd kosza — do tego wyjmowanie czatów z projektu i kopiowanie linków.",
+"items": [
+[
+"Pliki w Bibliotece",
+"nowy przełącznik: Obrazy / Pliki / Obrazy + pliki — PDF-y, dokumenty, arkusze, wideo, audio, archiwa i kod, każdy z ikonką typu, rozmiarem i datą."
+],
+[
+"Filtr typu pliku",
+"PDF, dokumenty, arkusze, prezentacje, tekst, kod, archiwa, wideo, audio, inne."
+],
+[
+"Pliki z usuniętych czatów",
+"usunięcie czatu nie usuwa jego plików — ChatKit Pro je znajduje, pokazuje, ile zajmują, i usuwa jednym ruchem."
+],
+[
+"Podgląd kosza",
+"co leży w koszu Biblioteki i ile zajmuje (tylko podgląd)."
+],
+[
+"Wyjmowanie z projektu",
+"📂 Projekt → „Bez projektu” przenosi czaty z powrotem do zwykłych."
+],
+[
+"Kopiowanie linków",
+"zaznaczone czaty trafiają do schowka jako „tytuł — link”."
+],
+[
+"Plik → czat",
+"przejście do czatu, z którego pochodzi plik (↗ albo podwójne kliknięcie); pliki z usuniętych czatów są oznaczone."
+],
+[
+"Ostrzeżenie o ukrytych zaznaczonych",
+"potwierdzenie mówi, gdy część zaznaczonych jest ukryta przez filtry."
+],
+[
+"Jasny komunikat po usunięciu",
+"usunięte pliki trafiają do „Ostatnio usunięte” w Bibliotece — teraz napisane wprost."
+]
+]
+},
 "1.3.1": {
 "intro": "Poprawka indeksu „Szukaj w treści” przy dużej liczbie czatów.",
 "items": [
