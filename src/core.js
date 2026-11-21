@@ -43,7 +43,8 @@
   //  - zapytania w tle (znaczniki czasu, minimapa, odświeżanie listy) w ogóle nie idą do serwera,
   //  - operacje uruchomione przez użytkownika (usuwanie, eksport, indeks) czekają i ruszają same po przerwie.
   // Do tego minimalny odstęp między naszymi zapytaniami, żeby nigdy nie robić „serii”.
-  const PAUSE_KEY = "ckp.pauseUntil", STREAK_KEY = "ckp.pauseStreak";
+  const PAUSE_KEY = "ckp.pauseUntil", STREAK_KEY = "ckp.pauseStreak", LASTHIT_KEY = "ckp.lastHit";
+  const CALM = 10 * 60000; // seria przerw zeruje się dopiero po 10 min bez 429 (a nie po jednym udanym zapytaniu)
   const MIN_GAP = 400, MIN_PAUSE = 60000, MAX_PAUSE = 10 * 60000;
   const lsGet = k => { try { return parseInt(localStorage.getItem(k), 10) || 0; } catch { return 0; } };
   const lsSet = (k, v) => { try { localStorage.setItem(k, String(v)); } catch {} };
@@ -60,12 +61,13 @@
       ms = Math.min(MAX_PAUSE, Math.max(ms, MIN_PAUSE * 2 ** (streak - 1)));
       const until = Date.now() + ms;
       pauseUntilMem = Math.max(pauseUntilMem, until);
-      lsSet(PAUSE_KEY, pauseUntilMem); lsSet(STREAK_KEY, streak);
+      lsSet(PAUSE_KEY, pauseUntilMem); lsSet(STREAK_KEY, streak); lsSet(LASTHIT_KEY, Date.now());
       console.warn(`[ChatKit Pro] ChatGPT ograniczył zapytania (429) — przerwa ${Math.round(ms / 1000)} s`);
       limitListeners.forEach(f => { try { f(ms); } catch {} });
     },
-    ok() { if (lsGet(STREAK_KEY)) lsSet(STREAK_KEY, 0); },
-    _reset() { pauseUntilMem = 0; lsSet(PAUSE_KEY, 0); lsSet(STREAK_KEY, 0); } // testy
+    ok() { if (lsGet(STREAK_KEY) && Date.now() - lsGet(LASTHIT_KEY) > CALM) lsSet(STREAK_KEY, 0); },
+    recentlyHit(ms = CALM) { return Date.now() - lsGet(LASTHIT_KEY) < ms; },
+    _reset() { pauseUntilMem = 0; lsSet(PAUSE_KEY, 0); lsSet(STREAK_KEY, 0); lsSet(LASTHIT_KEY, 0); } // testy
   };
   const rateResponse = () => ({ ok: false, status: 429, statusText: "Paused (ChatKit Pro)", headers: { get: () => null },
     json: async () => ({ detail: "ChatKit Pro: paused after 429" }), text: async () => "ChatKit Pro: paused after 429" });

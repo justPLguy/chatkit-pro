@@ -1,6 +1,6 @@
 {
   "name": "chatkit-pro",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "private": true,
   "description": "ChatKit Pro by JustPLGuy — Chrome extension for ChatGPT",
   "scripts": {

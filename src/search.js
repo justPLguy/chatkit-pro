@@ -44,20 +44,32 @@
         const r = existing.get(c.key);
         return !r || (CK.toDate(c.date)?.getTime() || 0) > (r.updated || 0);
       });
-      let done = 0, fail = 0;
+      // Tempo: zwykle 1 czat / 1,5 s. Po pierwszym „za dużo zapytań” od ChatGPT — do końca budowy wolno (1 czat / 6 s),
+      // żeby nie zjadać limitu, z którego korzysta też samo ChatGPT (inaczej czaty użytkownika przestają się otwierać).
+      // Czat odrzucony przez limit nie jest pomijany: po przerwie próbujemy go jeszcze raz (bez limitu prób — budowa może iść sama np. godzinę). Postęp zapisuje się po każdym czacie,
+      // więc przerwaną budowę można dokończyć później — zrobione czaty zostają.
+      const FAST = 1500, SLOW = 6000;
+      let done = 0, fail = 0, slow = CK.limit.recentlyHit();
       for (const c of todo) {
         if (shouldStop()) break;
-        try {
-          const conv = await CK.getConversation(c.key);
-          const msgs = CK.linearize(conv);
-          await put({
-            id: c.key, title: conv.title || c.title, updated: CK.toDate(c.date)?.getTime() || Date.now(), indexedAt: Date.now(),
-            text: msgs.map(m => (m.role === "user" ? "» " : "") + m.text).join("\n\n")
-          });
-        } catch (e) { fail++; }
+        for (let tries = 0; ; tries++) {
+          try {
+            const conv = await CK.getConversation(c.key);
+            const msgs = CK.linearize(conv);
+            await put({
+              id: c.key, title: conv.title || c.title, updated: CK.toDate(c.date)?.getTime() || Date.now(), indexedAt: Date.now(),
+              text: msgs.map(m => (m.role === "user" ? "» " : "") + m.text).join("\n\n")
+            });
+          } catch (e) {
+            if (e && e.status === 429 && !shouldStop()) { slow = true; await CK.waitLimit(shouldStop); continue; }
+            fail++;
+          }
+          break;
+        }
         done++;
-        onProgress && onProgress(done, todo.length);
-        await CK.sleep(1000); // spokojne tempo: ~60 czatów na minutę, żeby nie wpaść w limit ChatGPT
+        onProgress && onProgress(done, todo.length, slow);
+        if (CK.limit.pausedFor()) slow = true;
+        await CK.sleep(slow ? SLOW : FAST);
       }
       cache = null;
       return { indexed: done - fail, fail, skipped: chats.length - todo.length };

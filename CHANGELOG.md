@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.3.1 — 2026-11-20
+### English
+- 🐞 **Full-text search index with many chats** — building the index no longer gets stuck in a loop on ChatGPT's request limit (“too many requests” every minute). After the first limit it slows down so ChatGPT itself keeps working, the pauses grow longer instead of always lasting 1 minute, and chats refused by the limit are retried instead of skipped. Progress is saved after every chat, so you can stop and continue later.
+### Polski
+- 🐞 **Indeks „Szukaj w treści” przy wielu czatach** — budowa indeksu nie wpada już w pętlę na limicie zapytań ChatGPT („za dużo zapytań” co minutę). Po pierwszym limicie zwalnia, żeby samo ChatGPT dalej działało, przerwy rosną zamiast zawsze trwać minutę, a czaty odrzucone przez limit są ponawiane zamiast pomijane. Postęp zapisuje się po każdym czacie — możesz przerwać i dokończyć później.
+
 ## v1.3.0 — 2026-11-19
 ### English
 - 📂 **Move chats to a ChatGPT project in bulk** — select chats, click 📂 Project and pick the project
