@@ -1,0 +1,17 @@
+{
+  "appName": {
+    "message": "ChatKit Pro by JustPLGuy"
+  },
+  "appShortName": {
+    "message": "ChatKit Pro"
+  },
+  "appDesc": {
+    "message": "ChatGPT のチャットを一括削除・アーカイブ。ライブラリ整理、フォルダー、エクスポート、プロンプト、ミニマップ、検索。無料。"
+  },
+  "actionOn": {
+    "message": "オン（クリックでオフ）"
+  },
+  "actionOff": {
+    "message": "オフ（クリックでオン）"
+  }
+}

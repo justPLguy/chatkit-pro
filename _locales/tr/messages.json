@@ -1,0 +1,17 @@
+{
+  "appName": {
+    "message": "ChatKit Pro by JustPLGuy"
+  },
+  "appShortName": {
+    "message": "ChatKit Pro"
+  },
+  "appDesc": {
+    "message": "ChatGPT sohbetlerini toplu sil ve arşivle, Kitaplığı temizle, klasörler, dışa aktarma, promptlar, mini harita ve arama. Ücretsiz."
+  },
+  "actionOn": {
+    "message": "AÇIK (kapatmak için tıklayın)"
+  },
+  "actionOff": {
+    "message": "KAPALI (açmak için tıklayın)"
+  }
+}

@@ -44,6 +44,10 @@ w.fetch = (url, opts = {}) => {
   if (url.match(/\/backend-api\/conversation\/[^/?]+$/)) return opts.method === "PATCH" ? res({ success: true }) : res(conv);
   if (url.endsWith("/files/library")) { const b = JSON.parse(opts.body); return res(b.cursor ? lib2 : lib1); }
   if (url.includes("delete-batch")) return res({});
+  if (url.match(/\/backend-api\/share\/(post\/)?[^/?]+$/) && opts.method === "DELETE") return res({});
+  if (url.includes("/shared_textdocs")) return res({ items: [{ id: "t_doc1", title: "Wpis z Canvas", create_time: "2026-11-12T10:00:00Z" }] });
+  if (url.includes("/shared_conversations")) return res({ items: [{ id: "sh1", title: "Udostępniony A", conversation_id: "c1", create_time: "2026-11-10T10:00:00Z" }, { id: "sh2", title: "Udostępniony B", conversation_id: "c2", create_time: "2026-11-11T10:00:00Z" }], total: 2 });
+  if (url.includes("/gizmos/snorlax/sidebar")) return res({ items: [{ gizmo: { gizmo: { id: "g-p-api1", display: { name: "Projekt z API" } } }, conversations: { items: [] } }], cursor: null });
   if (url.includes("/backend-api/files/download/")) return res({ status: "success", download_url: "https://files.oaiusercontent.com/f?sig=1" });
   return res({}, 404);
 };
@@ -57,6 +61,7 @@ w.chrome = {
   }, onChanged: { addListener() {} } }
 };
 w.__sent = [];
+w.TextEncoder = TextEncoder;
 storage.update = { checkedAt: Date.now(), current: "1.0.0", latest: "1.1.0", url: "https://github.com/justPLguy/chatkit-pro/releases/tag/chrome-v1.1.0", available: true };
 w.confirm = () => true;
 w.prompt = () => "Folder Test";
@@ -73,7 +78,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 const assert = (c, m) => { if (!c) { console.error("FAIL:", m); process.exitCode = 1; } else console.log("ok  -", m); };
 
 (async () => {
-  await sleep(1500);
+  await sleep(2600); // znaczniki: 1,5 s na „zatrzymanie się” na czacie + zapytanie
   const root = w.document.getElementById("chatkit-pro-host").shadowRoot;
   const $ = s => root.querySelector(s);
   const $$ = s => [...root.querySelectorAll(s)];
@@ -224,7 +229,7 @@ const assert = (c, m) => { if (!c) { console.error("FAIL:", m); process.exitCode
   // reguły sprzątania
   tab("Sprzątanie").click(); await sleep(100);
   btn("Dodaj przykładowe reguły").click(); await sleep(200);
-  assert(w.CK.store.data.rules.length === 2 && $$(".card").length === 2, "przykładowe reguły dodane");
+  assert(w.CK.store.data.rules.length === 2 && $$(".card").length === 3 && $$(".card")[2].textContent.includes("Udostępnione linki"), "przykładowe reguły dodane");
 
   // statystyki
   tab("Statystyki").click(); await sleep(100);
@@ -245,6 +250,244 @@ const assert = (c, m) => { if (!c) { console.error("FAIL:", m); process.exitCode
   assert(tab("Archiv") && tab("Bibliothek"), "przełączenie języka na niemiecki");
   langSel.value = "fr"; langSel.dispatchEvent(new w.Event("change")); await sleep(200);
   assert($$("#tabs button").some(b => b.textContent === "Discussions"), "przełączenie języka na francuski");
+
+  // ===== v1.2.0 =====
+  // ZIP: poprawna struktura (sygnatury, liczba plików)
+  {
+    const blob = w.CK.zip([{ name: "a.md", data: "x" }, { name: "a.md", data: "y" }]);
+    const buf = Buffer.from(await new Promise(r => { const fr = new w.FileReader(); fr.onload = () => r(fr.result); fr.readAsArrayBuffer(blob); }));
+    const eocd = buf.lastIndexOf(Buffer.from([0x50, 0x4b, 0x05, 0x06]));
+    assert(buf.readUInt32LE(0) === 0x04034b50 && eocd > 0 && buf.readUInt16LE(eocd + 10) === 2 && buf.includes(Buffer.from("a (2).md")), "ZIP: nagłówki, 2 pliki, unikalne nazwy");
+  }
+  // eksport do ZIP (plik na czat)
+  {
+    const dl = []; const orig = w.CK.download; w.CK.download = (n, d) => dl.push({ n, d });
+    const r = await w.CK.exportChats(["c1", "c2"], "zip-json", () => {});
+    w.CK.download = orig;
+    assert(r.ok === 2 && dl.length === 1 && dl[0].n.endsWith(".zip") && dl[0].d instanceof w.Blob && dl[0].d.size > 200, "eksport ZIP: jeden plik .zip z 2 czatami");
+    const j = JSON.parse(w.CK._export.toJson({ id: "c9", title: "T", create_time: now, update_time: now, msgs: [{ role: "user", text: "hej", time: now }] }));
+    assert(j.url.endsWith("/c/c9") && j.messages[0].role === "user" && j.created, "eksport JSON: struktura czatu");
+  }
+  // kod: wyciąganie bloków, nazwy plików, liczniki
+  assert(JSON.stringify(w.CK.extractCode("a\n```python\nprint(1)\n```\nb")) === JSON.stringify([{ lang: "python", code: "print(1)\n" }]), "kod: blok ``` z językiem");
+  assert(w.CK.codeFileName("Mój czat", "TypeScript", 2) === "Mój czat-2.ts" && w.CK.codeExt("C#") === "cs" && w.CK.codeExt("nieznany") === "txt", "kod: rozszerzenia plików");
+  const st = w.CK.chatStats([{ role: "user", text: "Ala ma kota" }, { role: "assistant", text: "Zażółć gęślą" }]);
+  assert(st.messages === 2 && st.words === 5 && st.chars === 23 && st.tokens === 6, "liczniki: wiadomości, słowa, znaki, tokeny");
+  // przycisk „Zapisz” przy bloku kodu
+  {
+    const main = w.document.createElement("main");
+    main.innerHTML = '<div class="markdown"><pre><div><div>python</div><button>Copy</button></div><div><code class="whitespace-pre">print("hi")</code></div></pre></div>';
+    w.document.body.append(main);
+    const pre = main.querySelector("pre");
+    assert(w.CK._code.codeBlockFrom(main.querySelector("code")) === pre && w.CK._code.langOf(pre) === "python", "kod: wykrycie bloku i języka z nagłówka");
+    pre.getBoundingClientRect = () => ({ top: 100, bottom: 300, left: 50, right: 650, width: 600, height: 200 });
+    pre.dispatchEvent(new w.MouseEvent("mouseover", { bubbles: true }));
+    const cbtn = w.document.getElementById("chatkit-pro-code").shadowRoot.querySelector("button");
+    assert(cbtn.style.display === "flex" && cbtn.textContent.includes("💾"), "kod: przycisk pojawia się nad blokiem");
+    const dl = []; const orig = w.CK.download; w.CK.download = (n, d) => dl.push({ n, d });
+    cbtn.click(); w.CK.download = orig;
+    assert(dl.length === 1 && dl[0].n.endsWith(".py") && dl[0].d.startsWith('print("hi")'), "kod: zapis bloku do pliku .py");
+    main.remove();
+  }
+  // szerokość czatu i czcionka
+  w.CK.store.data.settings.chatWidth = 1200; w.CK.store.data.settings.fontSize = 17; await w.CK.store.save("settings"); await sleep(50);
+  const lookCss = w.document.getElementById("chatkit-pro-look").textContent;
+  assert(lookCss.includes("--thread-content-max-width: 1200px") && lookCss.includes("font-size: 17px"), "wygląd: szerokość 1200 px i czcionka 17 px");
+  w.CK.store.data.settings.chatWidth = 0; w.CK.store.data.settings.fontSize = 0; await w.CK.store.save("settings"); await sleep(50);
+  assert(w.document.getElementById("chatkit-pro-look").textContent.trim() === "", "wygląd: domyślnie nic nie zmienia");
+  assert(w.CK.lookCss(2000, 0).includes("100%"), "wygląd: pełna szerokość");
+  if (!$$(".pane input[type=range]").length) { $("#setbtn").click(); await sleep(100); }
+  assert($$(".pane input[type=range]").length === 2, "ustawienia: 2 suwaki (szerokość, czcionka)");
+
+  // suwak działa wielokrotnie, także gdy obiekt ustawień zostanie podmieniony (storage.onChanged)
+  {
+    const rng = $$(".pane input[type=range]")[0];
+    const move = async i => { rng.value = i; rng.dispatchEvent(new w.Event("input")); rng.dispatchEvent(new w.Event("change")); await sleep(30); };
+    await move(2); const a1 = w.CK.store.data.settings.chatWidth;
+    w.CK.store.data.settings = { ...w.CK.store.data.settings }; // jak po chrome.storage.onChanged
+    await move(5); const a2 = w.CK.store.data.settings.chatWidth;
+    w.CK.store.data.settings = { ...w.CK.store.data.settings };
+    rng.parentElement.querySelector("button").click(); await sleep(30);
+    assert(a1 === 900 && a2 === 1200 && w.CK.store.data.settings.chatWidth === 0, "suwak: kolejne zmiany i ↺ działają za każdym razem");
+  }
+  // czytelne znaczniki czasu
+  {
+    const n = new Date(2026, 10, 17, 23, 0);
+    w.CK.locale = "pl-PL";
+    const f = x => w.CK.fmtStamp(x.getTime(), n);
+    const r = [f(new Date(2026, 10, 17, 1, 30)), f(new Date(2026, 10, 16, 23, 10)), f(new Date(2026, 10, 13, 1, 30)), f(new Date(2025, 2, 5, 9, 0))];
+    console.log("    znaczniki:", r.join(" | "));
+    assert(r[0].endsWith("01:30") && /^(Dziś|Today|Aujourd|Heute)/.test(r[0]) && /^(Wczoraj|Yesterday|Hier|Gestern)/.test(r[1]) && r[2].includes("13") && r[3].includes("2025"), "znaczniki czasu: dziś / wczoraj / dzień tygodnia / rok");
+  }
+
+  assert(w.CK.lookCss(0, 18).includes("main [data-chatgpt-search-message-ids] :is(p, li") && w.CK.lookCss(0, 18).includes("main [data-ck-role]"), "czcionka: obejmuje treść odpowiedzi i pytań");
+  {
+    const labels = [...w.document.querySelectorAll("[data-ck-ts]")].map(e => e.getAttribute("data-ck-role") + "=" + e.getAttribute("data-ck-ts"));
+    console.log("    etykiety:", labels.join(" | "));
+    assert(!/order\s*:/.test(w.document.getElementById("chatkit-pro-ts-style").textContent), "znaczniki czasu: bez order (kontenery display: contents)");
+    assert(labels.length && labels.every(l => l.startsWith("user=👤") || l.startsWith("assistant=🤖 ChatGPT")), "znaczniki czasu: podpis roli (👤 Ty / 🤖 ChatGPT)");
+  }
+
+  // przypomnienie o kopii zapasowej
+  {
+    if (!w.CK.store.data.folders.length) { w.CK.store.data.folders.push({ id: "fx", name: "X" }); await w.CK.store.save("folders"); }
+    const day = 86400000, bakBox = () => $("#bak");
+    w.CK.store.data.settings.backupEvery = 7;
+    w.CK._backup.set({ firstSeen: Date.now() - 3 * day, lastBackup: 0, backupSnooze: 0 });
+    const early = bakBox().style.display;
+    w.CK._backup.set({ firstSeen: Date.now() - 10 * day });
+    const shown = bakBox().style.display === "flex" && bakBox().querySelectorAll("button").length === 2;
+    const dl = []; const orig = w.CK.download; w.CK.download = (n, d) => dl.push({ n, d });
+    bakBox().querySelector("button.go").click(); await sleep(30); w.CK.download = orig;
+    const after = bakBox().style.display;
+    assert(early === "none" && shown && dl.length === 1 && dl[0].n.startsWith("chatkit-pro-backup-") && JSON.parse(dl[0].d).folders.length && after === "none" && storage.lastBackup > 0,
+      "kopia: przypomnienie po 7 dniach, „Zrób kopię” pobiera JSON i chowa pasek");
+    w.CK._backup.set({ lastBackup: Date.now() - 8 * day });
+    const again = bakBox().style.display;
+    $$("#bak button")[1].click(); await sleep(30);
+    const snoozed = bakBox().style.display;
+    w.CK._backup.set({ backupSnooze: 0 }); w.CK.store.data.settings.backupEvery = 0; await w.CK.store.save("settings"); await sleep(30);
+    assert(again === "flex" && snoozed === "none" && bakBox().style.display === "none", "kopia: „Później” odkłada, „nigdy” wyłącza");
+    w.CK.store.data.settings.backupEvery = 7; await w.CK.store.save("settings");
+  }
+
+  // masowa zmiana nazw: logika tytułów
+  {
+    const r = w.CK.renameTitle;
+    assert(r("Plan", "prefix", "[Praca]") === "[Praca] Plan" && r("[Praca] Plan", "prefix", "[Praca]") === "[Praca] Plan" &&
+      r("Plan", "suffix", "(old)") === "Plan (old)" && r("[Praca] Plan", "remove", "[Praca]") === "Plan" &&
+      r("Test test", "replace", "test", "próba") === "Test próba" && r("x", "remove", "x") === "x", "zmiana nazw: prefiks, sufiks, usuń, zamień (bez pustych tytułów)");
+  }
+  // prompty v2: ulubione na górze, kolejność, tagi
+  {
+    const P = w.CK.prompts;
+    w.CK.store.data.prompts = [
+      { id: "pa", title: "A", text: "a", uses: 5, tags: ["mail"] },
+      { id: "pb", title: "B", text: "b", uses: 1 },
+      { id: "pc", title: "C", text: "c", uses: 9, fav: true, tags: ["kod", "mail"] }];
+    await w.CK.store.save("prompts");
+    assert(P.sorted(P.list(), "manual").map(x => x.id).join() === "pc,pa,pb" && P.sorted(P.list(), "uses").map(x => x.id).join() === "pc,pa,pb", "prompty: ulubiony zawsze pierwszy");
+    await P.move("pb", "pa");
+    assert(P.list().map(x => x.id).join() === "pb,pa,pc", "prompty: przeciągnięcie zmienia kolejność");
+    await P.toggleFav("pc");
+    assert(P.sorted(P.list(), "manual").map(x => x.id).join() === "pb,pa,pc" && !P.list()[2].fav, "prompty: przełączanie ulubionego");
+    assert(JSON.stringify(P.normTags(" Mail, #kod ,mail")) === JSON.stringify(["mail", "kod"]) && P.tags()[0][0] === "mail", "prompty: tagi (normalizacja, liczniki)");
+  }
+
+  // włącznik wtyczki + przywracanie usuniętych elementów
+  {
+    const host = w.document.getElementById("chatkit-pro-host"), mmHost = w.document.getElementById("chatkit-pro-minimap");
+    w.CK.store.data.enabled = false; await w.CK.store.save("enabled"); await sleep(50);
+    const offOk = host.style.display === "none" && mmHost.style.display === "none" && !w.document.querySelector("[data-ck-ts]") && !$("#panel").classList.contains("open");
+    w.CK.store.data.enabled = true; await w.CK.store.save("enabled"); await sleep(3200);
+    const onOk = host.style.display === "" && mmHost.style.display === "" && !!w.document.querySelector("[data-ck-ts]");
+    assert(offOk && onOk, "włącznik: wyłączenie chowa wszystko, włączenie przywraca bez przeładowania");
+    host.remove(); mmHost.remove(); await sleep(50);
+    assert(host.isConnected && mmHost.isConnected, "strażnik: ChatGPT usunął elementy wtyczki → wracają");
+  }
+
+  // 1.3.0: nowa wiadomość w otwartym czacie dostaje czas od razu (bez ponownego pobierania)
+  {
+    const b0 = calls.length;
+    const nm = w.document.createElement("div");
+    nm.setAttribute("data-message-id", "m9"); nm.setAttribute("data-message-author-role", "user"); nm.textContent = "Nowa wiadomość";
+    w.document.body.appendChild(nm); await sleep(3300);
+    const got = calls.slice(b0).filter(c => c.url.includes("/conversation/")).length;
+    assert(nm.hasAttribute("data-ck-ts") && /👤/.test(nm.getAttribute("data-ck-ts")) && got === 0, "znaczniki: nowa wiadomość od razu z godziną, bez zapytania");
+    nm.remove();
+  }
+  // 1.3.0: chowanie w pasku bocznym po archiwizacji/usunięciu (bez F5)
+  {
+    const NAV = "22222222-2222-3333-4444-555555555555";
+    w.CK.sidebarGone([NAV]); await sleep(30);
+    const link = w.document.querySelector(`nav a[href="/c/${NAV}"]`);
+    const hidden = link.closest("[data-ck-gone]");
+    const css = w.document.getElementById("chatkit-pro-sidebar").textContent;
+    assert(hidden && css.includes("[data-ck-gone]") && w.location.pathname.includes("11111111"), "pasek boczny: zarchiwizowany/usunięty czat znika od razu (otwarty czat zostaje)");
+  }
+  // 1.3.0: tagi
+  {
+    const T = w.CK.tags;
+    await T.add(["c1", "c3"], "#Praca, kod");
+    await T.add(["c3"], ["Pomysły na  wakacje"]);
+    const ok1 = JSON.stringify(T.of("c1")) === JSON.stringify(["praca", "kod"]) && T.of("c3").includes("pomysły-na-wakacje") && T.all()[0][1] === 2;
+    await T.rename("kod", "code"); await T.remove(["c1"], "praca");
+    const ok2 = JSON.stringify(T.of("c1")) === JSON.stringify(["code"]) && T.of("c3").includes("code") && !("c2" in w.CK.store.data.chatTags);
+    assert(ok1 && ok2, "tagi: dodawanie, normalizacja, zmiana nazwy, usuwanie");
+    w.CK.ui.showTag("code"); await sleep(100);
+    const vis = $$("#list .item").map(r => r.textContent);
+    assert(vis.length === 2 && vis.every(x => x.includes("#code")) && $$("#folders .frow.active").some(r => r.textContent.includes("#code")), "tagi: filtr w panelu i znaczki w wierszach");
+    w.CK.ui.filters.chats.tag = ""; w.CK.ui.filters.chats.q = "#pomy"; w.CK.ui.rerender(); await sleep(50);
+    assert($$("#list .item").length === 1, "tagi: „#tag” w wyszukiwarce");
+    w.CK.ui.filters.chats.q = ""; w.CK.ui.rerender();
+    assert(storage.chatTags && storage.chatTags.c3.length === 3 && !storage.chatTags.c2, "tagi: zapisane w chrome.storage");
+  }
+  // 1.3.0: szybki skok
+  {
+    const r = w.CK.palette.results("sredni");
+    const r2 = w.CK.palette.results("#code").filter(x => x.kind === "chat").map(x => x.id).sort().join();
+    const r3 = w.CK.palette.results("folder test");
+    assert(r[0] && r[0].kind === "chat" && r[0].id === "c3" && r2 === "c1,c3" && r3.some(x => x.kind === "folder"), "szybki skok: bez polskich znaków, #tag, foldery");
+  }
+  // 1.3.0: licznik przy polu wiadomości
+  {
+    const a = w.CK.countText("Ala ma kota."), b = w.CK.countText("日本語のテキスト");
+    assert(a.chars === 12 && a.words === 3 && a.tokens === 3 && b.tokens === 8, "licznik: znaki, słowa, ~tokeny (też CJK)");
+  }
+  // 1.3.0: eksport z nagłówkiem YAML + wybrane wiadomości (świeże pobranie)
+  {
+    w.CK.store.data.stars.c1 = true;
+    const fm = w.CK._export.toFrontmatter({ id: "c1", title: 'Plan "Q4"', create_time: now, update_time: now, msgs: w.CK.linearize(conv) });
+    assert(fm.startsWith("---\ntitle: \"Plan \\\"Q4\\\"\"") && fm.includes("tags:\n  - \"chatgpt\"\n  - \"code\"") && fm.includes("starred: true") && fm.includes("## 👤"), "eksport: Markdown z nagłówkiem YAML (tytuł, tagi, gwiazdka)");
+    const b0 = calls.length, d0 = downloads.length;
+    let seen = 0;
+    const res2 = await w.CK.exportChats(["c3"], "pick", () => {}, null, { pick: async c => { seen = c.msgs.length; return { msgs: c.msgs.slice(0, 1), format: "obs" }; } });
+    const got = calls.slice(b0).filter(c => /\/conversation\/c3$/.test(c.url)).length;
+    assert(res2.ok === 1 && seen === 2 && got === 1 && downloads.length > d0, "eksport: wybrane wiadomości, czat pobrany na świeżo");
+  }
+
+  // 1.3.0: przenoszenie do Projektu ChatGPT
+  {
+    const a = w.document.createElement("a"); a.href = "/g/g-p-dom1/project"; a.textContent = "Projekt z paska";
+    w.document.querySelector("nav").appendChild(a);
+    const list = await w.CK.projects.list();
+    const b0 = calls.length;
+    const ok = await w.CK.projects.move("c2", "g-p-dom1");
+    const p = calls.slice(b0).find(c => c.method === "PATCH");
+    assert(list.map(x => x.id).sort().join() === "g-p-api1,g-p-dom1" && list.some(x => x.name === "Projekt z paska") && ok && p && JSON.parse(p.body).gizmo_id === "g-p-dom1" && p.url.endsWith("/conversation/c2"),
+      "projekty: lista z paska i API, przeniesienie PATCH gizmo_id");
+    a.remove();
+  }
+
+  // 1.3.0: udostępnione linki — lista
+  {
+    const list = await w.CK.shares.list();
+    assert(list.length === 2 && list[0].url === "https://chatgpt.com/share/sh1" && list[1].title === "Udostępniony B", "udostępnione linki: lista z /shared_conversations");
+    const b0 = calls.length, ok = await w.CK.shares.remove("sh1");
+    const d = calls.slice(b0).filter(c => c.method === "DELETE");
+    assert(ok && d.length === 1 && d[0].url.endsWith("/backend-api/share/sh1"), "udostępnione linki: usuwanie DELETE /share/{id}");
+    const all = await w.CK.shares.all();
+    const b1 = calls.length, ok2 = await w.CK.shares.remove("t_doc1", "doc");
+    const d2 = calls.slice(b1).filter(c => c.method === "DELETE");
+    assert(all.length === 3 && all[0].kind === "doc" && all[0].id === "t_doc1" && ok2 && d2[0].url.endsWith("/backend-api/share/post/t_doc1"), "udostępnione linki: wpisy z Canvas (lista + DELETE /share/post/{id})");
+  }
+
+  // 1.3.0: pakiet startowy promptów we wszystkich 14 językach
+  {
+    const langs = Object.keys(w.CK.I18N), P = w.CK.prompts;
+    const bad = langs.filter(l => { const s = P.starter(l); return s.length !== 10 || s.some(p => !p.title || !p.text || !P.vars(p.text).length); });
+    const notEn = langs.filter(l => l !== "en" && P.starter(l)[0].title === P.starter("en")[0].title);
+    assert(langs.length === 14 && !bad.length && !notEn.length, "prompty: pakiet startowy w 14 językach (bez angielskiego zastępstwa)");
+    // niezmienione prompty startowe idą za językiem, zmienione zostają
+    const before = w.CK.store.data.prompts;
+    const pl = P.starter("pl").map(({ starter, sidx, ...x }) => x); // jak z 1.2.0 (bez znacznika)
+    pl[1].text += " (moja zmiana)"; pl[2].uses = 7; pl[2].fav = true;
+    w.CK.store.data.prompts = pl;
+    const n = await P.retranslate("it");
+    const it = P.starter("it");
+    assert(n === 9 && pl[0].title === it[0].title && pl[1].title === "Popraw tekst" && pl[1].text.endsWith("(moja zmiana)") && pl[2].title === it[2].title && pl[2].uses === 7 && pl[2].fav, "prompty: zmiana języka tłumaczy niezmienione prompty startowe, zmienione zostają");
+    w.CK.store.data.prompts = before;
+  }
 
   // niezalogowany: czytelny komunikat zamiast błędu
   const realFetch = w.fetch;

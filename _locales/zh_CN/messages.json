@@ -1,0 +1,17 @@
+{
+  "appName": {
+    "message": "ChatKit Pro by JustPLGuy"
+  },
+  "appShortName": {
+    "message": "ChatKit Pro"
+  },
+  "appDesc": {
+    "message": "批量删除和归档 ChatGPT 对话，清理资料库，文件夹、导出、提示词、迷你地图和搜索。免费。"
+  },
+  "actionOn": {
+    "message": "已开启（点击关闭）"
+  },
+  "actionOff": {
+    "message": "已关闭（点击开启）"
+  }
+}

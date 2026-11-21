@@ -1,5 +1,77 @@
 # Changelog
 
+## Firefox v1.3.1 — 2026-11-20
+### English
+- 🐞 **Full-text search index with many chats** — building the index no longer gets stuck in a loop on ChatGPT's request limit (“too many requests” every minute). After the first limit it slows down so ChatGPT itself keeps working, the pauses grow longer instead of always lasting 1 minute, and chats refused by the limit are retried instead of skipped. Progress is saved after every chat, so you can stop and continue later.
+### Polski
+- 🐞 **Indeks „Szukaj w treści” przy wielu czatach** — budowa indeksu nie wpada już w pętlę na limicie zapytań ChatGPT („za dużo zapytań” co minutę). Po pierwszym limicie zwalnia, żeby samo ChatGPT dalej działało, przerwy rosną zamiast zawsze trwać minutę, a czaty odrzucone przez limit są ponawiane zamiast pomijane. Postęp zapisuje się po każdym czacie — możesz przerwać i dokończyć później.
+
+## Firefox v1.3.0 — 2026-11-19
+### English
+- 📂 **Move chats to a ChatGPT project in bulk** — select chats, click 📂 Project and pick the project
+- 🔗 **Shared links manager** (Cleanup tab) — see every public link to your chats and Canvas docs, copy or open it, and delete the ones you no longer want public (the chats stay)
+- ⌕ **Quick jump** — press `Alt+Shift+J` (or ⌕ in the panel), type a few letters and jump to any chat, folder, tag or prompt. Works without Polish/French accents (“zolw” finds “Żółw”); `#tag` filters
+- 🏷 **Tags on chats** — give a chat several tags (#work, #code…), filter by tag in the panel, type `#tag` in the search box, drag chats onto a tag; rename or delete tags in one place
+- 🔢 **Counter above the message box** — characters, words and ~tokens of what you're typing (turn off in ⚙ Settings)
+- 📝 **Export for Obsidian / Notion** — Markdown with a YAML header (title, dates, link, folder, tags, star); one file or a ZIP with a file per chat
+- ✂️ **Export only the messages you pick** — choose questions and answers from one chat (e.g. only your own prompts)
+- ⚡ **Archive and delete without F5** — archived and deleted chats disappear from the ChatGPT sidebar right away
+- 🔄 Export always uses the latest version of a chat (no 2-minute cache)
+- 🎨 **6 panel themes** in ⚙ Settings — dark (default), black (AMOLED), light, black & red, navy, purple
+- 🆕 **“What's new” after an update** — after updating to a new version, the “What's new” page opens once in your language (can be turned off in ⚙ Settings)
+- ⚡ **Lighter in very long chats** — timestamps used to slow the page down in chats with hundreds of messages (measured: with 1,000 messages from ~120–140 ms of work per second down to ~3 ms); the result is identical
+- 🌍 **10 new languages** — Spanish, Portuguese (Brazil), Italian, Dutch, Czech, Ukrainian, Turkish, Japanese, Chinese (Simplified) and Korean — 14 in total. The language follows ChatGPT automatically (or pick it in ⚙ Settings); dates and numbers use the local format
+- 🏷 The extension's name and description in the store are translated into all 14 languages
+- 🐞 Fixed: in longer languages (e.g. French, German) the last panel tab dropped to a second row — tabs now always fit in one row
+### Polski
+- 📂 **Masowe przenoszenie czatów do projektu ChatGPT** — zaznacz czaty, kliknij 📂 Projekt i wybierz projekt
+- 🔗 **Menedżer udostępnionych linków** (zakładka Sprzątanie) — wszystkie publiczne linki do Twoich czatów i wpisów z Canvas w jednym miejscu: kopiowanie, otwieranie i usuwanie tych, które nie powinny być publiczne (same czaty zostają)
+- ⌕ **Szybki skok** — `Alt+Shift+J` (albo ⌕ w panelu), wpisz kilka liter i przejdź do dowolnego czatu, folderu, tagu albo promptu. Działa bez polskich znaków („zolw” znajdzie „Żółw”); `#tag` filtruje
+- 🏷 **Tagi na czatach** — czat może mieć kilka tagów (#praca, #kod…), filtr po tagu w panelu, `#tag` w wyszukiwarce, przeciąganie czatów na tag; zmiana nazwy i usuwanie tagów w jednym miejscu
+- 🔢 **Licznik nad polem wiadomości** — znaki, słowa i ~tokeny tego, co piszesz (wyłączysz w ⚙ Ustawieniach)
+- 📝 **Eksport do Obsidiana / Notion** — Markdown z nagłówkiem YAML (tytuł, daty, link, folder, tagi, gwiazdka); jeden plik albo ZIP z plikiem na czat
+- ✂️ **Eksport tylko wybranych wiadomości** — wybierasz pytania i odpowiedzi z jednego czatu (np. tylko swoje prompty)
+- ⚡ **Archiwizacja i usuwanie bez F5** — zarchiwizowane i usunięte czaty od razu znikają z paska bocznego ChatGPT
+- 🔄 Eksport zawsze bierze najnowszą wersję czatu (bez 2-minutowej pamięci podręcznej)
+- 🎨 **6 motywów panelu** w ⚙ Ustawieniach — ciemny (domyślny), czarny (AMOLED), jasny, czarno-czerwony, granatowy, fioletowy
+- 🆕 **„Co nowego” po aktualizacji** — po aktualizacji do nowej wersji raz otwiera się strona „Co nowego” w Twoim języku (można wyłączyć w ⚙ Ustawieniach)
+- ⚡ **Lżej w bardzo długich czatach** — znaczniki czasu spowalniały stronę w czatach z setkami wiadomości (pomiar: przy 1000 wiadomości z ok. 120–140 ms pracy na sekundę do ok. 3 ms); wynik bez zmian
+- 🌍 **10 nowych języków** — hiszpański, portugalski (Brazylia), włoski, niderlandzki, czeski, ukraiński, turecki, japoński, chiński (uproszczony) i koreański — razem 14. Język dopasowuje się sam do ChatGPT (albo wybierz go w ⚙ Ustawieniach); daty i liczby w lokalnym formacie
+- 🏷 Nazwa i opis wtyczki w sklepie przetłumaczone na wszystkie 14 języków
+- 🐞 Naprawione: w dłuższych językach (np. francuski, niemiecki) ostatnia zakładka panelu spadała do drugiego wiersza — teraz zakładki zawsze mieszczą się w jednym
+
+## Firefox v1.2.0 — 2026-11-18
+### English
+- 🔴 **On/off switch** — the CK icon in the toolbar now turns ChatKit Pro on and off: red = on, grey = off (everything disappears from ChatGPT; click again and it comes back on the same page, no reload). The panel opens with the 🧰 button or Alt+Shift+K
+- 🐞 Fixed: after reloading ChatGPT the extension sometimes vanished from the page — it now restores itself automatically
+- 📦 **Export to ZIP** — one file per chat (Markdown, HTML or JSON) in a single ZIP; folder export uses the format you pick
+- ↔️ **Chat width and font size** — two sliders in Settings, applied live (great on wide monitors)
+- 💾 **Code blocks** — a “Save” button on every code block saves it as a file with the right extension (.py, .js, .json…); the minimap can download all code from a chat at once
+- 🔢 **Chat stats** in the minimap — messages, words, characters and estimated tokens
+- ✏️ **Bulk rename** — select chats and add a prefix/suffix (e.g. “[Work]”), remove a piece of text or replace it, with a live preview
+- 📚 **Prompts 2.0** — ⭐ favorites always on top, #tags with a filter bar, drag-and-drop ordering (⋮⋮), sorting by my order / most used / A–Z / newest
+- 💾 **Backup reminder** — once a week (or every 2 weeks / month / never) the panel reminds you to save a copy of your folders, stars, prompts and notes; one click downloads it
+- 🕒 **Clearer timestamps** — each one says whose message it is (👤 You in blue on the right, 🤖 ChatGPT in green on the left) and reads naturally: “Today, 01:30”, “Yesterday, 23:10”, weekday and short date for older messages
+- 🐞 Fixed: settings sliders and checkboxes sometimes ignored a second change until the panel was reopened
+- ⚡ **Far fewer requests to ChatGPT** — fixes “Too many requests” / “Unable to load conversation” (HTTP 429) that heavy users could hit. Timestamps no longer re-download an open chat every few seconds (one request per chat, and only after you stop on it); chats you just viewed are reused; background tabs make no requests; bulk actions run at a calmer pace
+- 🛑 **Respects ChatGPT's limits** — if ChatGPT answers “too many requests”, ChatKit Pro pauses all its requests in every tab (at least 60 s, as long as ChatGPT asks) instead of retrying; bulk actions resume by themselves after the pause and the panel shows a countdown
+- 🚫 Installing the extension no longer opens a ChatGPT tab
+### Polski
+- 🔴 **Włącznik** — ikona CK na pasku przeglądarki włącza i wyłącza ChatKit Pro: czerwona = włączona, szara = wyłączona (wszystko znika z ChatGPT; kliknij ponownie, a wróci na tej samej stronie, bez przeładowania). Panel otwierasz przyciskiem 🧰 albo Alt+Shift+K
+- 🐞 Naprawione: po odświeżeniu ChatGPT wtyczka czasem znikała ze strony — teraz sama się przywraca
+- 📦 **Eksport do ZIP** — osobny plik dla każdego czatu (Markdown, HTML albo JSON) w jednym ZIP-ie; eksport folderu używa wybranego formatu
+- ↔️ **Szerokość czatu i rozmiar czcionki** — dwa suwaki w ustawieniach, zmiany widać od razu (świetne na szerokich monitorach)
+- 💾 **Bloki kodu** — przycisk „Zapisz” przy każdym bloku zapisuje go do pliku z dobrym rozszerzeniem (.py, .js, .json…); w minimapie pobierzesz cały kod z czatu naraz
+- 🔢 **Liczniki czatu** w minimapie — wiadomości, słowa, znaki i przybliżona liczba tokenów
+- ✏️ **Masowa zmiana nazw** — zaznacz czaty i dodaj prefiks/sufiks (np. „[Praca]”), usuń fragment albo zamień go na inny, z podglądem na żywo
+- 📚 **Prompty 2.0** — ⭐ ulubione zawsze na górze, #tagi z paskiem filtrów, kolejność ustawiana przeciąganiem (⋮⋮), sortowanie: moja kolejność / najczęściej używane / A–Z / najnowsze
+- 💾 **Przypomnienie o kopii zapasowej** — co tydzień (albo co 2 tygodnie / co miesiąc / nigdy) panel przypomina o zapisaniu kopii folderów, gwiazdek, promptów i notatek; jeden klik i gotowe
+- 🕒 **Czytelniejsze znaczniki czasu** — każdy mówi, czyja to wiadomość (👤 Ty na niebiesko po prawej, 🤖 ChatGPT na zielono po lewej) i jest zrozumiały od razu: „Dziś, 01:30”, „Wczoraj, 23:10”, dzień tygodnia i krótka data przy starszych wiadomościach
+- 🐞 Naprawione: suwaki i przełączniki w ustawieniach czasem ignorowały kolejną zmianę do ponownego otwarcia panelu
+- ⚡ **Dużo mniej zapytań do ChatGPT** — naprawia „Too many requests” / „Nie można wczytać konwersacji” (HTTP 429), które mogły się pojawiać przy intensywnym używaniu. Znaczniki czasu nie pobierają już otwartego czatu co kilka sekund (jedno zapytanie na czat i dopiero, gdy się na nim zatrzymasz); przed chwilą oglądane czaty nie są pobierane ponownie; karty w tle nic nie wysyłają; operacje hurtowe idą spokojniejszym tempem
+- 🛑 **Szanuje limity ChatGPT** — gdy ChatGPT odpowie „za dużo zapytań”, ChatKit Pro wstrzymuje wszystkie swoje zapytania we wszystkich kartach (min. 60 s, tyle ile prosi ChatGPT) zamiast ponawiać; operacje hurtowe same ruszają po przerwie, a panel pokazuje odliczanie
+- 🚫 Instalacja wtyczki nie otwiera już karty z ChatGPT
+
 ## Firefox v1.1.0 — 2026-11-17
 ### English
 - First Firefox version — the same features as Chrome v1.1.0

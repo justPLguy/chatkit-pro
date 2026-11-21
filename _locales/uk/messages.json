@@ -1,0 +1,17 @@
+{
+  "appName": {
+    "message": "ChatKit Pro by JustPLGuy"
+  },
+  "appShortName": {
+    "message": "ChatKit Pro"
+  },
+  "appDesc": {
+    "message": "Масове видалення й архівування чатів ChatGPT, очищення Бібліотеки, папки, експорт, промпти, мінімапа й пошук. Безкоштовно."
+  },
+  "actionOn": {
+    "message": "УВІМКНЕНО (клацніть, щоб вимкнути)"
+  },
+  "actionOff": {
+    "message": "ВИМКНЕНО (клацніть, щоб увімкнути)"
+  }
+}

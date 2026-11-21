@@ -16,8 +16,8 @@
     return {
       items: [], offset: 0, done: false, total: null,
       reset() { this.items = []; this.offset = 0; this.done = false; this.total = null; },
-      async fetchPage(offset) {
-        const r = await CK.withRetry(() => CK.api(`/conversations?offset=${offset}&limit=100&order=updated${archived ? "&is_archived=true" : ""}`));
+      async fetchPage(offset, bg = false) {
+        const r = await CK.withRetry(() => CK.api(`/conversations?offset=${offset}&limit=100&order=updated${archived ? "&is_archived=true" : ""}`, { bg }), { bg });
         if (!r.ok) throw new Error(t("err.chatList", { s: r.status }));
         const j = await r.json();
         const list = (j.items || []).map(c => ({ key: c.id, title: c.title || t("untitled"), date: c.update_time, created: c.create_time }));
@@ -32,8 +32,8 @@
         if (!list.length || (this.total !== null && this.offset >= this.total)) this.done = true;
         return list.length;
       },
-      async refreshTop() {
-        const { list, total } = await this.fetchPage(0);
+      async refreshTop(bg = false) {
+        const { list, total } = await this.fetchPage(0, bg);
         const byKey = new Map(this.items.map(i => [i.key, i]));
         let added = 0;
         for (const c of list) { const old = byKey.get(c.key); if (old) Object.assign(old, c); else { this.items.push(c); added++; } }
@@ -42,7 +42,7 @@
         return added;
       },
       async loadEverything(onProgress) {
-        while (!this.done) { const n = await this.loadPage(); onProgress && onProgress(this.items.length); if (!n) break; await sleep(200); }
+        while (!this.done) { const n = await this.loadPage(); onProgress && onProgress(this.items.length); if (!n) break; await sleep(500); }
       }
     };
   }
@@ -94,7 +94,7 @@
         return list.length;
       },
       async loadEverything(onProgress) {
-        while (!this.done) { const n = await this.loadPage(); onProgress && onProgress(this.items.length); if (!n && !this.done) break; await sleep(200); }
+        while (!this.done) { const n = await this.loadPage(); onProgress && onProgress(this.items.length); if (!n && !this.done) break; await sleep(500); }
       },
       async remove(keys, onProgress) {
         const byKey = new Map(this.items.map(i => [i.key, i]));
@@ -121,7 +121,7 @@
   const sel = Object.fromEntries(LIST_TABS.map(k => [k, new Set(ls.get("sel." + k, []))]));
   const saveSel = k => ls.set("sel." + k, [...sel[k]]);
   const filters = {
-    chats: { q: "", sort: "new", star: false, folder: "all", older: "" },
+    chats: { q: "", sort: "new", star: false, folder: "all", tag: "", older: "" },
     archive: { q: "", sort: "new", star: false, older: "" },
     lib: { q: "", sort: "new", type: "all", proj: "all", older: "" }
   };
@@ -134,7 +134,7 @@
   // =====================================================================
   const host = document.createElement("div");
   host.id = "chatkit-pro-host";
-  document.documentElement.appendChild(host);
+  CK.keepAttached(host);
   const root = host.attachShadow({ mode: "open" });
 
   root.innerHTML = `
@@ -142,110 +142,144 @@
     :host { all: initial; }
     * { box-sizing: border-box; font-family: system-ui, -apple-system, Segoe UI, sans-serif; }
     #fab { position: fixed; right: 18px; bottom: 90px; z-index: 2147483646; width: 48px; height: 48px; border-radius: 50%;
-      border: none; background: #ef4444; color: #fff; font-size: 20px; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.35); }
-    #fab:hover { background: #dc2626; }
+      border: none; background: var(--ck-acc, #ef4444); color: #fff; font-size: 20px; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.35); }
+    #fab:hover { background: var(--ck-acc2, #dc2626); }
     #panel { position: fixed; right: 18px; bottom: 150px; z-index: 2147483647; width: 660px; max-width: calc(100vw - 36px);
-      height: 80vh; display: none; flex-direction: column; background: #1f1f1f; color: #eee; border: 1px solid #3a3a3a;
+      height: 80vh; display: none; flex-direction: column; background: var(--ck-bg, #1f1f1f); color: var(--ck-tx, #eee); border: 1px solid var(--ck-bg5, #3a3a3a);
       border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,.5); font-size: 13px; overflow: hidden; }
     #panel.open { display: flex; }
     #panel.big { width: min(1400px, 94vw); height: 88vh; right: 3vw; bottom: 6vh; }
     header { padding: 6px 10px 0; display: flex; align-items: center; gap: 4px; }
-    header b { font-size: 13px; margin-right: 6px; color: #f87171; }
-    header b small { font-weight: 400; font-size: 11px; color: #888; margin-left: 2px; }
-    #tabs { display: flex; flex-wrap: wrap; gap: 0 2px; padding: 0 8px; border-bottom: 1px solid #333; }
-    .tab { background: none !important; border: none !important; border-bottom: 2px solid transparent !important; border-radius: 0 !important; padding: 6px 7px !important; font-size: 12.5px !important; color: #bbb !important; }
-    .tab.active { border-bottom-color: #ef4444 !important; font-weight: 600; color: #fff !important; }
+    header b { font-size: 13px; margin-right: 6px; color: var(--ck-acctx, #f87171); }
+    header b small { font-weight: 400; font-size: 11px; color: var(--ck-mut2, #888); margin-left: 2px; }
+    #tabs { display: flex; flex-wrap: wrap; gap: 0 2px; padding: 0 8px; border-bottom: 1px solid var(--ck-line, #333); }
+    #tabs.fit1 .tab { padding: 6px 5px !important; font-size: 12px !important; }
+    #tabs.fit2 .tab { padding: 6px 3px !important; font-size: 11.5px !important; letter-spacing: -.01em; }
+    .tab { background: none !important; border: none !important; border-bottom: 2px solid transparent !important; border-radius: 0 !important; padding: 6px 7px !important; font-size: 12.5px !important; color: var(--ck-mut, #bbb) !important; }
+    .tab.active { border-bottom-color: var(--ck-acc, #ef4444) !important; font-weight: 600; color: var(--ck-strong, #fff) !important; }
     .sp { flex: 1; }
     #upd { margin: 6px 10px 0; padding: 7px 10px; border-radius: 8px; background: rgba(34,197,94,.12); border: 1px solid rgba(34,197,94,.45); color: #bbf7d0; display: flex; align-items: center; gap: 8px; font-size: 12.5px; }
     #upd a { background: #16a34a; color: #fff; border-radius: 6px; padding: 4px 10px; text-decoration: none; font-weight: 600; font-size: 12px; }
     #upd a:hover { background: #15803d; }
-    #viewctl { display: none; align-items: center; gap: 6px; color: #aaa; font-size: 12px; }
+    .rnprev { margin-top: 8px; border-top: 1px solid var(--ck-line, #333); padding-top: 6px; max-height: 200px; overflow-y: auto; }
+    .rnrow { font-size: 12px; padding: 3px 0; color: var(--ck-tx2, #ddd); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .rnrow s { color: var(--ck-mut2, #888); } .rnrow b { color: #86efac; font-weight: 600; } .rnrow.same b { color: var(--ck-mut2, #999); font-weight: 400; }
+    #bak { margin: 6px 10px 0; padding: 7px 10px; border-radius: 8px; background: rgba(245,158,11,.10); border: 1px solid rgba(245,158,11,.45); color: #fde68a; display: flex; align-items: center; gap: 8px; font-size: 12.5px; flex-wrap: wrap; }
+    #bak button.go { background: #d97706; color: #fff; border-color: #d97706; font-weight: 600; }
+    #bak button.go:hover { background: #b45309; }
+    #viewctl { display: none; align-items: center; gap: 6px; color: var(--ck-mut, #aaa); font-size: 12px; }
     #panel.big.lib #viewctl { display: flex; }
     #viewctl input { width: 110px; }
-    .filters { padding: 6px 10px; display: flex; gap: 6px; align-items: center; border-bottom: 1px solid #333; flex-wrap: wrap; }
-    input[type=text], input[type=number], input[type=search], select, textarea { background: #2a2a2a; border: 1px solid #444; color: #eee; border-radius: 6px; padding: 5px 7px; font-size: 12px; }
+    .filters { padding: 6px 10px; display: flex; gap: 6px; align-items: center; border-bottom: 1px solid var(--ck-line, #333); flex-wrap: wrap; }
+    input[type=text], input[type=number], input[type=search], select, textarea { background: var(--ck-bg3, #2a2a2a); border: 1px solid var(--ck-line2, #444); color: var(--ck-tx, #eee); border-radius: 6px; padding: 5px 7px; font-size: 12px; }
     textarea { width: 100%; resize: vertical; font-family: inherit; line-height: 1.45; }
     input[type=text], input[type=search] { flex: 1; min-width: 140px; }
     input[type=number] { width: 64px; }
-    label.chk { display: flex; align-items: center; gap: 4px; color: #ccc; font-size: 12px; cursor: pointer; }
-    button { background: #2f2f2f; color: #eee; border: 1px solid #444; border-radius: 6px; padding: 5px 9px; cursor: pointer; font-size: 12px; white-space: nowrap; }
-    button:hover:not(:disabled) { background: #3a3a3a; }
+    label.chk { display: flex; align-items: center; gap: 4px; color: var(--ck-tx2, #ccc); font-size: 12px; cursor: pointer; }
+    button { background: var(--ck-bg4, #2f2f2f); color: var(--ck-tx, #eee); border: 1px solid var(--ck-line2, #444); border-radius: 6px; padding: 5px 9px; cursor: pointer; font-size: 12px; white-space: nowrap; }
+    button:hover:not(:disabled) { background: var(--ck-bg5, #3a3a3a); }
     button:disabled { opacity: .4; cursor: default; }
     button.danger { background: #b91c1c; border-color: #b91c1c; }
     button.danger:hover:not(:disabled) { background: #dc2626; }
     button.primary { background: #2563eb; border-color: #2563eb; }
     button.x { background: none; border: none; font-size: 18px; padding: 0 4px; }
     #body { flex: 1; display: flex; min-height: 0; }
-    #folders { width: 170px; flex-shrink: 0; border-right: 1px solid #333; overflow-y: auto; padding: 6px 0; font-size: 12px; }
+    #folders { width: 170px; flex-shrink: 0; border-right: 1px solid var(--ck-line, #333); overflow-y: auto; padding: 6px 0; font-size: 12px; }
     #panel.big #folders { width: 230px; }
-    .fhead { display: flex; align-items: center; padding: 2px 8px 6px; color: #999; text-transform: uppercase; font-size: 10px; letter-spacing: .05em; }
+    .fhead { display: flex; align-items: center; padding: 2px 8px 6px; color: var(--ck-mut2, #999); text-transform: uppercase; font-size: 10px; letter-spacing: .05em; }
     .fhead button { padding: 1px 7px; font-size: 13px; }
     .frow { display: flex; align-items: center; gap: 6px; padding: 5px 8px; cursor: pointer; border-left: 3px solid transparent; }
-    .frow:hover { background: #2a2a2a; }
-    .frow.active { background: #2f2626; border-left-color: #ef4444; }
-    .frow.drop { background: #3b1d1d; outline: 1px dashed #ef4444; }
+    .frow:hover { background: var(--ck-bg3, #2a2a2a); }
+    .frow.active { background: var(--ck-actv, #2f2626); border-left-color: var(--ck-acc, #ef4444); }
+    .frow.drop { background: var(--ck-sel, #3b1d1d); outline: 1px dashed var(--ck-acc, #ef4444); }
     .frow .n { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .frow .c { color: #777; font-size: 11px; }
+    .frow .c { color: var(--ck-mut3, #777); font-size: 11px; }
     .frow .a { display: none; gap: 2px; }
     .frow:hover .a { display: flex; }
     .frow .a span { padding: 0 2px; opacity: .7; }
     .frow .a span:hover { opacity: 1; }
-    .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; background: var(--c, #666); }
+    .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; background: var(--c, var(--ck-mut3, #666)); }
     #list { flex: 1; overflow-y: auto; min-width: 0; }
-    .item { display: flex; gap: 8px; padding: 6px 10px; align-items: center; cursor: pointer; border-bottom: 1px solid #2a2a2a; user-select: none; }
-    .item:hover { background: #2a2a2a; }
-    .item.sel { background: #3b1d1d; }
+    .item { display: flex; gap: 8px; padding: 6px 10px; align-items: center; cursor: pointer; border-bottom: 1px solid var(--ck-bg3, #2a2a2a); user-select: none; }
+    .item:hover { background: var(--ck-bg3, #2a2a2a); }
+    .item.sel { background: var(--ck-sel, #3b1d1d); }
     .item input { pointer-events: none; margin: 0; }
     .item .t { flex: 1; word-break: break-word; min-width: 0; }
-    .item .d { color: #888; font-size: 11px; white-space: nowrap; }
-    .item .sz { color: #aaa; font-size: 11px; white-space: nowrap; min-width: 56px; text-align: right; }
+    .item .d { color: var(--ck-mut2, #888); font-size: 11px; white-space: nowrap; }
+    .item .sz { color: var(--ck-mut, #aaa); font-size: 11px; white-space: nowrap; min-width: 56px; text-align: right; }
     .ic { opacity: .5; font-size: 12px; padding: 0 2px; cursor: pointer; }
     .ic:hover { opacity: 1; }
-    .star { color: #777; font-size: 15px; line-height: 1; }
+    .star { color: var(--ck-mut3, #777); font-size: 15px; line-height: 1; }
     .star.on { color: #fbbf24; }
-    .tag { display: inline-block; margin-left: 6px; font-size: 10px; padding: 1px 6px; border-radius: 8px; background: color-mix(in srgb, var(--c) 30%, transparent); color: #eee; border: 1px solid var(--c); vertical-align: middle; }
-    .badge { font-size: 10px; padding: 1px 5px; border-radius: 6px; background: #333; color: #bbb; margin-left: 4px; }
-    img.th { width: 44px; height: 44px; object-fit: cover; border-radius: 4px; flex-shrink: 0; background: #333; }
-    .ph { width: 44px; height: 44px; border-radius: 4px; flex-shrink: 0; background: #2a2a2a; color: #666; font-size: 10px; display: flex; align-items: center; justify-content: center; }
+    .tag { display: inline-block; margin-left: 6px; font-size: 10px; padding: 1px 6px; border-radius: 8px; background: color-mix(in srgb, var(--c) 30%, transparent); color: var(--ck-tx, #eee); border: 1px solid var(--c); vertical-align: middle; }
+    .badge { font-size: 10px; padding: 1px 5px; border-radius: 6px; background: var(--ck-line, #333); color: var(--ck-mut, #bbb); margin-left: 4px; }
+    img.th { width: 44px; height: 44px; object-fit: cover; border-radius: 4px; flex-shrink: 0; background: var(--ck-line, #333); }
+    .ph { width: 44px; height: 44px; border-radius: 4px; flex-shrink: 0; background: var(--ck-bg3, #2a2a2a); color: var(--ck-mut3, #666); font-size: 10px; display: flex; align-items: center; justify-content: center; }
     #list.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--sz, 180px), 1fr)); gap: 10px; padding: 10px; align-content: start; }
-    #list.grid .item { flex-direction: column; align-items: stretch; gap: 4px; padding: 6px; border: 2px solid #2a2a2a; border-radius: 8px; position: relative; }
-    #list.grid .item.sel { border-color: #ef4444; }
+    #list.grid .item { flex-direction: column; align-items: stretch; gap: 4px; padding: 6px; border: 2px solid var(--ck-bg3, #2a2a2a); border-radius: 8px; position: relative; }
+    #list.grid .item.sel { border-color: var(--ck-acc, #ef4444); }
     #list.grid .item input { position: absolute; top: 10px; left: 10px; width: 18px; height: 18px; z-index: 1; }
-    #list.grid img.th, #list.grid .ph { width: 100%; height: var(--sz, 180px); object-fit: contain; background: #111; border-radius: 6px; }
+    #list.grid img.th, #list.grid .ph { width: 100%; height: var(--sz, 180px); object-fit: contain; background: var(--ck-bg0, #111); border-radius: 6px; }
     #list.grid .t { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     #list.grid .meta { display: flex; justify-content: space-between; gap: 8px; white-space: nowrap; }
     #list.grid .bdg { position: absolute; top: 10px; right: 10px; display: flex; gap: 3px; }
-    #list.grid .bdg .badge { background: rgba(0,0,0,.65); color: #eee; margin: 0; }
-    .empty { padding: 30px; text-align: center; color: #777; line-height: 1.6; }
-    footer { padding: 6px 10px 8px; border-top: 1px solid #333; }
+    #list.grid .bdg .badge { background: rgba(0,0,0,.65); color: var(--ck-tx, #eee); margin: 0; }
+    .empty { padding: 30px; text-align: center; color: var(--ck-mut3, #777); line-height: 1.6; }
+    footer { padding: 6px 10px 8px; border-top: 1px solid var(--ck-line, #333); }
     #actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    #actions select { max-width: 170px; text-overflow: ellipsis; }
     progress { width: 100%; height: 6px; display: none; margin-top: 6px; }
-    #status { color: #aaa; font-size: 12px; margin-top: 6px; }
+    #status { color: var(--ck-mut, #aaa); font-size: 12px; margin-top: 6px; }
     #msg { color: #fbbf24; font-size: 12px; margin-top: 2px; }
     #zoom { position: fixed; inset: 0; z-index: 2147483647; background: rgba(0,0,0,.85); display: none; align-items: center; justify-content: center; cursor: zoom-out; }
     #zoom img { max-width: 92vw; max-height: 92vh; border-radius: 8px; }
     .pane { padding: 14px 16px; line-height: 1.55; }
-    .pane h3 { font-size: 13px; margin: 18px 0 6px; color: #f87171; }
+    .pane h3 { font-size: 13px; margin: 18px 0 6px; color: var(--ck-acctx, #f87171); }
     .pane h3:first-child { margin-top: 0; }
-    .pane p, .muted { color: #999; margin: 4px 0; font-size: 12px; }
+    .pane p, .muted { color: var(--ck-mut2, #999); margin: 4px 0; font-size: 12px; }
     .rowb { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; align-items: center; }
-    .card { border: 1px solid #333; border-radius: 8px; padding: 9px 11px; margin: 0 0 8px; background: #242424; }
-    .card:hover { border-color: #444; }
+    .pal { max-height: 55vh; overflow: auto; margin-top: 8px; }
+    .palrow { display: flex; gap: 9px; align-items: center; padding: 7px 9px; border-radius: 7px; cursor: pointer; }
+    .palrow.on { background: var(--ck-bg4, #2f2f2f); }
+    .palrow .pi { width: 18px; text-align: center; color: #9db4ff; flex-shrink: 0; }
+    .palrow .pl { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .palrow .ps { color: var(--ck-mut2, #888); font-size: 11px; flex-shrink: 0; max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    a.ic { color: inherit; text-decoration: none; }
+    .htag { display: inline-block; margin-left: 5px; font-size: 10.5px; padding: 0 6px; border-radius: 8px; background: #2b3245; color: #9db4ff; border: 1px solid #3b4a72; vertical-align: middle; cursor: pointer; }
+    .htag:hover { border-color: #7f9cff; }
+    .htag.big { font-size: 12px; padding: 2px 8px; margin: 3px 4px 3px 0; }
+    .htag.part { opacity: .65; border-style: dashed; }
+    .htag b { cursor: pointer; color: var(--ck-acctx, #f87171); }
+    .tgbox { margin: 6px 0; line-height: 1.9; }
+    .card { border: 1px solid var(--ck-line, #333); border-radius: 8px; padding: 9px 11px; margin: 0 0 8px; background: var(--ck-bg2, #242424); }
+    .card:hover { border-color: var(--ck-line2, #444); }
     .card .h { display: flex; gap: 8px; align-items: center; }
     .card .h b { flex: 1; font-size: 13px; }
-    .card .body { color: #bbb; font-size: 12px; white-space: pre-wrap; margin-top: 4px; max-height: 6.5em; overflow: hidden; }
-    .quote { border-left: 3px solid #ef4444; padding-left: 8px; color: #ccc; font-style: italic; margin: 4px 0; white-space: pre-wrap; }
+    .card.pr .h b { cursor: default; }
+    .card.pr .drag { cursor: grab; color: var(--ck-mut3, #666); padding: 0 2px; user-select: none; font-size: 14px; }
+    .card.pr .drag:hover { color: var(--ck-tx2, #ccc); }
+    .card.pr .fav { cursor: pointer; font-size: 15px; color: var(--ck-mut3, #666); }
+    .card.pr .fav.on { color: #fbbf24; }
+    .card.pr.dragging { opacity: .45; }
+    .card.pr.over { border-color: var(--ck-acc, #ef4444); box-shadow: 0 -2px 0 var(--ck-acc, #ef4444); }
+    .card.pr.favd { border-color: rgba(251,191,36,.35); }
+    .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+    .tag { font-size: 11px; padding: 1px 7px; border-radius: 999px; background: #1e3a5f; color: #bfdbfe; cursor: pointer; border: 1px solid transparent; }
+    .tag:hover, .tag.on { border-color: #60a5fa; }
+    .tagbar { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; margin: 0 0 10px; }
+    .card .body { color: var(--ck-mut, #bbb); font-size: 12px; white-space: pre-wrap; margin-top: 4px; max-height: 6.5em; overflow: hidden; }
+    .quote { border-left: 3px solid var(--ck-acc, #ef4444); padding-left: 8px; color: var(--ck-tx2, #ccc); font-style: italic; margin: 4px 0; white-space: pre-wrap; }
     .hl { background: #854d0e; color: #fff; border-radius: 2px; }
-    .bar { height: 8px; background: #ef4444; border-radius: 4px; }
+    .bar { height: 8px; background: var(--ck-acc, #ef4444); border-radius: 4px; }
     .barrow { display: grid; grid-template-columns: 90px 1fr 60px; gap: 8px; align-items: center; font-size: 12px; margin: 3px 0; }
     .kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
-    .kpi { background: #242424; border: 1px solid #333; border-radius: 8px; padding: 10px; }
-    .kpi b { display: block; font-size: 20px; color: #fff; }
-    .kpi span { color: #999; font-size: 11px; }
+    .kpi { background: var(--ck-bg2, #242424); border: 1px solid var(--ck-line, #333); border-radius: 8px; padding: 10px; }
+    .kpi b { display: block; font-size: 20px; color: var(--ck-strong, #fff); }
+    .kpi span { color: var(--ck-mut2, #999); font-size: 11px; }
     .form { display: grid; gap: 8px; }
-    .form label { font-size: 12px; color: #bbb; display: grid; gap: 3px; }
+    .form label { font-size: 12px; color: var(--ck-mut, #bbb); display: grid; gap: 3px; }
     .modal { position: fixed; inset: 0; z-index: 2147483647; background: rgba(0,0,0,.6); display: flex; align-items: center; justify-content: center; }
-    .modal .box { background: #1f1f1f; border: 1px solid #3a3a3a; border-radius: 12px; padding: 16px; width: min(520px, 92vw); max-height: 86vh; overflow: auto; color: #eee; font-size: 13px; }
+    .modal .box { background: var(--ck-bg, #1f1f1f); border: 1px solid var(--ck-bg5, #3a3a3a); border-radius: 12px; padding: 16px; width: min(520px, 92vw); max-height: 86vh; overflow: auto; color: var(--ck-tx, #eee); font-size: 13px; }
     .modal h4 { margin: 0 0 10px; font-size: 14px; }
   </style>
   <button id="fab">🧰</button>
@@ -255,10 +289,12 @@
       <span class="sp"></span>
       <span id="viewctl"><span id="sizelbl"></span> <input type="range" id="size" min="100" max="420" step="20"></span>
       <button id="bigbtn"></button>
+      <button id="jumpbtn" class="x" style="font-size:15px">⌕</button>
       <button id="setbtn" class="x" style="font-size:16px">⚙</button>
       <button class="x" id="close">×</button>
     </header>
     <div id="upd" style="display:none"></div>
+    <div id="bak" style="display:none"></div>
     <div id="tabs"></div>
     <div class="filters" id="filters"></div>
     <div id="body"><div id="folders"></div><div id="list"></div></div>
@@ -336,7 +372,21 @@
   function renderTabs() {
     const box = $("#tabs"); box.replaceChildren();
     for (const x of allTabs()) box.append(button(x.label, () => { if (!busy) switchTab(x.id); }, { class: "tab" + (current === x.id ? " active" : ""), title: x.title || "" }));
+    $("#jumpbtn").title = t("pal.title") + " (Alt+Shift+J)";
     const sb = $("#setbtn"); sb.title = t("tab.settings"); sb.style.color = current === "settings" ? "#f87171" : "";
+    fitTabs();
+  }
+  // Zakładki w jednym wierszu w każdym języku: gdy się zawijają, lekko zmniejsz odstępy i czcionkę (2 stopnie).
+  addEventListener("resize", () => { clearTimeout(fitTabs._t); fitTabs._t = setTimeout(fitTabs, 200); });
+  function fitTabs() {
+    const box = $("#tabs"); if (!box || !box.firstElementChild) return;
+    const wrapped = () => box.lastElementChild.offsetTop > box.firstElementChild.offsetTop + 4;
+    box.classList.remove("fit1", "fit2");
+    requestAnimationFrame(() => {
+      if (!box.isConnected || !box.offsetWidth) return;
+      if (wrapped()) box.classList.add("fit1");
+      if (wrapped()) { box.classList.remove("fit1"); box.classList.add("fit2"); }
+    });
   }
 
   // ---------- filtry ----------
@@ -404,7 +454,7 @@
       const actions = el("span", { class: "a" },
         act("＋", t("fold.sub"), async () => { const n = prompt(t("fold.subPrompt", { name: fo.name })); if (n && n.trim()) await CK.folders.create(n.trim(), fo.id); }),
         act("✎", t("fold.rename"), async () => { const n = prompt(t("fold.renamePrompt"), fo.name); if (n && n.trim()) await CK.folders.update(fo.id, { name: n.trim() }); }),
-        act("⬇", t("fold.export"), () => exportFlow(CK.folders.chatsIn(fo.id), "md", fo.name)),
+        act("⬇", t("fold.export"), () => exportFlow(CK.folders.chatsIn(fo.id), ls.get("expfmt", "md").replace("pick", "obs"), fo.name)),
         act("✕", t("fold.delete"), async () => {
           if (confirm(t("confirm.folderDelete", { name: fo.name }))) {
             if (CK.folders.subtree(fo.id).has(f.folder)) f.folder = "all";
@@ -414,7 +464,28 @@
       );
       a.append(row(fo.id, fo.name, { depth: fo.depth, prefix: [color, dot], count: CK.folders.chatsIn(fo.id).length, actions }));
     }
-    if (!data.folders.length) a.append(el("p", { style: "color:#777;padding:6px 10px;font-size:11px;line-height:1.4" }, t("fold.hint")));
+    if (!data.folders.length) a.append(el("p", { style: "color:var(--ck-mut3, #777);padding:6px 10px;font-size:11px;line-height:1.4" }, t("fold.hint")));
+    // ---------- tagi ----------
+    const all = CK.tags.all();
+    if (f.tag && !all.some(([g]) => g === f.tag)) f.tag = "";
+    a.append(el("div", { class: "fhead", style: "margin-top:10px" }, el("span", { class: "sp" }, t("tg.title"))));
+    for (const [g, n] of all) {
+      const act = (sym, title, fn) => el("span", { title, onclick: e => { e.stopPropagation(); fn(); } }, sym);
+      const r = el("div", { class: "frow" + (f.tag === g ? " active" : "") }, el("span", { class: "n", title: "#" + g }, "#" + g), el("span", { class: "c" }, n),
+        el("span", { class: "a" },
+          act("✎", t("tg.rename"), async () => { const v = prompt(t("tg.renamePrompt"), g); if (v && v.trim()) { await CK.tags.rename(g, v); if (f.tag === g) f.tag = CK.tags.norm(v)[0] || ""; } }),
+          act("✕", t("tg.delete"), async () => { if (confirm(t("tg.confirmDelete", { tag: g, n }))) await CK.tags.remove(Object.keys(data.chatTags), [g]); })));
+      r.addEventListener("click", () => { f.tag = f.tag === g ? "" : g; renderFolders(); renderList(); });
+      r.addEventListener("dragover", e => { e.preventDefault(); r.classList.add("drop"); });
+      r.addEventListener("dragleave", () => r.classList.remove("drop"));
+      r.addEventListener("drop", async e => {
+        e.preventDefault(); r.classList.remove("drop");
+        let keys = []; try { keys = JSON.parse(e.dataTransfer.getData("text/ck-keys") || "[]"); } catch {}
+        if (keys.length) { await CK.tags.add(keys, [g]); setMsg(t("tg.added", { n: keys.length, tag: g })); }
+      });
+      a.append(r);
+    }
+    if (!all.length) a.append(el("p", { style: "color:var(--ck-mut3, #777);padding:6px 10px;font-size:11px;line-height:1.4" }, t("tg.hint")));
   }
 
   // ---------- lista ----------
@@ -423,8 +494,12 @@
   function visibleItems() {
     const src = sources[current], f = filters[current], data = CK.store.data;
     let arr = src.items;
-    const q = f.q.trim().toLowerCase();
+    let q = f.q.trim().toLowerCase();
+    // „#tag” w polu wyszukiwania = filtr po tagu (tylko Czaty)
+    const qTags = current === "chats" ? (q.match(/#[^\s#]+/g) || []).map(x => x.slice(1)) : [];
+    if (qTags.length) { q = q.replace(/#[^\s#]+/g, "").trim(); arr = arr.filter(i => { const g = CK.tags.of(i.key); return qTags.every(x => g.some(y => y.startsWith(x))); }); }
     if (q) arr = arr.filter(i => i.title.toLowerCase().includes(q));
+    if (current === "chats" && f.tag) arr = arr.filter(i => CK.tags.of(i.key).includes(f.tag));
     if (f.older !== "" && +f.older >= 0) {
       const lim = Date.now() - (+f.older) * 864e5;
       arr = arr.filter(i => { const d = CK.toDate(i.date); return d && d.getTime() < lim; });
@@ -456,7 +531,8 @@
     const r = el("div", { class: "item" + (s.has(it.key) ? " sel" : ""), draggable: current === "chats" },
       el("input", { type: "checkbox", checked: s.has(it.key), tabIndex: -1 }),
       el("span", { class: "star" + (star ? " on" : ""), title: t("ui.star"), onclick: e => { e.stopPropagation(); toggleStars([it.key]); } }, star ? "★" : "☆"),
-      el("span", { class: "t" }, it.title, fo ? el("span", { class: "tag", style: `--c:${fo.color}` }, fo.name) : null),
+      el("span", { class: "t" }, it.title, fo ? el("span", { class: "tag", style: `--c:${fo.color}` }, fo.name) : null,
+        ...(current === "chats" ? CK.tags.of(it.key).map(g => el("span", { class: "htag", title: t("tg.filterTip"), onclick: e => { e.stopPropagation(); filters.chats.tag = filters.chats.tag === g ? "" : g; renderFolders(); renderList(); } }, "#" + g)) : [])),
       el("span", { class: "d", title: t("ui.created") + ": " + CK.fmtDate(it.created, true) }, CK.fmtDate(it.date, true)),
       el("span", { class: "ic", title: t("ui.copyLink"), onclick: e => { e.stopPropagation(); copy("https://chatgpt.com/c/" + it.key, t("msg.linkCopied")); } }, "🔗"),
       el("span", { class: "ic", title: t("ui.openTip"), onclick: e => { e.stopPropagation(); CK.openChat(it.key, e); },
@@ -500,7 +576,7 @@
       const tab = extraTabs.find(x => x.id === current);
       const box = el("div");
       if (current === "settings") box.append(renderSettings());
-      else if (tab) { try { tab.render(box, ui); } catch (e) { console.error(e); box.append(el("div", { class: "empty" }, "Error: " + e.message)); } }
+      else if (tab) { try { tab.render(box, ui); } catch (e) { console.error(e); box.append(el("div", { class: "empty" }, t("msg.error", { e: e.message }))); } }
       list.replaceChildren(box);
       updateStatus();
       return;
@@ -511,7 +587,7 @@
     if (!vis.length) {
       const src = sources[current];
       if (notLoggedIn && !src.items.length) frag.append(el("div", { class: "empty" }, "🔒 " + t("ui.loginNeeded"), el("br"), el("br"),
-        el("a", { href: "https://chatgpt.com/auth/login", style: "color:#f87171" }, t("ui.loginBtn"))));
+        el("a", { href: "https://chatgpt.com/auth/login", style: "color:var(--ck-acctx, #f87171)" }, t("ui.loginBtn"))));
       else frag.append(el("div", { class: "empty" }, src.items.length ? t("ui.noResults") : busy ? t("ui.loading") : t("ui.emptyLoad")));
     }
     for (const it of vis) { const r = current === "lib" ? libRow(it) : chatRow(it); rowEls.set(it.key, r); frag.append(r); }
@@ -588,8 +664,11 @@
         });
         a.append(fsel);
       }
-      const efmt = select([["md", "Markdown"], ["html", "HTML"], ["pdf", t("exp.pdf")]], ls.get("expfmt", "md"), v => ls.set("expfmt", v));
+      const efmt = select([["md", "Markdown"], ["obs", t("exp.obs")], ["html", "HTML"], ["pdf", t("exp.pdf")], ["zip-md", t("exp.zip", { f: "Markdown" })], ["zip-html", t("exp.zip", { f: "HTML" })], ["zip-json", t("exp.zip", { f: "JSON" })], ["pick", t("exp.pick")]], ls.get("expfmt", "md"), v => ls.set("expfmt", v));
       a.append(efmt, button("⬇ " + t("ui.export"), () => exportFlow(selectedLoaded(), efmt.value), need));
+      a.append(button("✏ " + t("rn.btn"), () => renameFlow(selectedLoaded()), need));
+      if (current === "chats") a.append(button("# " + t("tg.btn"), () => tagFlow(selectedLoaded()), { ...need, title: t("tg.btnTip") }));
+      if (current === "chats") a.append(button("📂 " + t("pj.btn"), () => projectFlow(selectedLoaded()), { ...need, title: t("pj.btnTip") }));
       if (current === "chats") a.append(button(t("ui.archive"), () => chatBulk("archive"), need));
       else a.append(button("↩ " + t("ui.restore"), () => chatBulk("unarchive"), need));
       a.append(button(t("ui.delete"), () => chatBulk("delete"), { ...need, class: "danger" }));
@@ -639,10 +718,11 @@
     if (!confirm(t("confirm.chat." + mode, { n: keys.length }))) return;
     const body = { delete: { is_visible: false }, archive: { is_archived: true }, unarchive: { is_archived: false } }[mode];
     let ok = 0, fail = 0;
+    const done = [];
     await safe(async () => {
       for (const k of keys) {
         if (await CK.patchConversation(k, body)) {
-          ok++;
+          ok++; done.push(k);
           src.items = src.items.filter(i => i.key !== k);
           src.offset = Math.max(0, src.offset - 1);
           if (src.total != null) src.total--;
@@ -655,8 +735,126 @@
       if (mode === "delete") { keys.forEach(k => { delete CK.store.data.stars[k]; delete CK.store.data.chatFolder[k]; }); await CK.store.save("stars", "chatFolder"); }
       if (mode === "archive") sources.archive.reset();
       if (mode === "unarchive") sources.chats.reset();
+      if (mode === "delete" && CK.tags) await CK.tags.drop(done);
     });
-    setMsg(t("msg.doneChats", { ok, fail: fail ? t("msg.failPart", { n: fail }) : "" }));
+    // Usunięte/zarchiwizowane znikają z paska ChatGPT od razu; przywrócone pokaże ChatGPT po odświeżeniu swojej listy.
+    if (mode !== "unarchive" && CK.sidebarGone) CK.sidebarGone(done);
+    setMsg(t(mode === "unarchive" ? "msg.doneChats" : "msg.doneChats2", { ok, fail: fail ? t("msg.failPart", { n: fail }) : "" }));
+    // przywróconych czatów wtyczka nie dopisze do listy ChatGPT — przycisk przeładowuje stronę, a panel wraca w to samo miejsce
+    if (mode === "unarchive" && ok) $("#msg").append(" ", button("↻ " + t("ui.reloadNow"), () => { saveRestore(); location.reload(); }, { class: "primary", style: "padding:2px 8px;font-size:11px" }));
+  }
+
+  // ---------- przenoszenie do Projektu ChatGPT ----------
+  async function projectFlow(keys) {
+    if (!keys.length) return setMsg(t("msg.selectFirst"));
+    setMsg(t("pj.loading"));
+    let list = [];
+    try { list = await CK.projects.list(); } catch {}
+    setMsg("");
+    let chosen = null;
+    const res = await modal(t("pj.title", { n: keys.length }), close => {
+      if (!list.length) return el("p", { class: "muted" }, t("pj.none"));
+      return el("div", {}, el("p", { class: "muted", style: "margin:0 0 8px" }, t("pj.hint")),
+        el("div", { style: "max-height:46vh;overflow:auto" }, ...list.map(p => el("div", { class: "palrow", onclick: () => { chosen = p; close(true); } }, el("span", { class: "pi" }, "📂"), el("span", { class: "pl" }, p.name)))));
+    }, [{ label: t("ui.cancel"), result: null }]);
+    if (!res || !chosen) return;
+    if (!confirm(t("pj.confirm", { n: keys.length, name: chosen.name }))) return;
+    let ok = 0, fail = 0;
+    await safe(async () => {
+      for (const k of keys) {
+        if (await CK.projects.move(k, chosen.id)) ok++; else fail++;
+        progress(ok + fail, keys.length, t("prog.project"));
+        await sleep(400);
+      }
+    });
+    setMsg(t("pj.done", { name: chosen.name, ok, fail: fail ? t("msg.failPart", { n: fail }) : "" }));
+    if (ok) $("#msg").append(" ", button("↻ " + t("ui.reloadNow"), () => { saveRestore(); location.reload(); }, { class: "primary", style: "padding:2px 8px;font-size:11px" }));
+  }
+
+  // ---------- tagi zaznaczonych czatów ----------
+  async function tagFlow(keys) {
+    if (!keys.length) return setMsg(t("msg.selectFirst"));
+    const has = new Map(); // tag -> ile zaznaczonych go ma
+    for (const k of keys) for (const g of CK.tags.of(k)) has.set(g, (has.get(g) || 0) + 1);
+    const add = new Set(), rm = new Set();
+    const input = el("input", { type: "text", placeholder: t("tg.addPh"), style: "width:100%" });
+    const cur = el("div", { class: "tgbox" }), sug = el("div", { class: "tgbox" });
+    const draw = () => {
+      cur.replaceChildren();
+      const shown = [...new Set([...has.keys(), ...add])].filter(g => !rm.has(g));
+      if (!shown.length) cur.append(el("span", { class: "muted" }, t("tg.noneSel")));
+      for (const g of shown) {
+        const partial = !add.has(g) && has.get(g) < keys.length;
+        cur.append(el("span", { class: "htag big" + (partial ? " part" : ""), title: partial ? t("tg.partial", { n: has.get(g), all: keys.length }) : "" }, "#" + g,
+          el("b", { title: t("tg.removeTip"), onclick: () => { add.delete(g); if (has.has(g)) rm.add(g); draw(); } }, " ×")));
+      }
+      sug.replaceChildren();
+      const rest = CK.tags.all().map(([g]) => g).filter(g => !shown.includes(g)).slice(0, 30);
+      if (rest.length) sug.append(el("span", { class: "muted" }, t("tg.existing") + " "));
+      for (const g of rest) sug.append(el("span", { class: "htag big", onclick: () => { rm.delete(g); add.add(g); draw(); } }, "+#" + g));
+    };
+    const take = () => { for (const g of CK.tags.norm(input.value)) { rm.delete(g); add.add(g); } input.value = ""; draw(); };
+    input.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === ",") { e.preventDefault(); take(); } });
+    const res = await modal(t("tg.title2", { n: keys.length }), () => { draw(); return el("div", {}, input, el("p", { class: "muted", style: "margin:6px 0" }, t("tg.help")), cur, sug); },
+      [{ label: t("ui.cancel"), result: null }, { label: t("tg.save"), cls: "primary", value: () => { take(); return true; } }]);
+    if (!res) return;
+    if (add.size) await CK.tags.add(keys, [...add]);
+    if (rm.size) await CK.tags.remove(keys, [...rm]);
+    setMsg(t("tg.saved", { n: keys.length }));
+  }
+
+  // ---------- masowa zmiana nazw ----------
+  // mode: prefix | suffix | remove | replace; zwraca nowy tytuł (bez podwójnych spacji na brzegach).
+  CK.renameTitle = (title, mode, text, repl = "") => {
+    const s = String(title || ""), x = String(text || "");
+    if (!x && mode !== "replace") return s;
+    let out = s;
+    if (mode === "prefix") out = s.startsWith(x) ? s : x + (/\s$/.test(x) ? "" : " ") + s;
+    else if (mode === "suffix") out = s.endsWith(x) ? s : s + (/^\s/.test(x) ? "" : " ") + x;
+    else if (mode === "remove") out = x ? s.split(x).join("") : s;
+    else if (mode === "replace") out = x ? s.split(x).join(repl) : s;
+    return out.replace(/\s{2,}/g, " ").trim() || s;
+  };
+
+  async function renameFlow(keys) {
+    if (!keys.length) return setMsg(t("msg.selectFirst"));
+    const src = sources[current];
+    const items = keys.map(k => src.items.find(i => i.key === k)).filter(Boolean);
+    const st = { mode: ls.get("rnmode", "prefix"), text: "", repl: "" };
+    const prev = el("div", { class: "rnprev" });
+    const draw = () => {
+      prev.replaceChildren();
+      const ch = items.map(i => [i.title || t("untitled"), CK.renameTitle(i.title || t("untitled"), st.mode, st.text, st.repl)]);
+      const n = ch.filter(([a, b]) => a !== b).length;
+      prev.append(el("p", { class: "muted" }, t("rn.preview", { n, all: items.length })));
+      for (const [a, b] of ch.slice(0, 6)) prev.append(el("div", { class: "rnrow" + (a === b ? " same" : "") }, el("s", {}, a), " → ", el("b", {}, b)));
+      if (ch.length > 6) prev.append(el("p", { class: "muted" }, t("rn.more", { n: ch.length - 6 })));
+    };
+    const textIn = el("input", { type: "text", placeholder: t("rn.textPh") }), replIn = el("input", { type: "text", placeholder: t("rn.replPh") });
+    const replRow = el("label", {}, t("rn.repl"), replIn);
+    const modeSel = select([["prefix", t("rn.prefix")], ["suffix", t("rn.suffix")], ["remove", t("rn.remove")], ["replace", t("rn.replace")]], st.mode,
+      v => { st.mode = v; ls.set("rnmode", v); replRow.style.display = v === "replace" ? "" : "none"; draw(); });
+    replRow.style.display = st.mode === "replace" ? "" : "none";
+    textIn.addEventListener("input", () => { st.text = textIn.value; draw(); });
+    replIn.addEventListener("input", () => { st.repl = replIn.value; draw(); });
+    draw();
+    const go = await modal("✏ " + t("rn.title", { n: items.length }), () => el("div", { class: "form" },
+      el("label", {}, t("rn.mode"), modeSel), el("label", {}, t("rn.text"), textIn), replRow, prev),
+      [{ label: t("ui.cancel"), result: null }, { label: t("rn.apply"), cls: "primary", value: () => st.text ? true : (setMsg(t("rn.empty")), false) }]);
+    if (!go) return;
+    const todo = items.map(i => ({ i, title: CK.renameTitle(i.title || "", st.mode, st.text, st.repl) })).filter(x => x.title && x.title !== x.i.title);
+    if (!todo.length) return setMsg(t("rn.nothing"));
+    let ok = 0, fail = 0;
+    await safe(async () => {
+      for (const { i, title } of todo) {
+        if (await CK.patchConversation(i.key, { title })) { ok++; i.title = title; CK.sidebarRename && CK.sidebarRename(i.key, title); } else fail++;
+        progress(ok + fail, todo.length, t("prog.rename"));
+        await sleep(300);
+      }
+    });
+    CK.nudgeChatGPT && CK.nudgeChatGPT();
+    renderList();
+    setMsg(t("rn.done", { ok, fail: fail ? t("msg.failPart", { n: fail }) : "" }));
   }
 
   async function libDelete(keysArg) {
@@ -672,22 +870,45 @@
     setMsg(t("msg.doneFiles", { ok: res.ok, fail: res.fail ? t("msg.failPart", { n: res.fail }) : "" }));
   }
 
+  // Wybór wiadomości do eksportu (format „pick”, jeden czat): pytania i odpowiedzi z polami wyboru.
+  function pickMessages(conv) {
+    const box = el("div", { style: "max-height:52vh;overflow:auto;margin:6px 0" });
+    const fmt = select([["obs", t("exp.obs")], ["md", "Markdown"]], ls.get("pickfmt", "obs"), v => ls.set("pickfmt", v));
+    const cbs = conv.msgs.map((m, i) => {
+      const cb = el("input", { type: "checkbox", checked: true });
+      box.append(el("label", { class: "chk", style: "display:flex;gap:8px;align-items:flex-start;margin:5px 0;cursor:pointer" }, cb,
+        el("span", {}, el("b", {}, (m.role === "user" ? "👤 " : "🤖 ") + (m.role === "user" ? t("exp.you") : "ChatGPT") + " "), el("span", { class: "muted" }, String(m.text).replace(/\s+/g, " ").slice(0, 140)))));
+      return cb;
+    });
+    const all = v => cbs.forEach(c => { c.checked = v; });
+    const onlyUser = () => cbs.forEach((c, i) => { c.checked = conv.msgs[i].role === "user"; });
+    return modal(t("exp.pickTitle", { title: conv.title }), () => el("div", {},
+      el("div", { class: "rowb", style: "gap:6px;flex-wrap:wrap" }, button(t("exp.pickAll"), () => all(true)), button(t("exp.pickNone"), () => all(false)), button(t("exp.pickUser"), onlyUser), el("span", { class: "sp" }), fmt),
+      box), [{ label: t("ui.cancel"), result: null }, { label: "⬇ " + t("ui.export"), cls: "primary", value: () => { const msgs = conv.msgs.filter((_, i) => cbs[i].checked); if (!msgs.length) { setMsg(t("exp.pickEmpty")); return false; } return { msgs, fmt: fmt.value }; } }]);
+  }
+
   async function exportFlow(ids, format, name) {
     if (!ids.length) return setMsg(t("msg.noExport"));
+    if (format === "pick" && ids.length !== 1) return setMsg(t("exp.pickOne"));
     if (ids.length > 30 && !confirm(t("confirm.exportMany", { n: ids.length }))) return;
-    let res = null;
-    await safe(async () => { res = await CK.exportChats(ids, format, (d, a) => progress(d, a, t("prog.fetchChats")), name); });
+    let res = null, opts = {};
+    if (format === "pick") opts.pick = async conv => { const r = await pickMessages(conv); return r && { msgs: r.msgs, format: r.fmt }; };
+    await safe(async () => { res = await CK.exportChats(ids, format, (d, a) => progress(d, a, t("prog.fetchChats")), name, opts); });
+    if (res && res.cancelled) return setMsg("");
     if (res) setMsg(t("msg.exported", { n: res.ok, fail: res.fail ? t("msg.failPart", { n: res.fail }) : "" }) + (format === "pdf" ? " " + t("msg.pdfHint") : ""));
   }
 
-  let refreshing = false;
+  // Ciche odświeżanie (otwarcie panelu, zmiana czatu): najwyżej raz na 30 s, tylko w widocznej karcie,
+  // jako zapytanie w tle (przy przerwie po 429 nic nie wysyła). Przycisk ↻ odświeża zawsze.
+  let refreshing = false, lastQuiet = 0;
   async function quietRefresh(manual = false) {
     if (!LIST_TABS.includes(current) || busy || refreshing) return;
+    if (!manual && (document.visibilityState === "hidden" || Date.now() - lastQuiet < 30000)) return;
     const src = sources[current];
     if (!src.items.length) { if (manual) loadOne(); return; }
-    refreshing = true;
+    refreshing = true; lastQuiet = Date.now();
     try {
-      const added = await src.refreshTop();
+      const added = await src.refreshTop(!manual);
       renderList();
       if (manual || added) setMsg(added ? t("msg.refreshed", { n: added }) : t("msg.upToDate"));
     } catch (e) { if (manual) setMsg(t("msg.error", { e: e.message })); }
@@ -765,6 +986,48 @@
       el("a", { href: upd.url, target: "_blank", rel: "noopener" }, "⬇ " + t("upd.download")),
       el("span", { class: "ic", title: t("upd.dismiss"), onclick: () => { ls.set("updDismissed", upd.latest); renderUpdate(); } }, "×"));
   }
+  // ---------- kopia zapasowa: dane + przypomnienie ----------
+  const backupJson = () => { const d = CK.store.data; return JSON.stringify({ app: "ChatKit Pro", version: CK.VERSION, exported: new Date().toISOString(), folders: d.folders, chatFolder: d.chatFolder, chatTags: d.chatTags, stars: d.stars, prompts: d.prompts, bookmarks: d.bookmarks, notes: d.notes, chatNotes: d.chatNotes, rules: d.rules, settings: d.settings }, null, 2); };
+  let bak = { lastBackup: 0, backupSnooze: 0, firstSeen: 0 };
+  async function exportBackup() {
+    CK.download(`chatkit-pro-backup-${new Date().toISOString().slice(0, 10)}.json`, backupJson(), "application/json");
+    bak.lastBackup = Date.now();
+    try { await chrome.storage.local.set({ lastBackup: bak.lastBackup }); } catch {}
+    renderBackup();
+    setMsg(t("bak.done"));
+  }
+  // Czy jest co chronić (własne foldery, gwiazdki, notatki, zakładki, reguły, używane prompty)?
+  function hasUserData() {
+    const d = CK.store.data, n = o => Object.keys(o || {}).length;
+    return d.folders.length + n(d.stars) + n(d.chatFolder) + n(d.chatTags) + n(d.bookmarks) + d.notes.length + n(d.chatNotes) + d.rules.length > 0 ||
+      (Array.isArray(d.prompts) && d.prompts.some(x => x.uses > 0));
+  }
+  CK.backupDue = (now = Date.now()) => {
+    const every = +CK.store.data.settings.backupEvery || 0;
+    if (!every || !hasUserData()) return false;
+    const base = Math.max(bak.lastBackup || 0, bak.backupSnooze || 0, bak.firstSeen || now);
+    return now - base >= every * 86400000;
+  };
+  function renderBackup() {
+    const box = $("#bak"); box.replaceChildren();
+    const show = CK.backupDue();
+    box.style.display = show ? "flex" : "none";
+    if (!show) return;
+    const ago = bak.lastBackup ? t("bak.ago", { n: Math.floor((Date.now() - bak.lastBackup) / 86400000) }) : t("bak.never");
+    box.append(el("span", {}, "💾 " + t("bak.remind", { ago })), el("span", { class: "sp" }),
+      button("⬇ " + t("bak.now"), exportBackup, { class: "go" }),
+      button(t("bak.later"), async () => { bak.backupSnooze = Date.now(); try { await chrome.storage.local.set({ backupSnooze: bak.backupSnooze }); } catch {} renderBackup(); }));
+  }
+  CK._backup = { state: () => bak, set: o => { Object.assign(bak, o); renderBackup(); } }; // do testów
+  async function loadBackup() {
+    try {
+      const r = await chrome.storage.local.get(["lastBackup", "backupSnooze", "firstSeen"]);
+      bak = { lastBackup: r.lastBackup || 0, backupSnooze: r.backupSnooze || 0, firstSeen: r.firstSeen || 0 };
+      if (!bak.firstSeen) { bak.firstSeen = Date.now(); await chrome.storage.local.set({ firstSeen: bak.firstSeen }); }
+    } catch {}
+    renderBackup();
+  }
+
   async function loadUpdate() { try { upd = (await chrome.storage.local.get("update")).update || null; } catch {} renderUpdate(); }
   const askUpdate = force => chrome.runtime.sendMessage({ type: "ck-check-update", force }).catch(e => ({ error: e.message }));
   chrome.storage.onChanged.addListener((ch, area) => {
@@ -776,28 +1039,51 @@
     const d = CK.store.data, S = d.settings;
     const save = async () => { await CK.store.save("settings"); };
     const chk = (key, label, def = false) => el("label", { class: "chk", style: "margin:4px 0" },
-      el("input", { type: "checkbox", checked: S[key] ?? def, onchange: async e => { S[key] = e.target.checked; await save(); } }), label);
+      el("input", { type: "checkbox", checked: S[key] ?? def, onchange: async e => { CK.store.data.settings[key] = e.target.checked; await save(); } }), label);
+    // Suwak po liście wartości (0 = ustawienie ChatGPT). Zapis z opóźnieniem, podgląd na żywo.
+    const slider = (key, label, steps, fmt) => {
+      const cur = Math.max(0, steps.indexOf(+S[key] || 0));
+      const out = el("b", { style: "min-width:84px;text-align:right;font-size:12px" }, fmt(steps[cur]));
+      let timer;
+      const inp = el("input", { type: "range", min: 0, max: steps.length - 1, step: 1, value: cur, style: "flex:1;accent-color:var(--ck-acc, #ef4444)" });
+      inp.addEventListener("input", () => {
+        const v = steps[+inp.value]; out.textContent = fmt(v); CK.store.data.settings[key] = v;
+        clearTimeout(timer); timer = setTimeout(save, 150);
+      });
+      inp.addEventListener("change", () => { clearTimeout(timer); save(); });
+      return el("div", { class: "rowb", style: "gap:10px" }, el("span", { style: "min-width:120px;font-size:12px;color:var(--ck-tx2, #ccc)" }, label), inp, out,
+        button("↺", () => { CK.store.data.settings[key] = 0; inp.value = 0; out.textContent = fmt(0); save(); }, { title: t("set.reset") }));
+    };
     const fileIn = el("input", { type: "file", accept: ".json,application/json", style: "display:none", onchange: async e => {
       const file = e.target.files[0]; if (!file) return;
       try {
         const j = JSON.parse(await file.text());
         if (!confirm(t("confirm.import"))) return;
-        for (const k of ["folders", "chatFolder", "stars", "prompts", "bookmarks", "notes", "chatNotes", "rules", "settings"]) if (j[k] !== undefined) d[k] = j[k];
+        for (const k of ["folders", "chatFolder", "chatTags", "stars", "prompts", "bookmarks", "notes", "chatNotes", "rules", "settings"]) if (j[k] !== undefined) d[k] = j[k];
         await CK.store.save();
         setMsg(t("msg.imported"));
       } catch (err) { setMsg(t("msg.badFile", { e: err.message })); }
     } });
     return el("div", { class: "pane" },
       el("h3", {}, t("set.language")),
-      el("div", { class: "rowb" }, select([["auto", t("set.langAuto")], ["pl", "Polski"], ["en", "English"], ["fr", "Français"], ["de", "Deutsch"]], S.lang || "auto",
-        async v => { S.lang = v; await save(); CK.applyLang(); renderAll(); })),
+      el("div", { class: "rowb" }, select([["auto", t("set.langAuto")], ...CK.LANG_NAMES], S.lang || "auto",
+        async v => { CK.store.data.settings.lang = v; await save(); CK.applyLang(); renderAll(); })),
       el("h3", {}, t("set.look")),
+      el("div", { class: "rowb", style: "gap:10px;margin:2px 0 6px" }, el("span", { style: "font-size:12px;color:var(--ck-tx2, #ccc)" }, t("set.uiTheme")),
+        select(CK.THEMES.map(k => [k, t("th." + k)]), S.uiTheme || "dark", async v => { CK.store.data.settings.uiTheme = v; await save(); })),
       chk("timestamps", t("set.timestamps"), true),
       el("div", { class: "rowb" }, button(t("set.tsDiag"), () => copy(JSON.stringify(CK.tsDebug ? CK.tsDebug() : {}, null, 1), t("msg.diagCopied")))),
       chk("minimap", t("set.minimap"), true),
       chk("classicDark", t("set.classicDark"), false),
       chk("sidebarMarks", t("set.sidebarMarks"), true),
       chk("showFab", t("set.showFab"), true),
+      el("h3", {}, t("set.chatLook")),
+      slider("chatWidth", t("set.chatWidth"), [0, 800, 900, 1000, 1100, 1200, 1400, 1600, 2000], v => v === 0 ? t("set.default") : v >= 2000 ? t("set.fullWidth") : v + " px"),
+      slider("fontSize", t("set.fontSize"), [0, 13, 14, 15, 16, 17, 18, 20, 22], v => v === 0 ? t("set.default") : v + " px"),
+      el("p", { class: "muted", style: "margin:2px 0 6px" }, t("set.lookHint")),
+      chk("codeSave", t("set.codeSave"), true),
+      chk("composerCount", t("set.composerCount"), true),
+      chk("whatsNew", t("set.whatsNew"), true),
       el("h3", {}, t("set.updates")),
       ...(upd && upd.store ? [el("p", {}, t("upd.current", { v: CK.VERSION })), el("p", { style: "color:#86efac" }, "✓ " + t("upd.store"))] : [
       el("p", {}, t("upd.current", { v: CK.VERSION }) + (upd && upd.latest ? " · " + t("upd.latest", { v: upd.latest }) : "")),
@@ -812,11 +1098,16 @@
           setMsg(r && r.error ? t("upd.error", { e: r.error }) : updAvailable() ? t("upd.available", { v: upd.latest }) : t("upd.upToDate"));
         }),
         updAvailable() ? el("a", { href: upd.url, target: "_blank", rel: "noopener", style: "color:#86efac;font-size:12px" }, "⬇ " + t("upd.download") + " v" + upd.latest) : null),
+      CK.STORE_URL ? el("p", { style: "margin-top:6px" }, "🛒 " + t("upd.storeTip") + " ", el("a", { href: CK.STORE_URL, target: "_blank", rel: "noopener", style: "color:#fca5a5" }, t("upd.storeLink"))) : null,
       el("p", {}, t("upd.howTo"))]),
       el("h3", {}, t("set.backup")),
       el("p", {}, t("set.backupInfo")),
+      el("div", { class: "rowb" }, el("span", { style: "font-size:12px;color:var(--ck-tx2, #ccc)" }, t("bak.every")),
+        select([["7", t("bak.d7")], ["14", t("bak.d14")], ["30", t("bak.d30")], ["0", t("bak.off")]], String(S.backupEvery ?? 7),
+          async v => { CK.store.data.settings.backupEvery = +v; await save(); renderBackup(); })),
+      el("p", {}, t("bak.last", { d: bak.lastBackup ? CK.fmtDate(bak.lastBackup, true) : t("bak.never") })),
       el("div", { class: "rowb" },
-        button("⬇ " + t("set.exportData"), () => CK.download(`chatkit-pro-backup-${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify({ app: "ChatKit Pro", version: CK.VERSION, folders: d.folders, chatFolder: d.chatFolder, stars: d.stars, prompts: d.prompts, bookmarks: d.bookmarks, notes: d.notes, chatNotes: d.chatNotes, rules: d.rules, settings: d.settings }, null, 2), "application/json")),
+        button("⬇ " + t("set.exportData"), exportBackup),
         button("⬆ " + t("set.importData"), () => fileIn.click()), fileIn),
       el("h3", {}, t("set.selections")),
       el("div", { class: "rowb" }, button(t("set.clearSel"), () => { LIST_TABS.forEach(k => { sel[k].clear(); saveSel(k); }); setMsg(t("msg.cleared")); })),
@@ -852,9 +1143,9 @@
   }
 
   function togglePanel(force) {
-    const open = force ?? !panel.classList.contains("open");
+    const open = CK.on() && (force ?? !panel.classList.contains("open"));
     panel.classList.toggle("open", open);
-    if (open) welcome();
+    if (open) { welcome(); fitTabs(); }
     if (open) askUpdate(false); // raz na dobę (cache w tle)
     if (open && LIST_TABS.includes(current)) { if (!sources[current].items.length && !sources[current].done) loadOne(); else quietRefresh(); }
   }
@@ -902,6 +1193,11 @@
     el, button, select, modal, setMsg, copy, safe, progress, t,
     get busy() { return busy; },
     rerender: () => { renderFooter(); renderList(); },
+    // dla szybkiego skoku (palette.js)
+    chatItems: () => sources.chats.items,
+    async ensureChats() { const s = sources.chats; if (!s.items.length && !s.done && !busy) { await s.loadPage(); if (current === "chats") renderList(); } },
+    showFolder(id) { togglePanel(true); switchTab("chats"); filters.chats.folder = id; filters.chats.tag = ""; renderFolders(); renderList(); },
+    showTag(g) { togglePanel(true); switchTab("chats"); filters.chats.tag = g; renderFolders(); renderList(); },
     switchTab, open: () => togglePanel(true), sel, saveSel, filters, chatBulk, libDelete,
     registerTab(def) { extraTabs.push(def); if (CK.store.data) renderTabs(); }
   };
@@ -910,11 +1206,13 @@
   // ---------- zdarzenia ----------
   $("#fab").addEventListener("click", () => togglePanel());
   $("#close").addEventListener("click", () => togglePanel(false));
+  $("#jumpbtn").addEventListener("click", () => { if (CK.palette) CK.palette.open(); });
   $("#setbtn").addEventListener("click", () => { if (!busy) switchTab(current === "settings" ? "chats" : "settings"); });
   $("#bigbtn").addEventListener("click", () => { view.big = !view.big; renderList(); });
   $("#size").addEventListener("input", e => { view.size = +e.target.value; applyView(); });
   zoom.addEventListener("click", () => { zoom.style.display = "none"; });
   document.addEventListener("keydown", e => {
+    if (!CK.on()) return;
     if (e.altKey && e.shiftKey && e.code === "KeyK") { e.preventDefault(); togglePanel(); }
     else if (e.key === "Escape") {
       if (root.querySelector(".modal")) return;
@@ -930,21 +1228,40 @@
     if (panel.classList.contains("open") && current === "chats") setTimeout(() => quietRefresh(), 2500);
   }, 1500);
 
-  chrome.runtime.onMessage.addListener(msg => { if (msg && msg.type === "ck-toggle") togglePanel(msg.open); });
+  chrome.runtime.onMessage.addListener((msg, _s, reply) => {
+    if (msg && msg.type === "ck-toggle") togglePanel(msg.open);
+    if (msg && msg.type === "ck-ping") { reply({ ok: true }); return false; }
+  });
 
-  const applyFab = () => { $("#fab").style.display = CK.store.data.settings.showFab === false ? "none" : ""; };
+  // Wyłączona wtyczka: znika cały panel i przycisk; po włączeniu wraca bez przeładowania strony.
+  const applyFab = () => {
+    host.style.display = CK.on() ? "" : "none";
+    if (!CK.on() && panel.classList.contains("open")) panel.classList.remove("open");
+    $("#fab").style.display = CK.store.data.settings.showFab === false ? "none" : "";
+  };
 
   CK.ready.then(async () => {
+    CK.applyTheme(host, root); CK.store.onChange(() => CK.applyTheme(host, root));
     applyFab();
-    loadUpdate();
+    loadUpdate(); loadBackup();
+    CK.store.onChange(renderBackup);
     CK.store.onChange(applyFab);
-    try {
-      const { openPanelAt } = await chrome.storage.local.get("openPanelAt");
-      if (openPanelAt && Date.now() - openPanelAt < 30000) { await chrome.storage.local.remove("openPanelAt"); setTimeout(() => togglePanel(true), 300); }
-    } catch {}
+    // Przerwa po HTTP 429: komunikat w panelu z odliczaniem (operacje same ruszą po przerwie).
+    let rateTimer = null;
+    CK.limit.onChange((_ms, kind) => {
+      clearInterval(rateTimer);
+      const waiting = kind === "wait" || busy;
+      const show = () => {
+        const left = Math.ceil(CK.limit.pausedFor() / 1000);
+        if (left <= 0) { clearInterval(rateTimer); if ($("#msg").textContent.startsWith("⏸")) setMsg(""); return; }
+        setMsg("⏸ " + t(waiting || busy ? "rate.wait" : "rate.bg", { s: left }));
+        if (busy) $("#status").textContent = "⏳ " + t("rate.status", { s: left });
+      };
+      show(); rateTimer = setInterval(show, 1000);
+    });
     CK.store.onChange(() => {
       if (current === "chats") renderFolders();
-      if (current !== "lib" && !root.querySelector(".modal") && !root.activeElement?.matches?.("textarea, input[type=text], input[type=search]")) { renderFooter(); renderList(); }
+      if (current !== "lib" && !root.querySelector(".modal") && !root.activeElement?.matches?.("textarea, input[type=text], input[type=search], input[type=range]")) { renderFooter(); renderList(); }
     });
     const restored = takeRestore();
     switchTab(restored && restored.tab ? restored.tab : "chats");

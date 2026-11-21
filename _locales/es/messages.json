@@ -1,0 +1,17 @@
+{
+  "appName": {
+    "message": "ChatKit Pro by JustPLGuy"
+  },
+  "appShortName": {
+    "message": "ChatKit Pro"
+  },
+  "appDesc": {
+    "message": "Borra y archiva chats de ChatGPT en bloque, limpia la Biblioteca, carpetas, exportación, prompts, minimapa y búsqueda. Gratis."
+  },
+  "actionOn": {
+    "message": "ACTIVADO (clic para desactivar)"
+  },
+  "actionOff": {
+    "message": "DESACTIVADO (clic para activar)"
+  }
+}

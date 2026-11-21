@@ -1,4 +1,4 @@
-// ChatKit Pro — klasyczny (szary) tryb ciemny zamiast czarnego OLED.
+// ChatKit Pro — wygląd: klasyczny (szary) tryb ciemny zamiast czarnego OLED, szerokość czatu i rozmiar czcionki.
 // Nadpisuje zmienne CSS ChatGPT tylko w trybie ciemnym; wyłączenie przywraca oryginał.
 (() => {
   const CK = window.CK;
@@ -25,13 +25,45 @@
     html.dark nav, html.dark [data-testid="sidebar"], html.dark aside { background-color: #171717 !important; }`;
 
   function apply() {
-    const on = !!CK.store.data.settings.classicDark;
+    const on = !!CK.store.data.settings.classicDark && CK.on();
     style.textContent = on ? CSS : "";
-    if (!style.isConnected) document.documentElement.appendChild(style);
+    if (!style.isConnected) CK.keepAttached(style);
+  }
+
+  // ---------- szerokość czatu i rozmiar czcionki ----------
+  // ChatGPT ustawia szerokość wątku zmienną --thread-content-max-width na elementach z klasą, która ją zawiera.
+  const look = document.createElement("style");
+  look.id = "chatkit-pro-look";
+  CK.lookCss = (width, font) => {
+    let css = "";
+    if (width > 0) {
+      const w = width >= 2000 ? "100%" : width + "px";
+      css += `
+    [class*="--thread-content-max-width"], :root { --thread-content-max-width: ${w} !important; }
+    main [class*="max-w-3xl"], main [class*="max-w-[48rem]"], main [class*="max-w-[40rem]"] { max-width: ${w} !important; }`;
+    }
+    if (font > 0) {
+      // Treść wiadomości (obie strony): kontener wiadomości ChatGPT, nasz znacznik roli i stara klasa .markdown.
+      const M = ['main [data-chatgpt-search-message-ids]', 'main [data-ck-role]', 'main .markdown', 'main [data-message-author-role]'];
+      const txt = "p, li, td, th, blockquote, dd, dt, .whitespace-pre-wrap";
+      const code = Math.max(11, font - 2);
+      css += `
+    ${M.join(", ")} { font-size: ${font}px !important; line-height: 1.6 !important; }
+    ${M.map(m => `${m} :is(${txt})`).join(",\n    ")} { font-size: ${font}px !important; line-height: 1.6 !important; }
+    ${M.map(m => `${m} :is(pre, pre *, code)`).join(", ")} { font-size: ${code}px !important; line-height: 1.5 !important; }`;
+    }
+    return css;
+  };
+  function applyLook() {
+    const S = CK.store.data.settings;
+    look.textContent = CK.on() ? CK.lookCss(+S.chatWidth || 0, +S.fontSize || 0) : "";
+    if (!look.isConnected) CK.keepAttached(look);
   }
 
   CK.ready.then(() => {
-    apply();
+    apply(); applyLook();
+    CK.store.onChange(applyLook);
+    setInterval(() => { if (!look.isConnected) applyLook(); }, 4000);
     CK.store.onChange(apply);
     // <head>/<html> bywa przebudowywany — pilnuj obecności stylu
     setInterval(() => { if (!style.isConnected) apply(); }, 4000);
