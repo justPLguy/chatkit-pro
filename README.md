@@ -1,156 +1,154 @@
-<p align="center"><img src="assets/icon128.png" width="104" alt="ChatKit Pro"></p>
-
-<h1 align="center">ChatKit Pro by JustPLGuy</h1>
-
 <p align="center">
-<b>Free, open-source power tools for ChatGPT.</b><br>
-Bulk delete · Library cleanup · Folders & tags · Quick jump · Export · Prompts · Shared links · 14 languages<br><br>
-<a href="https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh"><b>🛒 Add to Chrome (Chrome Web Store)</b></a><br><br>
-<a href="../../releases"><b>⬇ GitHub Releases</b></a> ·
-<a href="https://justplguy.github.io/chatkit-pro/"><b>🌐 Website</b></a> ·
-<a href="../../tree/chrome"><b>🧩 Chrome</b></a> ·
-<a href="../../tree/firefox"><b>🦊 Firefox</b></a> ·
-<a href="../../issues"><b>🐞 Report an issue</b></a> ·
-<a href="mailto:justplguy@gmail.com"><b>✉ Contact</b></a>
+  <a href="https://chatkit.justplguy.com/"><img src="https://chatkit.justplguy.com/assets/icon128.png" width="96" alt="ChatKit Pro"></a>
 </p>
 
-<p align="center"><a href="#-english">🇬🇧 English</a> · <a href="#-polski">🇵🇱 Polski</a></p>
+<h1 align="center">ChatKit Pro</h1>
+
+<p align="center">
+  <b>Your ChatGPT, finally organized.</b><br>
+  Bulk delete, a clean Library, folders, export — and auto-scroll that follows long answers again.<br>
+  Free. Open source. No account. No servers.
+</p>
+
+<p align="center">
+  <a href="https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh?utm_source=github&utm_medium=readme"><img alt="Chrome Web Store version" src="https://img.shields.io/chrome-web-store/v/pehdgnogfmaeeldpjdmadfpankacofhh?label=Chrome%20Web%20Store&color=ef4444&style=flat-square"></a>
+  <a href="https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh?utm_source=github&utm_medium=readme"><img alt="Users" src="https://img.shields.io/chrome-web-store/users/pehdgnogfmaeeldpjdmadfpankacofhh?color=ef4444&style=flat-square"></a>
+  <a href="https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh/reviews"><img alt="Rating" src="https://img.shields.io/chrome-web-store/rating/pehdgnogfmaeeldpjdmadfpankacofhh?color=ef4444&style=flat-square"></a>
+  <img alt="14 languages" src="https://img.shields.io/badge/languages-14-3a363e?style=flat-square">
+  <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-3a363e?style=flat-square"></a>
+</p>
+
+<p align="center">
+  <a href="https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh?utm_source=github&utm_medium=readme"><img alt="Add to Chrome — it's free" src="https://img.shields.io/badge/Add%20to%20Chrome-it's%20free-ef4444?style=for-the-badge&logo=googlechrome&logoColor=white"></a>
+  &nbsp;
+  <a href="../../releases"><img alt="Firefox" src="https://img.shields.io/badge/Firefox-GitHub%20release-2a2a2a?style=for-the-badge&logo=firefoxbrowser&logoColor=white"></a>
+  &nbsp;
+  <a href="https://chatkit.justplguy.com/"><img alt="Website" src="https://img.shields.io/badge/Website-chatkit.justplguy.com-2a2a2a?style=for-the-badge"></a>
+</p>
+
+<p align="center">
+  <a href="https://chatkit.justplguy.com/"><img src="https://chatkit.justplguy.com/assets/shots/en/1-1280.webp" width="880" alt="ChatKit Pro panel on chatgpt.com: chats with folders, tags and bulk actions"></a>
+</p>
+
+<p align="center"><a href="#english">English</a> · <a href="#polski">Polski</a> · <a href="https://chatkit.justplguy.com/how-it-works/">How it works</a> · <a href="https://chatkit.justplguy.com/releases/">What's new</a> · <a href="mailto:contact@justplguy.com">Contact</a></p>
 
 ---
 
-## 🇬🇧 English
+<a id="english"></a>
 
-ChatGPT lets you delete chats only one at a time, keeps every image in the Library even after you delete the chat, and has no folders, export or bulk actions. **ChatKit Pro adds all of that — free, with no account and no servers.**
+> [!TIP]
+> ### ⬇ New in 1.5 — auto-scroll is back
+> ChatGPT stopped scrolling down while it writes long answers. ChatKit Pro keeps the newest line in view, right above the message box. **Scroll up to read — it pauses. Scroll back to the end — it follows again.** On by default, one switch in ⚙ Settings.
 
-### Repository layout
+<p align="center">
+  <img src=".github/follow-demo.gif" width="640" alt="Animation: without ChatKit Pro the answer runs under the message box; with ChatKit Pro the newest line stays in view">
+</p>
 
-This repository uses **one branch per browser**:
+## Why
 
-| Branch | Contents | Status |
-|---|---|---|
-| **`main`** *(you are here)* | project overview, website (`index.html`), license | — |
-| **[`chrome`](../../tree/chrome)** | extension for Chrome, Edge, Brave, Opera | ✅ **v1.3.1** |
-| **[`firefox`](../../tree/firefox)** | extension for Firefox 140+ | ✅ **v1.1.0** |
+ChatGPT deletes chats one at a time, keeps every file in the Library after the chat is gone, has no folders for regular chats and no real export. **100 chats ≈ 300 clicks.** With ChatKit Pro: load, filter, select, delete — **about 3.**
 
-**Downloads are published only in [Releases](../../releases)** — one release per browser and version (e.g. `chrome-v1.3.1`, `firefox-v1.1.0`).
-**Store listings:** [Chrome Web Store](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh) ✅ v1.3.1 · Firefox Add-ons ⏳ v1.3.1 in review.
-Please don't use “Code → Download ZIP” on `main`: it doesn't contain the extension.
+## What you get
 
-### Features
-*Current version: **v1.3.1** — Chrome Web Store and the `chrome` branch. Firefox 1.3.1 is in review; the Firefox build on GitHub is still v1.1.0 (fewer features). Full history: [What's new](https://justplguy.github.io/chatkit-pro/releases/).*
+| | |
+|---|---|
+| ⬇ **Follows long answers** | The newest line stays in view while ChatGPT writes. Scroll up = pause. *New in 1.5* |
+| 📦 **Bulk actions** | Delete, archive, restore and rename hundreds of chats at once — filters, Shift+click ranges, copy links |
+| 🖼️ **Library cleanup** | Images **and** files (PDF, docs, video, code…), files left over from deleted chats, trash preview, size sorting |
+| 🗂️ **Folders, tags, stars** | Nested colored folders with drag & drop, `#tags`, stars — shown in the ChatGPT sidebar too |
+| ⚡ **Quick jump** | `Alt+Shift+J` — type a few letters, open any chat, folder, tag or prompt |
+| 📂 **Projects & shared links** | Move many chats into a project (or back out); find and delete public share links |
+| 📤 **Export** | Markdown, HTML, PDF, ZIP, Markdown + YAML for Obsidian / Notion — or only the messages you pick |
+| 📚 **Prompt library** | `{{variables}}`, `#tags`, favorites — insert with `Alt+Shift+P` or by typing `//` |
+| 🗺️ **Inside every chat** | Timestamps, minimap with search, bookmarks & notes, “Save” on code blocks, message counter |
+| 🔍 **Full-text search** | Find a chat by a sentence from the middle of it — local index |
+| 🎨 **Make it yours** | 6 panel themes, chat width & font size, classic dark mode, 14 languages |
 
-- 📦 **Bulk actions** — delete, archive, restore and rename many chats at once (Shift+click ranges, filters); the ChatGPT sidebar updates right away
-- 🖼️ **Library cleanup** — bulk delete/download images and files, size sorting, AI/uploaded/project filters
-- 🗂️ **Folders, tags & stars** — nested, colored folders with drag & drop, `#tags` on chats, stars; also shown in the ChatGPT sidebar
-- ⚡ **Quick jump** (`Alt+Shift+J`) — type a few letters and open any chat, folder, tag or prompt *(new in 1.3)*
-- 📂 **ChatGPT projects** — move many chats to a project at once *(new in 1.3)*
-- 🔗 **Shared links manager** — see and delete public links to your chats and Canvas docs *(new in 1.3)*
-- 📤 **Export** — Markdown, HTML, PDF, ZIP (one file per chat), Markdown + YAML for Obsidian / Notion, or only selected messages
-- ⏰ **Timestamps** above every message (“You · Today, 14:32”)
-- 📚 **Prompt library** — `{{variables}}`, `#tags`, ⭐ favorites, quick insert (`Alt+Shift+P` or `//`), starter pack in 14 languages
-- 🗺️ **Minimap & code** — outline, in-chat search, chat stats, “Save” on every code block, counter above the message box
-- 🔖 **Bookmarks** and 📝 **notes** inside chats
-- 🔍 **Full-text search** across all chats (local index)
-- 🧹 **Cleanup rules** with preview · 📊 **Statistics**
-- 🎨 **6 panel themes**, chat width & font size sliders, 🌙 classic dark mode *(themes new in 1.3)*
-- 🌐 **14 languages** — English, Polish, French, German, Spanish, Portuguese (Brazil), Italian, Dutch, Czech, Ukrainian, Turkish, Japanese, Chinese (Simplified), Korean
-- 🔴 **On/off switch** on the toolbar icon · light on ChatGPT (few requests, automatic pause on “too many requests”)
+Full guide: **[How it works](https://chatkit.justplguy.com/how-it-works/)** · history: **[What's new](https://chatkit.justplguy.com/releases/)**
 
-### Install (Chrome)
-**Recommended:** [**Add to Chrome — Chrome Web Store**](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh) (one click, automatic updates; also works in Edge, Brave and Opera).
+<table>
+  <tr>
+    <td><img src="https://chatkit.justplguy.com/assets/shots/en/2-720.webp" alt="Library: images and files"></td>
+    <td><img src="https://chatkit.justplguy.com/assets/shots/en/4-720.webp" alt="Quick jump"></td>
+    <td><img src="https://chatkit.justplguy.com/assets/shots/en/6-720.webp" alt="Prompt library"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Library: images & files</sub></td>
+    <td align="center"><sub>Quick jump</sub></td>
+    <td align="center"><sub>Prompt library</sub></td>
+  </tr>
+</table>
 
-**Manual install from GitHub:**
-1. Download **`ChatKit-Pro-Chrome-v1.3.1.zip`** from [Releases](../../releases) and unzip it.
+## Install
+
+**Chrome, Edge, Brave, Opera** → **[Chrome Web Store](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh?utm_source=github&utm_medium=readme)** — one click, automatic updates.
+
+**Firefox 140+** → Firefox Add-ons listing is in review. Until then: download `ChatKit-Pro-Firefox-v1.5.0.zip` from **[Releases](../../releases)**, unzip, open `about:debugging#/runtime/this-firefox` → **Load Temporary Add-on…** → pick `manifest.json`.
+
+<details>
+<summary><b>Manual install in Chrome (from GitHub)</b></summary>
+
+1. Download **`ChatKit-Pro-Chrome-v1.5.0.zip`** from [Releases](../../releases) — not “Code → Download ZIP” — and unzip it.
    Updating? Unzip into **the same folder** as before — your data is tied to that folder.
-2. Open `chrome://extensions`, switch on **Developer mode**.
+2. Open `chrome://extensions` and switch on **Developer mode**.
 3. **Load unpacked** → choose the unzipped folder.
-4. Pin the extension, open [chatgpt.com](https://chatgpt.com) and click the round 🧰 button (or `Alt+Shift+K`). The CK icon is the on/off switch.
+4. Open [chatgpt.com](https://chatgpt.com) and click the round 🧰 button (or `Alt+Shift+K`).
 
-Full guide: [`chrome` branch README](../../tree/chrome#readme).
+Moving to the store version later? ⚙ Settings → **Export data (JSON)** in the GitHub version, then **Import data** in the store version.
+</details>
 
-**Moving from the GitHub version to the store version?** Your folders, stars, prompts and notes belong to each installation, so move them: in the GitHub version open the panel → ⚙ Settings → **Export data (JSON)**, remove the GitHub version, add ChatKit Pro from the [Chrome Web Store](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh), then ⚙ Settings → **Import data**.
+## Privacy
 
-### Install (Firefox)
-Firefox Add-ons: v1.3.1 is in review. Until then you can test it: download **`ChatKit-Pro-Firefox-v1.1.0.zip`** from [Releases](../../releases), unzip, open `about:debugging#/runtime/this-firefox` → **Load Temporary Add-on…** → pick `manifest.json` (temporary — removed when Firefox restarts). Details: [`firefox` branch README](../../tree/firefox#readme).
+No servers, no analytics, no account. ChatKit Pro talks only to chatgpt.com with the session you're already signed in with. Folders, tags, prompts and notes stay in your browser. The GitHub (ZIP) version checks GitHub Releases once a day for a new version — anonymously. **[Privacy policy](https://chatkit.justplguy.com/privacy/)**
 
-### Privacy
-No servers of our own, no analytics, no account. Your chats are handled only on chatgpt.com with your existing session; all your data (folders, prompts, notes…) stays in your browser. The Chrome Web Store version is updated by Chrome and makes no update requests; the GitHub (ZIP) version checks GitHub Releases once a day (anonymously) and shows a notice in the panel. Details: [PRIVACY.md](../../blob/chrome/PRIVACY.md).
+## Repository
 
-### Roadmap
-- [x] Chrome Web Store (v1.3.1)
-- [x] Move chats to ChatGPT projects in bulk, shared links manager, tags, quick jump
-- [x] 14 languages, 6 themes
-- [ ] Firefox Add-ons (v1.3.1 in review)
-- [ ] Files cleanup (ChatGPT storage) — planned for 1.4.0
+| Branch | What's inside |
+|---|---|
+| **`main`** *(you are here)* | this page, license, redirects from the old `justplguy.github.io/chatkit-pro` address |
+| **[`chrome`](../../tree/chrome)** | extension for Chrome, Edge, Brave, Opera — **v1.5.0** |
+| **[`firefox`](../../tree/firefox)** | extension for Firefox 140+ — **v1.5.0** |
 
-### Contact
-Bug reports, ideas, questions: **[GitHub Issues](../../issues)** or **[justplguy@gmail.com](mailto:justplguy@gmail.com)**.
+Downloads live in **[Releases](../../releases)** (`chrome-v1.5.0`, `firefox-v1.5.0`).
 
----
+## Support & contact
 
-## 🇵🇱 Polski
-
-ChatGPT pozwala usuwać czaty tylko pojedynczo, trzyma każdy obrazek w Bibliotece nawet po usunięciu czatu i nie ma folderów, eksportu ani operacji hurtowych. **ChatKit Pro dodaje to wszystko — za darmo, bez konta i bez serwerów.**
-
-### Układ repozytorium
-
-Repozytorium ma **osobną gałąź dla każdej przeglądarki**:
-
-| Gałąź | Zawartość | Status |
-|---|---|---|
-| **`main`** *(tutaj jesteś)* | opis projektu, strona (`index.html`), licencja | — |
-| **[`chrome`](../../tree/chrome)** | wtyczka dla Chrome, Edge, Brave, Opery | ✅ **v1.3.1** |
-| **[`firefox`](../../tree/firefox)** | wtyczka dla Firefoksa 140+ | ✅ **v1.1.0** |
-
-**Pliki do pobrania są wyłącznie w [Releases](../../releases)** — osobne wydanie dla każdej przeglądarki i wersji (np. `chrome-v1.3.1`, `firefox-v1.1.0`).
-**Sklepy:** [Chrome Web Store](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh) ✅ v1.3.1 · Firefox Add-ons ⏳ v1.3.1 w recenzji.
-Nie używaj „Code → Download ZIP” na gałęzi `main` — nie ma tu wtyczki.
-
-### Funkcje
-*Aktualna wersja: **v1.3.1** — Chrome Web Store i gałąź `chrome`. Firefox 1.3.1 czeka na recenzję; wersja dla Firefoksa na GitHubie to wciąż v1.1.0 (mniej funkcji). Pełna historia: [Co nowego](https://justplguy.github.io/chatkit-pro/releases/?lang=pl).*
-
-- 📦 **Operacje hurtowe** — usuwanie, archiwizacja, przywracanie i zmiana nazw wielu czatów naraz (Shift+klik, filtry); pasek boczny ChatGPT odświeża się od razu
-- 🖼️ **Czyszczenie Biblioteki** — hurtowe usuwanie i pobieranie zdjęć/plików, sortowanie po rozmiarze, filtry AI/wgrane/projekty
-- 🗂️ **Foldery, tagi i gwiazdki** — zagnieżdżone, kolorowe foldery z przeciąganiem, `#tagi` na czatach, gwiazdki; widoczne też w pasku bocznym ChatGPT
-- ⚡ **Szybki skok** (`Alt+Shift+J`) — wpisz kilka liter i otwórz dowolny czat, folder, tag albo prompt *(nowość w 1.3)*
-- 📂 **Projekty ChatGPT** — przenoszenie wielu czatów naraz do projektu *(nowość w 1.3)*
-- 🔗 **Menedżer udostępnionych linków** — podgląd i usuwanie publicznych linków do czatów i wpisów z Canvas *(nowość w 1.3)*
-- 📤 **Eksport** — Markdown, HTML, PDF, ZIP (plik na czat), Markdown + YAML dla Obsidiana / Notion albo tylko wybrane wiadomości
-- ⏰ **Znaczniki czasu** nad każdą wiadomością („Ty · Dziś, 14:32”)
-- 📚 **Biblioteka promptów** — zmienne `{{...}}`, `#tagi`, ⭐ ulubione, szybkie wstawianie (`Alt+Shift+P` albo `//`), pakiet startowy w 14 językach
-- 🗺️ **Minimapa i kod** — spis treści, wyszukiwanie w czacie, liczniki, „Zapisz” przy każdym bloku kodu, licznik nad polem wiadomości
-- 🔖 **Zakładki** i 📝 **notatki** w czacie
-- 🔍 **Wyszukiwanie w treści** wszystkich czatów (lokalny indeks)
-- 🧹 **Reguły sprzątania** z podglądem · 📊 **Statystyki**
-- 🎨 **6 motywów panelu**, suwaki szerokości czatu i rozmiaru czcionki, 🌙 klasyczny tryb ciemny *(motywy — nowość w 1.3)*
-- 🌐 **14 języków** — polski, angielski, francuski, niemiecki, hiszpański, portugalski (Brazylia), włoski, niderlandzki, czeski, ukraiński, turecki, japoński, chiński (uproszczony), koreański
-- 🔴 **Włącznik** na ikonie · oszczędna dla ChatGPT (mało zapytań, automatyczna przerwa przy „za dużo zapytań”)
-
-### Instalacja (Chrome)
-**Polecane:** [**Dodaj do Chrome — Chrome Web Store**](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh) (jedno kliknięcie, aktualizacje automatyczne; działa też w Edge, Brave i Operze).
-
-**Instalacja ręczna z GitHuba:**
-1. Pobierz **`ChatKit-Pro-Chrome-v1.3.1.zip`** z [Releases](../../releases) i rozpakuj.
-   Aktualizujesz? Rozpakuj do **tego samego folderu** co wcześniej — dane są powiązane z tym folderem.
-2. Otwórz `chrome://extensions`, włącz **Tryb dewelopera**.
-3. **Załaduj rozpakowane** → wskaż rozpakowany folder.
-4. Przypnij wtyczkę, wejdź na [chatgpt.com](https://chatgpt.com) i kliknij okrągły przycisk 🧰 (albo `Alt+Shift+K`). Ikona CK to włącznik.
-
-Pełna instrukcja: [README gałęzi `chrome`](../../tree/chrome#readme).
-
-**Przechodzisz z wersji z GitHuba na wersję ze sklepu?** Foldery, gwiazdki, prompty i notatki należą do konkretnej instalacji, więc przenieś je: w wersji z GitHuba otwórz panel → ⚙ Ustawienia → **Eksportuj dane (JSON)**, usuń wersję z GitHuba, dodaj ChatKit Pro z [Chrome Web Store](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh), potem ⚙ Ustawienia → **Importuj dane**.
-
-### Instalacja (Firefox)
-Firefox Add-ons: v1.3.1 czeka na recenzję. Do tego czasu możesz ją przetestować: pobierz **`ChatKit-Pro-Firefox-v1.1.0.zip`** z [Releases](../../releases), rozpakuj, otwórz `about:debugging#/runtime/this-firefox` → **Załaduj tymczasowy dodatek…** → wskaż `manifest.json` (tymczasowo — znika po restarcie Firefoksa). Szczegóły: [README gałęzi `firefox`](../../tree/firefox#readme).
-
-### Prywatność
-Bez własnych serwerów, analityki i konta. Twoje czaty obsługiwane są tylko na chatgpt.com z Twojej sesji; wszystkie dane (foldery, prompty, notatki…) zostają w przeglądarce. Wersję z Chrome Web Store aktualizuje Chrome i nie wysyła ona zapytań o aktualizacje; wersja z GitHuba (ZIP) raz dziennie anonimowo sprawdza GitHub Releases i pokazuje w panelu informację o nowej wersji. Szczegóły: [PRIVACY.md](../../blob/chrome/PRIVACY.md).
-
-### Kontakt
-Błędy, pomysły, pytania: **[GitHub Issues](../../issues)** albo **[justplguy@gmail.com](mailto:justplguy@gmail.com)**.
+Found a bug or have an idea? **[Open an issue](../../issues)** or write to **[contact@justplguy.com](mailto:contact@justplguy.com)** (also in ⚙ Settings → About).
+ChatKit Pro is free. If it saves you time, you can **[buy me a coffee on Ko-fi](https://ko-fi.com/justplguy)** ☕ — never required.
 
 ---
 
-**License / Licencja:** [MIT](LICENSE)
+<a id="polski"></a>
 
-*ChatKit Pro by JustPLGuy is an independent project and is not affiliated with, endorsed by, or sponsored by OpenAI. ChatGPT is a trademark of OpenAI.*
+<details>
+<summary><b>🇵🇱 Polski</b></summary>
+
+### ChatKit Pro — Twój ChatGPT wreszcie uporządkowany
+
+Hurtowe usuwanie czatów, czysta Biblioteka, foldery, eksport — i przewijanie, które znowu idzie za długą odpowiedzią. Za darmo, open source, bez konta i bez serwerów.
+
+> **⬇ Nowość w 1.5 — wraca automatyczne przewijanie.** ChatGPT przestał przewijać w dół, gdy pisze długą odpowiedź. ChatKit Pro trzyma najnowszą linijkę w widoku, tuż nad polem wiadomości. Przewiń w górę, żeby czytać — zatrzymuje się. Zjedź na koniec — znowu przewija. Domyślnie włączone, jeden przełącznik w ⚙ Ustawieniach.
+
+**Co dostajesz:**
+- ⬇ **Przewijanie za odpowiedzią** — najnowsza linijka w widoku, przewinięcie w górę = pauza *(nowość w 1.5)*
+- 📦 **Operacje hurtowe** — usuwanie, archiwizacja, przywracanie i zmiana nazw setek czatów naraz, filtry, kopiowanie linków
+- 🖼️ **Sprzątanie Biblioteki** — obrazy **i** pliki, pliki z usuniętych czatów, podgląd kosza, sortowanie po rozmiarze
+- 🗂️ **Foldery, tagi, gwiazdki** — także w pasku bocznym ChatGPT
+- ⚡ **Szybki skok** (`Alt+Shift+J`) · 📂 **Projekty i udostępnione linki** · 📤 **Eksport** (Markdown, HTML, PDF, ZIP, Obsidian / Notion)
+- 📚 **Biblioteka promptów** (`Alt+Shift+P` albo `//`) · 🗺️ **minimapa, znaczniki czasu, zakładki, notatki, „Zapisz” przy kodzie**
+- 🔍 **Wyszukiwanie w treści** wszystkich czatów · 🎨 6 motywów, szerokość czatu, 14 języków
+
+**Instalacja:** [Chrome Web Store](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh?utm_source=github&utm_medium=readme) (Chrome, Edge, Brave, Opera). Firefox: ZIP z [Releases](../../releases) jako dodatek tymczasowy, dopóki Firefox Add-ons nie zakończy recenzji.
+
+**Prywatność:** bez serwerów, analityki i konta; dane zostają w Twojej przeglądarce. [Polityka prywatności](https://chatkit.justplguy.com/privacy/)
+
+**Strona:** [chatkit.justplguy.com/pl/](https://chatkit.justplguy.com/pl/) · [Jak to działa](https://chatkit.justplguy.com/pl/how-it-works/) · [Co nowego](https://chatkit.justplguy.com/pl/releases/)
+
+**Kontakt:** [GitHub Issues](../../issues) albo [contact@justplguy.com](mailto:contact@justplguy.com). Wsparcie (zawsze dobrowolne): [Ko-fi](https://ko-fi.com/justplguy).
+</details>
+
+---
+
+**License:** [MIT](LICENSE)
+
+<sub>ChatKit Pro by JustPLGuy is an independent project and is not affiliated with, endorsed by, or sponsored by OpenAI. ChatGPT is a trademark of OpenAI.</sub>
