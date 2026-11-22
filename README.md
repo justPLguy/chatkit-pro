@@ -3,7 +3,7 @@
 <h1 align="center">ChatKit Pro by JustPLGuy — Chrome</h1>
 
 <p align="center">
-<b>v1.3.1</b> · Chrome / Edge / Brave / Opera · MIT<br>
+<b>v1.5.0</b> · Chrome / Edge / Brave / Opera · MIT<br>
 <a href="https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh"><b>🛒 Add to Chrome (Chrome Web Store)</b></a><br>
 Free, open-source power tools for ChatGPT.<br>
 <a href="#-english">🇬🇧 English</a> · <a href="#-polski">🇵🇱 Polski</a>
@@ -20,7 +20,7 @@ Free, open-source power tools for ChatGPT.<br>
 **Recommended:** [**Add to Chrome — Chrome Web Store**](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh) — one click, automatic updates. Works in Chrome, Edge, Brave and Opera.
 
 **Manual install from GitHub (2 minutes):**
-1. Download **`ChatKit-Pro-Chrome-v1.3.1.zip`** from **[Releases](../../releases)** (not “Code → Download ZIP”) and unzip it.
+1. Download **`ChatKit-Pro-Chrome-v1.5.0.zip`** from **[Releases](../../releases)** (not “Code → Download ZIP”) and unzip it.
 2. Open `chrome://extensions` and switch on **Developer mode** (top-right).
 3. Click **Load unpacked** and pick the unzipped folder (the one that contains `manifest.json`).
 4. Pin the extension: 🧩 → 📌 next to **ChatKit Pro by JustPLGuy**.
@@ -33,13 +33,13 @@ Free, open-source power tools for ChatGPT.<br>
 ### What's inside
 | Area | Features |
 |---|---|
-| **Chats** | bulk delete / archive / star / move to folder / rename (prefix, suffix, replace), Shift+click ranges, filters (title, older than X days, starred), #tags, move to a ChatGPT project, exact date & time |
+| **Chats** | bulk delete / archive / star / move to folder / rename (prefix, suffix, replace), Shift+click ranges, filters (title, older than X days, starred), #tags, move to a ChatGPT project and back out, copy links of selected chats, exact date & time |
 | **Archive** | browse, restore or delete archived chats |
-| **Library** | bulk delete & download images/files, thumbnail grid, size sort, AI / uploaded / project filters, size counter |
+| **Library** | images **and** other files (PDF, documents, spreadsheets, video, audio, archives, code) with a file-type filter; find files from deleted chats; read-only trash preview; open the chat a file came from; bulk delete & download, thumbnail grid, size sort, AI / uploaded / project filters, size counter |
 | **Quick jump** | `Alt+Shift+J`: jump to any chat, folder, tag or prompt by typing a few letters |
 | **Folders, tags & stars** | tags on chats (filter, `#tag` search), nested colored folders, drag & drop, marks in the ChatGPT sidebar, export a whole folder |
 | **Export** | Markdown, HTML, PDF — with per-message timestamps; ZIP with one file per chat (Markdown / HTML / JSON); Markdown + YAML for Obsidian / Notion; only the messages you pick |
-| **In the chat** | timestamps above messages, minimap (outline + search), bookmarks, notes on excerpts, chat stats (messages, words, characters, ~tokens), “Save” button on code blocks, download all code from a chat, counter above the message box (characters, words, ~tokens) |
+| **In the chat** | timestamps above messages, minimap (outline + search), bookmarks, notes on excerpts, chat stats (messages, words, characters, ~tokens), “Save” button on code blocks, download all code from a chat, counter above the message box (characters, words, ~tokens), follows long answers while ChatGPT writes (scroll up = pause) |
 | **Prompts** | library with `{{variables}}`, categories, #tags, ⭐ favorites on top, drag-and-drop order, import/export, starter pack, quick insert |
 | **Search** | full-text search across all chats (local index) |
 | **Cleanup** | rules like “chats older than 90 days without a star → archive”, with preview; shared links manager (see and delete public links) |
@@ -63,7 +63,7 @@ Free, open-source power tools for ChatGPT.<br>
 - Once a day it asks the public GitHub API whether a newer release exists (no data about you is sent).
 - No external servers, no analytics, no tracking, no account.
 - Folders, stars, prompts, notes and settings are stored locally (`chrome.storage.local`); the search index lives in IndexedDB in your browser.
-- Details: [PRIVACY.md](PRIVACY.md)
+- Details: [PRIVACY.md](PRIVACY.md) · [chatkit.justplguy.com/privacy](https://chatkit.justplguy.com/privacy/)
 
 ### Permissions
 | Permission | Why |
@@ -79,7 +79,7 @@ The extension checks GitHub Releases once a day. When a new version is out you'l
 ### Known limitations
 - Uses ChatGPT's unofficial internal API — changes on OpenAI's side may require an update.
 - The ChatGPT sidebar refreshes only after a page reload (F5).
-- Deleted Library files may land in “Recently deleted”.
+- Deleted Library files go to “Recently deleted” in ChatGPT's Library (preview: 🗑 Trash in the panel).
 
 ### Development
 ```
@@ -103,7 +103,7 @@ Tests (jsdom simulation): `npm install && npm test`
 Adding a language: add an object to `DICT` in `src/i18n.js` and an option in the settings — `tests/i18n-check.js` reports missing keys.
 
 ### Contact
-Bug reports, ideas, questions: **[GitHub Issues](../../issues)** or **[justplguy@gmail.com](mailto:justplguy@gmail.com)**.
+Bug reports, ideas, questions: **[GitHub Issues](../../issues)** or **[contact@justplguy.com](mailto:contact@justplguy.com)**.
 
 ---
 
@@ -113,7 +113,7 @@ Bug reports, ideas, questions: **[GitHub Issues](../../issues)** or **[justplguy
 **Polecane:** [**Dodaj do Chrome — Chrome Web Store**](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh) — jedno kliknięcie, aktualizacje automatyczne. Działa w Chrome, Edge, Brave i Operze.
 
 **Instalacja ręczna z GitHuba (2 minuty):**
-1. Pobierz **`ChatKit-Pro-Chrome-v1.3.1.zip`** z **[Releases](../../releases)** (nie „Code → Download ZIP”) i rozpakuj.
+1. Pobierz **`ChatKit-Pro-Chrome-v1.5.0.zip`** z **[Releases](../../releases)** (nie „Code → Download ZIP”) i rozpakuj.
 2. Otwórz `chrome://extensions` i włącz **Tryb dewelopera** (prawy górny róg).
 3. Kliknij **Załaduj rozpakowane** i wskaż rozpakowany folder (ten z plikiem `manifest.json`).
 4. Przypnij wtyczkę: 🧩 → 📌 przy **ChatKit Pro by JustPLGuy**.
@@ -126,13 +126,13 @@ Bug reports, ideas, questions: **[GitHub Issues](../../issues)** or **[justplguy
 ### Co jest w środku
 | Obszar | Funkcje |
 |---|---|
-| **Czaty** | masowe usuwanie / archiwizacja / gwiazdki / foldery / zmiana nazw (prefiks, sufiks, zamiana), Shift+klik, filtry (tytuł, starsze niż X dni, z gwiazdką), #tagi, przenoszenie do projektu ChatGPT, dokładna data i godzina |
+| **Czaty** | masowe usuwanie / archiwizacja / gwiazdki / foldery / zmiana nazw (prefiks, sufiks, zamiana), Shift+klik, filtry (tytuł, starsze niż X dni, z gwiazdką), #tagi, przenoszenie do projektu ChatGPT i z powrotem, kopiowanie linków zaznaczonych czatów, dokładna data i godzina |
 | **Archiwum** | przeglądanie, przywracanie i usuwanie zarchiwizowanych czatów |
-| **Biblioteka** | masowe usuwanie i pobieranie zdjęć/plików, siatka miniatur, sortowanie po rozmiarze, filtry AI / wgrane / projekty, licznik miejsca |
+| **Biblioteka** | obrazy **i** inne pliki (PDF, dokumenty, arkusze, wideo, audio, archiwa, kod) z filtrem typu; wyszukiwanie plików z usuniętych czatów; podgląd kosza; przejście do czatu, z którego pochodzi plik; masowe usuwanie i pobieranie, siatka miniatur, sortowanie po rozmiarze, filtry AI / wgrane / projekty, licznik miejsca |
 | **Szybki skok** | `Alt+Shift+J`: przejście do dowolnego czatu, folderu, tagu albo promptu po kilku literach |
 | **Foldery, tagi i gwiazdki** | tagi na czatach (filtr, `#tag` w wyszukiwarce), zagnieżdżone foldery, kolorowe, przeciąganie, oznaczenia w pasku bocznym ChatGPT, eksport folderu |
 | **Eksport** | Markdown, HTML, PDF — z godziną każdej wiadomości; ZIP z osobnym plikiem dla każdego czatu (Markdown / HTML / JSON); Markdown + YAML dla Obsidiana / Notion; tylko wybrane wiadomości |
-| **W czacie** | znaczniki czasu, minimapa (spis treści + wyszukiwanie), zakładki, notatki do fragmentów, liczniki czatu (wiadomości, słowa, znaki, ~tokeny), przycisk „Zapisz” przy blokach kodu, pobieranie całego kodu z czatu, licznik nad polem wiadomości (znaki, słowa, ~tokeny) |
+| **W czacie** | znaczniki czasu, minimapa (spis treści + wyszukiwanie), zakładki, notatki do fragmentów, liczniki czatu (wiadomości, słowa, znaki, ~tokeny), przycisk „Zapisz” przy blokach kodu, pobieranie całego kodu z czatu, licznik nad polem wiadomości (znaki, słowa, ~tokeny), przewijanie za długą odpowiedzią, gdy ChatGPT pisze (przewiń w górę = pauza) |
 | **Prompty** | biblioteka ze zmiennymi `{{...}}`, kategorie, #tagi, ⭐ ulubione na górze, kolejność przeciąganiem, import/eksport, pakiet startowy, szybkie wstawianie |
 | **Wyszukiwanie** | w treści wszystkich czatów (lokalny indeks) |
 | **Sprzątanie** | reguły typu „czaty starsze niż 90 dni bez gwiazdki → archiwum”, z podglądem; menedżer udostępnionych linków (podgląd i usuwanie publicznych linków) |
@@ -160,10 +160,10 @@ Wtyczka sama sprawdza GitHub Releases raz dziennie. Gdy wyjdzie nowa wersja, zob
 ### Ograniczenia
 - Korzysta z nieoficjalnego, wewnętrznego API ChatGPT — zmiany po stronie OpenAI mogą wymagać aktualizacji.
 - Pasek boczny ChatGPT odświeża się dopiero po przeładowaniu strony (F5).
-- Usunięte pliki Biblioteki mogą trafić do „Ostatnio usunięte”.
+- Usunięte pliki Biblioteki trafiają do „Ostatnio usunięte” w Bibliotece ChatGPT (podgląd: 🗑 Kosz w panelu).
 
 ### Kontakt
-Błędy, pomysły, pytania: **[GitHub Issues](../../issues)** albo **[justplguy@gmail.com](mailto:justplguy@gmail.com)**.
+Błędy, pomysły, pytania: **[GitHub Issues](../../issues)** albo **[contact@justplguy.com](mailto:contact@justplguy.com)**.
 
 ---
 

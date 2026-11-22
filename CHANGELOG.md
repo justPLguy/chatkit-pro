@@ -1,5 +1,37 @@
 # Changelog
 
+## v1.5.0 — 2026-11-22
+### English
+- ⬇ **Follow the answer** — ChatGPT no longer scrolls down while it writes a long answer. ChatKit Pro keeps the newest line in view, right above the message box. Scroll up to read calmly and it pauses; scroll back to the end and it follows again; a new message starts following from scratch. Toggle: ⚙ Settings → “Follow the answer while ChatGPT is writing” (on by default)
+- 🌐 **New website address** — after an update, “What's new” opens on **https://chatkit.justplguy.com/** (the old justplguy.github.io/chatkit-pro address forwards there). Contact: contact@justplguy.com
+- ✉ **Website and contact in Settings** — ⚙ Settings → About: a link to the website and an email address for bugs and ideas (contact@justplguy.com)
+### Polski
+- ⬇ **Przewijanie za odpowiedzią** — ChatGPT przestał sam przewijać w dół, gdy pisze długą odpowiedź. ChatKit Pro trzyma najnowszą linijkę w widoku, tuż nad polem wiadomości. Przewiń w górę, żeby spokojnie czytać — śledzenie się zatrzyma; zjedź na koniec — śledzi dalej; nowa wiadomość — śledzi od nowa. Przełącznik: ⚙ Ustawienia → „Przewijaj za odpowiedzią, gdy ChatGPT pisze” (domyślnie włączone)
+- 🌐 **Nowy adres strony** — po aktualizacji „Co nowego” otwiera się na **https://chatkit.justplguy.com/** (stary adres justplguy.github.io/chatkit-pro przekierowuje tutaj). Kontakt: contact@justplguy.com
+- ✉ **Strona i kontakt w Ustawieniach** — ⚙ Ustawienia → O wtyczce: link do strony i adres do zgłaszania błędów i pomysłów (contact@justplguy.com)
+
+## v1.4.0 — 2026-11-21
+### English
+- 📎 **Files in the Library** — a new switch: **Images / Files / Images + files**. See everything stored in ChatGPT — PDFs, documents, spreadsheets, presentations, video, audio, archives, code — each with a type icon, extension, size and date. Size sorting, download and bulk delete work like for images
+- 🗂 **File-type filter** — PDF, documents, spreadsheets, presentations, text, code, archives, video, audio, other
+- 🔎 **Files from deleted chats** (Library) — deleting a chat in ChatGPT doesn't delete its files. ChatKit Pro finds these leftovers, shows how many and how many MB, and lets you remove them in one go. Chats that aren't on your list (e.g. in projects) are checked one by one, so nothing is marked by mistake
+- 🗑 **Trash preview** — see the files in the Library trash with their total size (read-only; restore or empty it in ChatGPT)
+- ↩ **Take chats out of a project** — 📂 Project → “No project (regular chats)”
+- 📋 **Copy links** — the selected chats go to the clipboard as “title — link”, one per line
+- ↗ **File → chat** — open the chat a file came from (“↗ chat”, the ↗ icon or a double-click); files from deleted chats are marked “🗑 chat deleted”
+- ⚠ **Hidden selection warning** — if some selected items are hidden by filters, the confirmation for deleting files and deleting or archiving chats says so
+- ℹ After deleting files, the message says clearly that they go to “Recently deleted” in the Library
+### Polski
+- 📎 **Pliki w Bibliotece** — nowy przełącznik: **Obrazy / Pliki / Obrazy + pliki**. Widać wszystko, co trzymasz w ChatGPT — PDF-y, dokumenty, arkusze, prezentacje, wideo, audio, archiwa, kod — z ikonką typu, rozszerzeniem, rozmiarem i datą. Sortowanie po rozmiarze, pobieranie i hurtowe usuwanie działają jak przy obrazkach
+- 🗂 **Filtr typu pliku** — PDF, dokumenty, arkusze, prezentacje, tekst, kod, archiwa, wideo, audio, inne
+- 🔎 **Pliki z usuniętych czatów** (Biblioteka) — usunięcie czatu w ChatGPT nie usuwa jego plików. ChatKit Pro znajduje takie pozostałości, pokazuje ile ich jest i ile zajmują, i pozwala usunąć je jednym ruchem. Czaty spoza listy (np. z projektów) są sprawdzane pojedynczo, żeby nic nie zostało oznaczone przez pomyłkę
+- 🗑 **Podgląd kosza** — pliki z kosza Biblioteki z łącznym rozmiarem (tylko podgląd; przywracanie i opróżnianie w ChatGPT)
+- ↩ **Wyjmowanie czatów z projektu** — 📂 Projekt → „Bez projektu (zwykłe czaty)”
+- 📋 **Kopiowanie linków** — zaznaczone czaty trafiają do schowka jako „tytuł — link”, każdy w osobnej linii
+- ↗ **Plik → czat** — przejście do czatu, z którego pochodzi plik („↗ czat”, ikonka ↗ albo podwójne kliknięcie); pliki z usuniętych czatów mają plakietkę „🗑 czat usunięty”
+- ⚠ **Ostrzeżenie o ukrytych zaznaczonych** — jeśli część zaznaczonych jest schowana przez filtry, potwierdzenie usuwania plików oraz usuwania i archiwizacji czatów mówi o tym wprost
+- ℹ Po usunięciu plików komunikat mówi wprost, że trafiają do „Ostatnio usunięte” w Bibliotece
+
 ## v1.3.1 — 2026-11-20
 ### English
 - 🐞 **Full-text search index with many chats** — building the index no longer gets stuck in a loop on ChatGPT's request limit (“too many requests” every minute). After the first limit it slows down so ChatGPT itself keeps working, the pauses grow longer instead of always lasting 1 minute, and chats refused by the limit are retried instead of skipped. Progress is saved after every chat, so you can stop and continue later.

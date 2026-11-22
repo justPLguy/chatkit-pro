@@ -18,6 +18,12 @@ const chats = [
   { id: "c2", title: "Nowy czat", update_time: now - 3600, create_time: now - 7200 },
   { id: "c3", title: "Średni czat", update_time: now - 86400 * 10, create_time: now - 86400 * 11 }
 ];
+const libFiles = { items: [
+  { kind: "directory", id: "6af9d80267f4", name: "WASTELAND" },
+  { kind: "file", id: "libfile_p", file_id: "file_p", name: "raport.pdf", mime_type: "application/pdf", library_file_category: "pdf", file_size_bytes: 75141, parent_directory_id: "libdir_1", origination_thread_id: "c-abc", record_creation_time: "2026-11-15T17:00:00Z" },
+  { kind: "file", id: "libfile_z", file_id: "file_z", name: "stary.zip", mime_type: "application/zip", library_file_category: "other", file_size_bytes: 124472, parent_directory_id: "libdir_1", origination_thread_id: "c-gone", record_creation_time: "2026-11-13T17:00:00Z" },
+  { kind: "file", id: "libfile_i", file_id: "file_i", name: "foto.jpeg", mime_type: "image/jpeg", library_file_category: "image", file_size_bytes: 3000, parent_directory_id: "libdir_1", record_creation_time: "2026-11-14T17:00:00Z" }
+], cursor: null };
 const lib1 = { items: [
   { id: "libfile_a", file_id: "file_a", file_name: "a.png", directory_id: "dir1", file_size_bytes: 2000000, image_gen_attribution: { x: 1 }, is_project: true, gizmo_id: "g-p-1", thumbnail_url: null, record_creation_time: "2026-11-17T06:00:00Z" },
   { id: "libfile_b", file_id: "file_b", file_name: "b.jpg", directory_id: "dir1", file_size_bytes: 1000, image_gen_attribution: null, is_project: false, thumbnail_url: null, record_creation_time: "2026-10-01T06:00:00Z" }
@@ -41,8 +47,9 @@ w.fetch = (url, opts = {}) => {
     if (url.includes("is_archived=true")) return res({ items: url.includes("offset=0") ? [{ id: "a1", title: "Zarchiwizowany", update_time: now }] : [], total: 1 });
     return res({ items: url.includes("offset=0") ? chats : [], total: chats.length });
   }
+  if (url.endsWith("/conversation/c-gone") && (opts.method || "GET") === "GET") return res({ detail: "not found" }, 404);
   if (url.match(/\/backend-api\/conversation\/[^/?]+$/)) return opts.method === "PATCH" ? res({ success: true }) : res(conv);
-  if (url.endsWith("/files/library")) { const b = JSON.parse(opts.body); return res(b.cursor ? lib2 : lib1); }
+  if (url.endsWith("/files/library")) { const b = JSON.parse(opts.body); if (b.trashed_only) return res({ items: [{ kind: "file", id: "libfile_t", file_id: "file_t", name: "w-koszu.txt", mime_type: "text/plain", library_file_category: "other", file_size_bytes: 10, parent_directory_id: "libdir_1", trashed_at: "2026-11-21T10:00:00Z" }], cursor: null }); if (b.categories === null) return res(libFiles); return res(b.cursor ? lib2 : lib1); }
   if (url.includes("delete-batch")) return res({});
   if (url.match(/\/backend-api\/share\/(post\/)?[^/?]+$/) && opts.method === "DELETE") return res({});
   if (url.includes("/shared_textdocs")) return res({ items: [{ id: "t_doc1", title: "Wpis z Canvas", create_time: "2026-11-12T10:00:00Z" }] });
@@ -171,7 +178,7 @@ const assert = (c, m) => { if (!c) { console.error("FAIL:", m); process.exitCode
   btn("Wczytaj wszystkie").click(); await sleep(800);
   assert($$("#list .item").length === 3, "biblioteka wszystkie strony");
   assert($$("#list .item")[0].textContent.includes("a.png"), "sortowanie po dacie");
-  const typeSel = $$("#filters select")[1];
+  const typeSel = $$("#filters select")[2];
   typeSel.value = "gen"; typeSel.dispatchEvent(new w.Event("change"));
   assert($$("#list .item").length === 1, "filtr wygenerowane");
   typeSel.value = "all"; typeSel.dispatchEvent(new w.Event("change"));
@@ -189,6 +196,24 @@ const assert = (c, m) => { if (!c) { console.error("FAIL:", m); process.exitCode
   const files = JSON.parse(del[0].body).files;
   assert(del.length === 1 && files.length === 3 && files[0].parent_directory_id.startsWith("libdir_") && files[0].library_file_id.startsWith("libfile_"), "delete-batch z poprawnym payloadem");
   assert($$("#list .item").length === 0, "biblioteka pusta po usunięciu");
+
+  // 1.4.0: przełącznik Obrazy / Pliki / Wszystko
+  const catSel = $$("#filters select")[1];
+  catSel.value = "file"; catSel.dispatchEvent(new w.Event("change")); await sleep(600);
+  const pdfRow = $$("#list .item").find(r => r.textContent.includes("raport.pdf"));
+  assert($$("#list .item").length === 2 && pdfRow && !$$("#list .item").some(r => r.textContent.includes("foto.jpeg")), "tryb Pliki: tylko nie-obrazy, bez folderów");
+  assert(pdfRow.querySelector("a.badge.lnk")?.getAttribute("href") === "/c/c-abc", "plik ma link do czatu");
+  { const cs = $$("#filters select")[1]; cs.value = "all"; cs.dispatchEvent(new w.Event("change")); } await sleep(600);
+  assert($$("#list .item").length === 3, "tryb Wszystko: pliki i obrazy");
+  // 1.4.0: pliki z usuniętych czatów — c-gone (404) jest usunięty, c-abc (200, np. czat z projektu) istnieje
+  btn("🔎 Z usuniętych czatów").click(); await sleep(4500);
+  assert($$("#list .item").length === 1 && $$("#list .item")[0].textContent.includes("stary.zip") && $$("#list .item")[0].textContent.includes("czat usunięty"), "filtr: pliki z usuniętych czatów");
+  assert(/Pliki z usuniętych czatów: 1/.test($("#msg").textContent), "komunikat o plikach z usuniętych czatów: " + $("#msg").textContent);
+  { const cs = $$("#filters select").find(x => [...x.options].some(o => o.value === "gone")); cs.value = "all"; cs.dispatchEvent(new w.Event("change")); }
+  // 1.4.0: kosz — tylko podgląd
+  { const cs = $$("#filters select")[1]; cs.value = "trash"; cs.dispatchEvent(new w.Event("change")); } await sleep(600);
+  assert($$("#list .item").length === 1 && $$("#list .item")[0].textContent.includes("w-koszu.txt") && !btn("Usuń zaznaczone") && !btn("🔎"), "kosz: podgląd bez usuwania");
+  const cs2 = $$("#filters select")[1]; cs2.value = "image"; cs2.dispatchEvent(new w.Event("change")); await sleep(600);
 
   // duży widok
   btn("⛶").click(); await sleep(50);

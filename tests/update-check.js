@@ -41,7 +41,7 @@ const ask = force => new Promise(res => { const r = listeners.msg.map(fn => fn({
   listeners.installed({ reason: "update", previousVersion: "1.0.0" }); await new Promise(r => setTimeout(r, 50));
   store.settings = { lang: "auto", whatsNew: false };
   listeners.installed({ reason: "update", previousVersion: "0.8.0" }); await new Promise(r => setTimeout(r, 50));
-  assert(url1 === "https://justplguy.github.io/chatkit-pro/releases/?lang=pt-BR&updated=1.0.0#v1-0-0" && tabsNow() === 1,
+  assert(url1 === "https://chatkit.justplguy.com/releases/?lang=pt-BR&updated=1.0.0#v1-0-0" && tabsNow() === 1,
     "po aktualizacji X.Y: otwiera „Co nowego” raz (ta sama wersja / wyłączone w ustawieniach = nic): " + url1);
   delete store.settings; ctx.__tabOpened = false;
   assert(store.update && store.update.latest === "1.1.0", "najnowsza wersja Chrome = 1.1.0 (pomija Firefox, szkice, beta): " + store.update?.latest);
