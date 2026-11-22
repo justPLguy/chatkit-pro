@@ -456,7 +456,7 @@
     chatNotes: {},          // convId -> tekst notatki do całego czatu
     rules: [],              // [{id, name, target, olderDays, keepStarred, keepFoldered, onlyAI, action}]
     enabled: true,          // włącznik całej wtyczki (ikona na pasku przeglądarki)
-    settings: { timestamps: true, showFab: true, lang: "auto", classicDark: false, minimap: true, sidebarMarks: true, chatWidth: 0, fontSize: 0, codeSave: true, backupEvery: 7, composerCount: true, uiTheme: "dark", whatsNew: true }
+    settings: { timestamps: true, showFab: true, lang: "auto", classicDark: false, minimap: true, sidebarMarks: true, chatWidth: 0, fontSize: 0, codeSave: true, backupEvery: 7, composerCount: true, uiTheme: "dark", whatsNew: true, follow: true }
   });
 
   CK.store = {

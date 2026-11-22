@@ -107,7 +107,8 @@ async function checkUpdate(force = false) {
 // ===================== „Co nowego” po aktualizacji (od 1.3.0) =====================
 // Po aktualizacji do nowej wersji (zmiana X.Y, nie poprawka X.Y.Z) otwieramy raz stronę „Co nowego” w języku wtyczki.
 // Instalacja nie otwiera niczego. Wyłączysz to w ⚙ Ustawieniach („Pokaż »Co nowego« po aktualizacji”).
-const WHATS_NEW = "https://justplguy.github.io/chatkit-pro/releases/";
+// Od 1.5.0 strona jest na własnej domenie (stary adres justplguy.github.io/chatkit-pro przekierowuje tutaj).
+const WHATS_NEW = "https://chatkit.justplguy.com/releases/";
 const SITE_LANGS = ["en", "pl", "fr", "de", "es", "pt-BR", "it", "nl", "cs", "uk", "tr", "ja", "zh-CN", "ko"];
 const minorOf = v => String(v || "").split(".").slice(0, 2).map(n => parseInt(n, 10) || 0).join(".");
 function siteLang(pref) {

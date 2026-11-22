@@ -53,10 +53,34 @@
     return null;
   }
 
+  // Rodzaj pliku w Bibliotece (od 1.4.0): image / pdf / doc / sheet / slides / text / code / zip / video / audio / other
+  const EXT_KIND = {
+    pdf: "pdf", doc: "doc", docx: "doc", odt: "doc", rtf: "doc", pages: "doc",
+    xls: "sheet", xlsx: "sheet", ods: "sheet", csv: "sheet", tsv: "sheet", numbers: "sheet",
+    ppt: "slides", pptx: "slides", odp: "slides", key: "slides",
+    txt: "text", md: "text", log: "text", json: "code", xml: "code", yaml: "code", yml: "code", html: "code", htm: "code", css: "code",
+    js: "code", ts: "code", jsx: "code", tsx: "code", py: "code", java: "code", c: "code", cpp: "code", h: "code", cs: "code", go: "code",
+    rs: "code", rb: "code", php: "code", sh: "code", ps1: "code", sql: "code", kt: "code", swift: "code", lua: "code",
+    png: "image", jpg: "image", jpeg: "image", gif: "image", webp: "image", heic: "image", bmp: "image", svg: "image",
+    zip: "zip", rar: "zip", "7z": "zip", tar: "zip", gz: "zip",
+    mp4: "video", mov: "video", webm: "video", mkv: "video", avi: "video", m4b: "audio", mp3: "audio", wav: "audio", m4a: "audio", ogg: "audio", flac: "audio"
+  };
+  function libKind(cat, mime, name) {
+    const ext = String(name || "").split(".").pop().toLowerCase();
+    if (cat === "image" || /^image\//.test(mime || "")) return "image";
+    if (EXT_KIND[ext]) return EXT_KIND[ext];
+    if (cat === "pdf" || mime === "application/pdf") return "pdf";
+    if (cat === "video" || /^video\//.test(mime || "")) return "video";
+    if (cat === "audio" || /^audio\//.test(mime || "")) return "audio";
+    if (/^text\//.test(mime || "")) return "text";
+    return "other";
+  }
+  const KIND_ICON = { pdf: "📕", doc: "📝", sheet: "📊", slides: "📽️", text: "📄", code: "💻", zip: "🗜️", video: "🎬", audio: "🎵", other: "📎", image: "🖼️" };
+
   function librarySource() {
     return {
-      items: [], cursor: null, done: false, cat: "image", lastRaw: null,
-      reset() { this.items = []; this.cursor = null; this.done = false; },
+      items: [], cursor: null, done: false, cat: ["image", "file", "all", "trash"].includes(ls.get("libcat", "image")) ? ls.get("libcat", "image") : "image", lastRaw: null,
+      reset() { this.items = []; this.cursor = null; this.done = false; this.gen = (this.gen || 0) + 1; },
       async refreshTop() {
         const saved = { cursor: this.cursor, done: this.done }, before = this.items.length;
         this.cursor = null;
@@ -65,25 +89,32 @@
       },
       async loadPage() {
         const body = {
-          cursor: this.cursor, limit: 50, categories: this.cat === "all" ? null : [this.cat], source: null,
-          include_hidden_files: false, include_saved_entities: true, include_sites: false, trashed_only: false, external_account_keys: {}
+          cursor: this.cursor, limit: 50, categories: this.cat === "image" ? ["image"] : null, source: null,
+          include_hidden_files: false, include_saved_entities: true, include_sites: false, trashed_only: this.cat === "trash", external_account_keys: {}
         };
+        const gen = this.gen;
         const r = await CK.withRetry(() => CK.api("/files/library", { method: "POST", body: JSON.stringify(body) }));
         if (!r.ok) throw new Error(t("err.library", { s: r.status }));
         const j = await r.json();
+        if (gen !== this.gen) return 0; // w międzyczasie zmieniono Obrazy/Pliki/Wszystko — ta strona jest już nieaktualna
         this.lastRaw = j;
         const arr = Array.isArray(j.items) ? j.items : [];
         const list = [];
         for (const o of arr) {
+          if (o.kind === "directory") continue;
           const id = o.library_file_id || (typeof o.id === "string" && o.id.startsWith("libfile_") ? o.id : null);
           if (!id) continue;
+          // od 1.4.0: Obrazy / Pliki / Wszystko — „Pliki” = wszystko poza obrazami (kategoria z ChatGPT albo typ MIME)
+          const name = o.file_name || o.name || id;
+          const kind = libKind(o.library_file_category, o.mime_type, name);
+          if (this.cat === "file" && kind === "image") continue;
           let dir = o.parent_directory_id || o.directory_id || null;
           if (dir && !String(dir).startsWith("libdir_")) dir = "libdir_" + dir;
           list.push({
-            key: id, title: o.file_name || id, date: o.record_creation_time || o.file_upload_time || o.updated_at,
+            key: id, title: name, kind, chat: o.origination_thread_id || null, date: o.record_creation_time || o.file_upload_time || o.updated_at,
             size: o.file_size_bytes || 0, generated: !!o.image_gen_attribution, project: o.is_project ? (o.gizmo_id || "?") : null,
             thumb: o.thumbnail_url || o.thumbnail_preview_url || null, mime: o.mime_type || null,
-            payload: { library_file_id: id, file_id: o.file_id, parent_directory_id: dir, file_name: o.file_name }
+            payload: { library_file_id: id, file_id: o.file_id, parent_directory_id: dir, file_name: name }
           });
         }
         const known = new Set(this.items.map(i => i.key));
@@ -91,7 +122,7 @@
         const nc = nextCursor(j);
         if (!arr.length || !nc || nc === this.cursor) this.done = true;
         this.cursor = nc;
-        return list.length;
+        return arr.length; // liczba pozycji z serwera (część może być odfiltrowana — np. obrazy w trybie „Pliki”)
       },
       async loadEverything(onProgress) {
         while (!this.done) { const n = await this.loadPage(); onProgress && onProgress(this.items.length); if (!n && !this.done) break; await sleep(500); }
@@ -116,6 +147,9 @@
   }
 
   const sources = { chats: chatSource(false), archive: chatSource(true), lib: librarySource() };
+  // pliki z usuniętych czatów (od 1.4.0) — stan wyszukiwania, patrz orphanFlow()
+  const orphan = { done: false, running: false, stop: false, gone: new Set(ls.get("libgone", [])) };
+
   CK.sources = sources;
   const LIST_TABS = ["chats", "archive", "lib"];
   const sel = Object.fromEntries(LIST_TABS.map(k => [k, new Set(ls.get("sel." + k, []))]));
@@ -123,7 +157,7 @@
   const filters = {
     chats: { q: "", sort: "new", star: false, folder: "all", tag: "", older: "" },
     archive: { q: "", sort: "new", star: false, older: "" },
-    lib: { q: "", sort: "new", type: "all", proj: "all", older: "" }
+    lib: { q: "", sort: "new", type: "all", proj: "all", older: "", kind: "all", chat: "all" }
   };
   let current = "chats", busy = false, lastClicked = null, visibleNow = [], notLoggedIn = false;
   const view = { big: false, size: 180, ...ls.get("view", {}) };
@@ -215,6 +249,9 @@
     .badge { font-size: 10px; padding: 1px 5px; border-radius: 6px; background: var(--ck-line, #333); color: var(--ck-mut, #bbb); margin-left: 4px; }
     img.th { width: 44px; height: 44px; object-fit: cover; border-radius: 4px; flex-shrink: 0; background: var(--ck-line, #333); }
     .ph { width: 44px; height: 44px; border-radius: 4px; flex-shrink: 0; background: var(--ck-bg3, #2a2a2a); color: var(--ck-mut3, #666); font-size: 10px; display: flex; align-items: center; justify-content: center; }
+    .ph.fk { flex-direction: column; gap: 1px; } .ph .fi { font-size: 18px; line-height: 1; } #list.grid .ph .fi { font-size: 46px; }
+    a.badge.lnk { text-decoration: none; cursor: pointer; } a.badge.lnk:hover { color: var(--ck-tx, #eee); }
+    .badge.gone { color: #f87171; border-color: rgba(248,113,113,.35); }
     #list.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--sz, 180px), 1fr)); gap: 10px; padding: 10px; align-content: start; }
     #list.grid .item { flex-direction: column; align-items: stretch; gap: 4px; padding: 6px; border: 2px solid var(--ck-bg3, #2a2a2a); border-radius: 8px; position: relative; }
     #list.grid .item.sel { border-color: var(--ck-acc, #ef4444); }
@@ -415,10 +452,18 @@
       box.append(el("label", { class: "chk" }, el("input", { type: "checkbox", checked: f.star, onchange: e => { f.star = e.target.checked; rerender(); } }), t("ui.onlyStar")));
     } else {
       const src = sources.lib;
-      box.append(
-        select([["all", t("lib.allOrigins")], ["gen", t("lib.generated")], ["up", t("lib.uploaded")]], f.type, v => { f.type = v; rerender(); }),
+      box.append(...[
+        select([["image", "🖼️ " + t("lib.catImages")], ["file", "📎 " + t("lib.catFiles")], ["all", t("lib.catAll")], ["trash", "🗑 " + t("lib.catTrash")]], src.cat, v => {
+          if (v === src.cat) return;
+          src.cat = v; ls.set("libcat", v); src.reset(); sel.lib.clear(); saveSel("lib"); f.kind = "all"; f.type = "all"; setMsg(""); renderFilters(); renderFooter(); rerender(); loadOne();
+        }, { title: t("lib.catTip") }),
+        src.cat === "image" ? null : select([["all", t("lib.kindAll")], ["pdf", "📕 PDF"], ["doc", "📝 " + t("lib.kindDoc")], ["sheet", "📊 " + t("lib.kindSheet")],
+          ["slides", "📽️ " + t("lib.kindSlides")], ["text", "📄 " + t("lib.kindText")], ["code", "💻 " + t("lib.kindCode")], ["zip", "🗜️ " + t("lib.kindZip")],
+          ["video", "🎬 " + t("lib.kindVideo")], ["audio", "🎵 " + t("lib.kindAudio")], ["other", "📎 " + t("lib.kindOther")]], f.kind, v => { f.kind = v; rerender(); }),
+        src.cat === "file" ? null : select([["all", t("lib.allOrigins")], ["gen", t("lib.generated")], ["up", t("lib.uploaded")]], f.type, v => { f.type = v; rerender(); }),
         select([["all", t("lib.projAll")], ["in", t("lib.projIn")], ["out", t("lib.projOut")]], f.proj, v => { f.proj = v; rerender(); }),
-      );
+        orphan.done ? select([["all", t("lib.chAll")], ["gone", "🗑 " + t("lib.chGone")], ["alive", t("lib.chAlive")]], f.chat, v => { f.chat = v; rerender(); }) : null,
+      ].filter(Boolean));
     }
   }
 
@@ -505,6 +550,9 @@
       arr = arr.filter(i => { const d = CK.toDate(i.date); return d && d.getTime() < lim; });
     }
     if (current === "lib") {
+      if (f.kind && f.kind !== "all" && sources.lib.cat !== "image") arr = arr.filter(i => i.kind === f.kind);
+      if (orphan.done && f.chat === "gone") arr = arr.filter(i => i.chat && orphan.gone.has(i.chat));
+      if (orphan.done && f.chat === "alive") arr = arr.filter(i => !(i.chat && orphan.gone.has(i.chat)));
       if (f.type === "gen") arr = arr.filter(i => i.generated);
       if (f.type === "up") arr = arr.filter(i => !i.generated);
       if (f.proj === "in") arr = arr.filter(i => i.project);
@@ -556,15 +604,20 @@
       thumb = el("img", { class: "th", src: it.thumb, loading: "lazy", title: t("lib.dblPreview") });
       thumb.onerror = () => thumb.replaceWith(el("div", { class: "ph" }, ext));
       thumb.addEventListener("dblclick", e => { e.stopPropagation(); zoom.querySelector("img").src = it.thumb; zoom.style.display = "flex"; });
-    } else thumb = el("div", { class: "ph" }, ext || t("lib.file"));
-    const badges = [it.generated ? el("span", { class: "badge" }, "AI") : null, it.project ? el("span", { class: "badge" }, t("lib.project")) : null];
+    } else thumb = el("div", { class: "ph" + (it.kind && it.kind !== "image" ? " fk" : "") }, it.kind && it.kind !== "image" ? el("span", { class: "fi" }, KIND_ICON[it.kind] || "📎") : null, el("span", {}, ext || t("lib.file")));
+    const badges = [it.generated ? el("span", { class: "badge" }, "AI") : null, it.project ? el("span", { class: "badge" }, t("lib.project")) : null,
+      it.chat && orphan.gone.has(it.chat) ? el("span", { class: "badge gone", title: t("lib.chatGoneTip") }, "🗑 " + t("lib.chatGone"))
+        : it.chat ? el("a", { class: "badge lnk", href: "/c/" + it.chat, title: t("lib.openChat"), onclick: e => e.stopPropagation() }, "↗ " + t("lib.chat")) : null];
     const cb = el("input", { type: "checkbox", checked: s.has(it.key), tabIndex: -1 });
+    const chatOk = it.chat && !orphan.gone.has(it.chat);
+    const goChat = () => el("a", { class: "ic", href: "/c/" + it.chat, title: t("lib.openChat"), onclick: e => e.stopPropagation() }, "↗");
     const r = grid
       ? el("div", { class: "item" + (s.has(it.key) ? " sel" : "") }, cb, thumb, el("div", { class: "bdg" }, ...badges), el("span", { class: "t", title: it.title }, it.title),
-          el("div", { class: "meta" }, el("span", { class: "d" }, CK.fmtDate(it.date)), el("span", { class: "d" }, CK.fmtSize(it.size), " ", dlIcon(it))))
+          el("div", { class: "meta" }, el("span", { class: "d" }, CK.fmtDate(it.date)), el("span", { class: "d" }, CK.fmtSize(it.size), " ", dlIcon(it), chatOk ? goChat() : null)))
       : el("div", { class: "item" + (s.has(it.key) ? " sel" : "") }, cb, thumb, el("span", { class: "t" }, it.title, ...badges),
-          el("span", { class: "sz" }, CK.fmtSize(it.size)), el("span", { class: "d" }, CK.fmtDate(it.date, true)), dlIcon(it));
+          el("span", { class: "sz" }, CK.fmtSize(it.size)), el("span", { class: "d" }, CK.fmtDate(it.date, true)), dlIcon(it), chatOk ? goChat() : null);
     r.addEventListener("click", e => onRowClick(it.key, e));
+    if (chatOk) r.addEventListener("dblclick", () => { location.href = "/c/" + it.chat; });
     return r;
   }
 
@@ -667,15 +720,19 @@
       const efmt = select([["md", "Markdown"], ["obs", t("exp.obs")], ["html", "HTML"], ["pdf", t("exp.pdf")], ["zip-md", t("exp.zip", { f: "Markdown" })], ["zip-html", t("exp.zip", { f: "HTML" })], ["zip-json", t("exp.zip", { f: "JSON" })], ["pick", t("exp.pick")]], ls.get("expfmt", "md"), v => ls.set("expfmt", v));
       a.append(efmt, button("⬇ " + t("ui.export"), () => exportFlow(selectedLoaded(), efmt.value), need));
       a.append(button("✏ " + t("rn.btn"), () => renameFlow(selectedLoaded()), need));
+      a.append(button("📋 " + t("cl.btn"), () => copyLinks(selectedLoaded()), { ...need, title: t("cl.tip") }));
       if (current === "chats") a.append(button("# " + t("tg.btn"), () => tagFlow(selectedLoaded()), { ...need, title: t("tg.btnTip") }));
       if (current === "chats") a.append(button("📂 " + t("pj.btn"), () => projectFlow(selectedLoaded()), { ...need, title: t("pj.btnTip") }));
       if (current === "chats") a.append(button(t("ui.archive"), () => chatBulk("archive"), need));
       else a.append(button("↩ " + t("ui.restore"), () => chatBulk("unarchive"), need));
       a.append(button(t("ui.delete"), () => chatBulk("delete"), { ...need, class: "danger" }));
     } else {
+      const trash = sources.lib.cat === "trash"; // od 1.4.0: kosz Biblioteki — tylko podgląd (bez usuwania i przywracania)
       a.append(button(t("ui.diagnostics"), diag, { title: t("ui.diagTip") }));
+      if (!trash) a.append(button(orphan.running ? "⏹ " + t("orph.stop") : "🔎 " + t("orph.btn"), orphanFlow, { title: t("orph.tip") }));
       a.append(button("⬇ " + t("lib.downloadSel"), () => libDownload(selectedLoaded()), need));
-      a.append(button(t("ui.deleteSelected"), libDelete, { ...need, class: "danger" }));
+      if (!trash) a.append(button(t("ui.deleteSelected"), libDelete, { ...need, class: "danger" }));
+      else a.append(el("span", { class: "muted", style: "font-size:11px" }, t("lib.trashNote")));
     }
     updateStatus();
   }
@@ -688,7 +745,7 @@
       if (e.code === "NOAUTH") { notLoggedIn = true; setMsg(""); }
       else { console.error("[ChatKit Pro]", e); setMsg(t("msg.error", { e: e.message })); }
     }
-    finally { busy = false; prog.style.display = "none"; renderList(); }
+    finally { busy = false; prog.style.display = "none"; renderList(); if (pendingLoad) { pendingLoad = false; setTimeout(loadOne, 0); } }
   }
 
   const progress = (done, all, label) => {
@@ -696,8 +753,10 @@
     $("#status").textContent = `${label} ${done}/${all}…`;
   };
 
+  let pendingLoad = false;
   function loadOne() {
     if (!LIST_TABS.includes(current)) return;
+    if (busy) { pendingLoad = true; return; }
     return safe(async () => { $("#status").textContent = t("ui.loading"); await sources[current].loadPage(); });
   }
   function loadAll() {
@@ -712,10 +771,17 @@
     await CK.store.save("stars");
   }
 
+  // od 1.4.0: ostrzeżenie, gdy część zaznaczonych jest ukryta przez filtry (łatwo usunąć coś, czego nie widać)
+  function hiddenNote(keys) {
+    const vis = new Set(visibleNow.map(i => i.key));
+    const n = keys.filter(k => !vis.has(k)).length;
+    return n ? "\n\n⚠ " + t("confirm.hiddenSel", { n, des: t("ui.deselect"), sel: t("ui.selectVisible") }) : "";
+  }
+
   async function chatBulk(mode, keysArg, tabArg) {
     const tab = tabArg || current, src = sources[tab];
     const keys = keysArg || selectedLoaded(); if (!keys.length) return;
-    if (!confirm(t("confirm.chat." + mode, { n: keys.length }))) return;
+    if (!confirm(t("confirm.chat." + mode, { n: keys.length }) + (keysArg ? "" : hiddenNote(keys)))) return;
     const body = { delete: { is_visible: false }, archive: { is_archived: true }, unarchive: { is_archived: false } }[mode];
     let ok = 0, fail = 0;
     const done = [];
@@ -745,6 +811,77 @@
   }
 
   // ---------- przenoszenie do Projektu ChatGPT ----------
+  // ---------- pliki z usuniętych czatów (od 1.4.0) ----------
+  // Usunięcie czatu w ChatGPT nie usuwa jego plików. Szukamy plików, których czat (origination_thread_id) już nie istnieje:
+  // 1) wczytujemy całą Bibliotekę oraz listy czatów i archiwum; 2) czaty spoza list (np. z projektów) sprawdzamy pojedynczo
+  // (GET /conversation/{id}: 404 = usunięty); 3) tylko czaty POTWIERDZONE jako usunięte trafiają do filtra „Z usuniętych czatów”.
+  // Tempo jak przy indeksie: 1,2 s / czat, po limicie ChatGPT wolniej; wynik (usunięte czaty) zapamiętujemy w tej przeglądarce.
+  async function orphanFlow() {
+    if (orphan.running) { orphan.stop = true; return; }
+    if (busy) return;
+    const lib = sources.lib;
+    // szukamy we wszystkim (obrazy + pliki), żeby nie przeoczyć żadnego pliku z usuniętego czatu
+    if (lib.cat !== "all") { lib.cat = "all"; ls.set("libcat", "all"); lib.reset(); sel.lib.clear(); saveSel("lib"); }
+    orphan.running = true; orphan.stop = false; renderFilters(); renderFooter();
+    let checked = 0, todo = [];
+    try {
+      await safe(async () => {
+        setMsg(t("orph.loadingLib"));
+        await lib.loadEverything(n => { $("#status").textContent = t("ui.loadingN", { n }); });
+        const threads = new Set(lib.items.map(i => i.chat).filter(Boolean));
+        if (!threads.size) return;
+        setMsg(t("orph.loadingChats"));
+        for (const k of ["chats", "archive"]) await sources[k].loadEverything(n => { $("#status").textContent = t("ui.loadingN", { n }); });
+        const known = new Set([...sources.chats.items, ...sources.archive.items].map(i => i.key));
+        todo = [...threads].filter(id => !known.has(id) && !orphan.gone.has(id));
+        let slow = CK.limit.recentlyHit();
+        for (const id of todo) {
+          if (orphan.stop) break;
+          for (;;) {
+            let r = null;
+            try { r = await CK.api("/conversation/" + encodeURIComponent(id)); } catch {}
+            if (r && r.status === 429) { slow = true; if (!(await CK.waitLimit(() => orphan.stop))) break; continue; }
+            if (r && (r.status === 404 || r.status === 410)) orphan.gone.add(id);
+            else if (r && r.ok) { const j = await r.json().catch(() => null); if (j && j.is_visible === false) orphan.gone.add(id); }
+            break;
+          }
+          checked++;
+          progress(checked, todo.length, t("orph.checking"));
+          if (CK.limit.pausedFor()) slow = true;
+          await sleep(slow ? 6000 : 1200);
+        }
+        ls.set("libgone", [...orphan.gone].slice(-5000));
+        orphan.done = true;
+      });
+    } finally { orphan.running = false; }
+    const files = lib.items.filter(i => i.chat && orphan.gone.has(i.chat));
+    const size = files.reduce((a, i) => a + (i.size || 0), 0);
+    if (orphan.done) {
+      const f = filters.lib;
+      f.chat = files.length ? "gone" : "all";
+      if (files.length) { f.kind = "all"; f.type = "all"; f.proj = "all"; f.q = ""; f.older = ""; } // żeby wszystkie znalezione pliki były widoczne
+      renderFilters(); renderList();
+    }
+    renderFooter();
+    setMsg(orphan.stop && checked < todo.length ? t("orph.stopped", { d: checked, a: todo.length })
+      : files.length ? t("orph.found", { n: files.length, size: CK.fmtSize(size) || "0 B", sel: t("ui.selectVisible"), del: t("ui.deleteSelected") }) : t("orph.none"));
+  }
+
+  // ---------- kopiowanie linków zaznaczonych czatów (od 1.4.0) — bez zapytań do ChatGPT ----------
+  async function copyLinks(keys) {
+    if (!keys.length) return setMsg(t("msg.selectFirst"));
+    const byKey = new Map(sources[current].items.map(i => [i.key, i]));
+    const lines = keys.map(k => { const it = byKey.get(k); return (it ? it.title : t("untitled")) + " — https://chatgpt.com/c/" + k; });
+    const text = lines.join("\n");
+    let ok = false;
+    try { await navigator.clipboard.writeText(text); ok = true; } catch {}
+    if (!ok) {
+      const ta = el("textarea", { style: "position:fixed;left:-9999px" }); ta.value = text; root.append(ta); ta.select();
+      try { ok = document.execCommand("copy"); } catch {} ta.remove();
+    }
+    setMsg(ok ? t("cl.done", { n: keys.length }) : t("cl.fail"));
+  }
+
   async function projectFlow(keys) {
     if (!keys.length) return setMsg(t("msg.selectFirst"));
     setMsg(t("pj.loading"));
@@ -752,13 +889,15 @@
     try { list = await CK.projects.list(); } catch {}
     setMsg("");
     let chosen = null;
+    // od 1.4.0: na górze „Bez projektu” — wyjmuje czaty z projektu (PATCH gizmo_id: "")
+    const OUT = { id: "", name: t("pj.out"), out: true };
     const res = await modal(t("pj.title", { n: keys.length }), close => {
-      if (!list.length) return el("p", { class: "muted" }, t("pj.none"));
-      return el("div", {}, el("p", { class: "muted", style: "margin:0 0 8px" }, t("pj.hint")),
-        el("div", { style: "max-height:46vh;overflow:auto" }, ...list.map(p => el("div", { class: "palrow", onclick: () => { chosen = p; close(true); } }, el("span", { class: "pi" }, "📂"), el("span", { class: "pl" }, p.name)))));
+      const outRow = el("div", { class: "palrow", onclick: () => { chosen = OUT; close(true); } }, el("span", { class: "pi" }, "↩"), el("span", { class: "pl" }, OUT.name), el("span", { class: "muted", style: "margin-left:auto;font-size:11px" }, t("pj.outTip")));
+      return el("div", {}, el("p", { class: "muted", style: "margin:0 0 8px" }, list.length ? t("pj.hint") : t("pj.none")),
+        el("div", { style: "max-height:46vh;overflow:auto" }, outRow, ...list.map(p => el("div", { class: "palrow", onclick: () => { chosen = p; close(true); } }, el("span", { class: "pi" }, "📂"), el("span", { class: "pl" }, p.name)))));
     }, [{ label: t("ui.cancel"), result: null }]);
     if (!res || !chosen) return;
-    if (!confirm(t("pj.confirm", { n: keys.length, name: chosen.name }))) return;
+    if (!confirm(chosen.out ? t("pj.confirmOut", { n: keys.length }) : t("pj.confirm", { n: keys.length, name: chosen.name }))) return;
     let ok = 0, fail = 0;
     await safe(async () => {
       for (const k of keys) {
@@ -767,7 +906,7 @@
         await sleep(400);
       }
     });
-    setMsg(t("pj.done", { name: chosen.name, ok, fail: fail ? t("msg.failPart", { n: fail }) : "" }));
+    setMsg(chosen.out ? t("pj.doneOut", { ok, fail: fail ? t("msg.failPart", { n: fail }) : "" }) : t("pj.done", { name: chosen.name, ok, fail: fail ? t("msg.failPart", { n: fail }) : "" }));
     if (ok) $("#msg").append(" ", button("↻ " + t("ui.reloadNow"), () => { saveRestore(); location.reload(); }, { class: "primary", style: "padding:2px 8px;font-size:11px" }));
   }
 
@@ -859,7 +998,7 @@
 
   async function libDelete(keysArg) {
     const keys = Array.isArray(keysArg) ? keysArg : selectedLoaded(); if (!keys.length) return;
-    if (!confirm(t("confirm.libDelete", { n: keys.length }))) return;
+    if (!confirm(t("confirm.libDelete", { n: keys.length }) + hiddenNote(keys))) return;
     let res = { ok: 0, fail: 0 };
     await safe(async () => {
       res = await sources.lib.remove(keys, (d, a) => progress(d, a, t("prog.delete")));
@@ -1083,6 +1222,7 @@
       el("p", { class: "muted", style: "margin:2px 0 6px" }, t("set.lookHint")),
       chk("codeSave", t("set.codeSave"), true),
       chk("composerCount", t("set.composerCount"), true),
+      chk("follow", t("set.follow"), true),
       chk("whatsNew", t("set.whatsNew"), true),
       el("h3", {}, t("set.updates")),
       ...(upd && upd.store ? [el("p", {}, t("upd.current", { v: CK.VERSION })), el("p", { style: "color:#86efac" }, "✓ " + t("upd.store"))] : [
@@ -1114,7 +1254,9 @@
       el("h3", {}, t("set.shortcuts")),
       el("p", {}, t("set.shortcutsText")),
       el("h3", {}, t("set.about")),
-      el("p", {}, t("set.aboutText", { v: CK.VERSION }))
+      el("p", {}, t("set.aboutText", { v: CK.VERSION })),
+      el("p", {}, "🌐 " + t("set.website") + ": ", el("a", { href: "https://chatkit.justplguy.com/?lang=" + encodeURIComponent(CK.lang || "en") + "&utm_source=extension&utm_medium=settings", target: "_blank", rel: "noopener", style: "color:#fca5a5" }, "chatkit.justplguy.com")),
+      el("p", {}, "🐞 " + t("set.bug") + " ", el("a", { href: "mailto:contact@justplguy.com?subject=" + encodeURIComponent("ChatKit Pro v" + CK.VERSION + " (" + (CK.IS_FIREFOX || /Firefox\//.test(navigator.userAgent) ? "Firefox" : "Chrome") + ")"), style: "color:#fca5a5" }, "contact@justplguy.com"))
     );
   }
 
