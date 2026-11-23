@@ -15,7 +15,55 @@
   function chatSource(archived) {
     return {
       items: [], offset: 0, done: false, total: null,
-      reset() { this.items = []; this.offset = 0; this.done = false; this.total = null; },
+      // od 1.5.1: lista zapamiętana lokalnie (per konto) → panel pokazuje od razu wszystkie czaty,
+      // a w tle (spokojnie, jako zapytania „bg”) dociąga i sprawdza całą listę z ChatGPT
+      gone: new Set(), syncing: false, syncedAt: 0, saveT: 0, noCache: false,
+      // po przeniesieniu czatów między listami (archiwizacja/przywracanie) pamięć jest nieaktualna → wczytaj od nowa
+      reset() { this.items = []; this.offset = 0; this.done = false; this.total = null; this.syncedAt = 0; this.noCache = true; this.gen = (this.gen || 0) + 1; },
+      async cacheKey() { await CK.getToken(); return "ckp.list." + (archived ? "archive" : "chats") + "." + (CK.acct || "default"); },
+      async restore() {
+        try {
+          const k = await this.cacheKey();
+          const r = (await chrome.storage.local.get(k))[k];
+          if (this.noCache || !r || !Array.isArray(r.i) || !r.i.length || this.items.length) return false;
+          this.items = r.i.filter(a => !this.gone.has(a[0])).map(a => ({ key: a[0], title: a[1] || t("untitled"), date: a[2], created: a[3] }));
+          this.offset = this.items.length; this.total = typeof r.t === "number" ? r.t : null; this.done = !!r.c; this.syncedAt = r.s || 0;
+          return true;
+        } catch (e) { return false; }
+      },
+      persist() {
+        clearTimeout(this.saveT);
+        this.saveT = setTimeout(async () => {
+          try {
+            if (!this.items.length) return;
+            const k = await this.cacheKey();
+            await chrome.storage.local.set({ [k]: { i: this.items.map(c => [c.key, c.title, c.date, c.created]), t: this.total, c: this.done, s: this.syncedAt } });
+          } catch (e) { /* pamięć listy jest tylko udogodnieniem */ }
+        }, 800);
+      },
+      forget(key) { this.gone.add(key); },
+      async sync(onDone) {
+        // raz na każde wczytanie ChatGPT, potem najwyżej co 15 min (zmiany z telefonu/innej karty)
+        if (this.syncing || (this.syncedOnce && this.done && Date.now() - this.syncedAt < 15 * 60 * 1000)) return;
+        this.syncing = true; const gen = this.gen;
+        try {
+          const all = []; let off = 0, total = null;
+          for (let guard = 0; guard < 1000; guard++) {
+            const { list, total: tt } = await this.fetchPage(off, true);
+            if (tt !== null) total = tt;
+            all.push(...list); off += list.length;
+            if (!list.length || (total !== null && off >= total)) break;
+            await sleep(800);
+          }
+          if (gen !== this.gen) return; // lista wyczyszczona w międzyczasie (np. przywrócenie z archiwum) — wynik nieaktualny
+          const seen = new Set();
+          const fresh = all.filter(c => !this.gone.has(c.key) && !seen.has(c.key) && seen.add(c.key));
+          this.items = fresh; this.offset = fresh.length; this.total = fresh.length; this.done = true; this.syncedAt = Date.now(); this.noCache = false; this.syncedOnce = true;
+          this.persist();
+          onDone && onDone();
+        } catch (e) { /* przerwa po 429 albo brak sieci — zostaje to, co było; spróbujemy przy następnym otwarciu */ }
+        finally { this.syncing = false; }
+      },
       async fetchPage(offset, bg = false) {
         const r = await CK.withRetry(() => CK.api(`/conversations?offset=${offset}&limit=100&order=updated${archived ? "&is_archived=true" : ""}`, { bg }), { bg });
         if (!r.ok) throw new Error(t("err.chatList", { s: r.status }));
@@ -30,6 +78,7 @@
         this.offset += list.length;
         if (total !== null) this.total = total;
         if (!list.length || (this.total !== null && this.offset >= this.total)) this.done = true;
+        this.persist();
         return list.length;
       },
       async refreshTop(bg = false) {
@@ -39,6 +88,7 @@
         for (const c of list) { const old = byKey.get(c.key); if (old) Object.assign(old, c); else { this.items.push(c); added++; } }
         this.offset += added;
         if (total !== null) { this.total = total; this.done = this.offset >= total; }
+        this.persist();
         return added;
       },
       async loadEverything(onProgress) {
@@ -790,6 +840,7 @@
         if (await CK.patchConversation(k, body)) {
           ok++; done.push(k);
           src.items = src.items.filter(i => i.key !== k);
+          if (src.forget) src.forget(k);
           src.offset = Math.max(0, src.offset - 1);
           if (src.total != null) src.total--;
           sel[tab].delete(k);
@@ -798,6 +849,7 @@
         await sleep(300);
       }
       saveSel(tab);
+      if (src.persist) src.persist();
       if (mode === "delete") { keys.forEach(k => { delete CK.store.data.stars[k]; delete CK.store.data.chatFolder[k]; }); await CK.store.save("stars", "chatFolder"); }
       if (mode === "archive") sources.archive.reset();
       if (mode === "unarchive") sources.chats.reset();
@@ -1268,7 +1320,18 @@
     renderAll();
     const tab = extraTabs.find(x => x.id === id);
     if (tab && tab.onShow) tab.onShow(ui);
-    if (LIST_TABS.includes(id)) { if (!sources[id].items.length && !sources[id].done) loadOne(); else quietRefresh(); }
+    if (LIST_TABS.includes(id)) openList(id);
+  }
+
+  // od 1.5.1: czaty i archiwum — od razu lista z pamięci, potem ciche sprawdzenie całości w tle
+  async function openList(id) {
+    const s = sources[id];
+    if (!s.restore) { if (!s.items.length && !s.done) loadOne(); else quietRefresh(); return; }
+    if (!s.items.length && !s.done) {
+      if (await s.restore()) { if (current === id) renderList(); quietRefresh(); }
+      else { await loadOne(); if (s.done && s.items.length) { s.syncedOnce = true; s.syncedAt = Date.now(); } } // cała lista przyszła w 1. stronie — świeża
+    } else quietRefresh();
+    s.sync(() => { if (current === id && !busy) renderList(); });
   }
 
   async function welcome() {
@@ -1289,7 +1352,7 @@
     panel.classList.toggle("open", open);
     if (open) { welcome(); fitTabs(); }
     if (open) askUpdate(false); // raz na dobę (cache w tle)
-    if (open && LIST_TABS.includes(current)) { if (!sources[current].items.length && !sources[current].done) loadOne(); else quietRefresh(); }
+    if (open && LIST_TABS.includes(current)) openList(current);
   }
 
   // ---------- otwieranie czatu bez gubienia listy ----------
@@ -1337,7 +1400,7 @@
     rerender: () => { renderFooter(); renderList(); },
     // dla szybkiego skoku (palette.js)
     chatItems: () => sources.chats.items,
-    async ensureChats() { const s = sources.chats; if (!s.items.length && !s.done && !busy) { await s.loadPage(); if (current === "chats") renderList(); } },
+    async ensureChats() { const s = sources.chats; if (!s.items.length && !s.done && !busy) { if (!(await s.restore())) await s.loadPage(); if (current === "chats") renderList(); } },
     showFolder(id) { togglePanel(true); switchTab("chats"); filters.chats.folder = id; filters.chats.tag = ""; renderFolders(); renderList(); },
     showTag(g) { togglePanel(true); switchTab("chats"); filters.chats.tag = g; renderFolders(); renderList(); },
     switchTab, open: () => togglePanel(true), sel, saveSel, filters, chatBulk, libDelete,

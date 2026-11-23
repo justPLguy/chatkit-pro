@@ -3,7 +3,7 @@
 <h1 align="center">ChatKit Pro by JustPLGuy — Chrome</h1>
 
 <p align="center">
-<b>v1.5.0</b> · Chrome / Edge / Brave / Opera · MIT<br>
+<b>v1.5.1</b> · Chrome / Edge / Brave / Opera · MIT<br>
 <a href="https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh"><b>🛒 Add to Chrome (Chrome Web Store)</b></a><br>
 Free, open-source power tools for ChatGPT.<br>
 <a href="#-english">🇬🇧 English</a> · <a href="#-polski">🇵🇱 Polski</a>
@@ -20,7 +20,7 @@ Free, open-source power tools for ChatGPT.<br>
 **Recommended:** [**Add to Chrome — Chrome Web Store**](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh) — one click, automatic updates. Works in Chrome, Edge, Brave and Opera.
 
 **Manual install from GitHub (2 minutes):**
-1. Download **`ChatKit-Pro-Chrome-v1.5.0.zip`** from **[Releases](../../releases)** (not “Code → Download ZIP”) and unzip it.
+1. Download **`ChatKit-Pro-Chrome-v1.5.1.zip`** from **[Releases](../../releases)** (not “Code → Download ZIP”) and unzip it.
 2. Open `chrome://extensions` and switch on **Developer mode** (top-right).
 3. Click **Load unpacked** and pick the unzipped folder (the one that contains `manifest.json`).
 4. Pin the extension: 🧩 → 📌 next to **ChatKit Pro by JustPLGuy**.
@@ -113,7 +113,7 @@ Bug reports, ideas, questions: **[GitHub Issues](../../issues)** or **[contact@j
 **Polecane:** [**Dodaj do Chrome — Chrome Web Store**](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh) — jedno kliknięcie, aktualizacje automatyczne. Działa w Chrome, Edge, Brave i Operze.
 
 **Instalacja ręczna z GitHuba (2 minuty):**
-1. Pobierz **`ChatKit-Pro-Chrome-v1.5.0.zip`** z **[Releases](../../releases)** (nie „Code → Download ZIP”) i rozpakuj.
+1. Pobierz **`ChatKit-Pro-Chrome-v1.5.1.zip`** z **[Releases](../../releases)** (nie „Code → Download ZIP”) i rozpakuj.
 2. Otwórz `chrome://extensions` i włącz **Tryb dewelopera** (prawy górny róg).
 3. Kliknij **Załaduj rozpakowane** i wskaż rozpakowany folder (ten z plikiem `manifest.json`).
 4. Przypnij wtyczkę: 🧩 → 📌 przy **ChatKit Pro by JustPLGuy**.

@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.5.1 — 2026-11-23
+### English
+- 📋 **Your chat list opens instantly** — ChatKit Pro now remembers the list of your chats (titles and dates, stored locally per ChatGPT account). The panel shows all of them right away, and in the background it quietly fetches the full list from ChatGPT and updates it — no more clicking “Load all” after every browser start. Chats deleted elsewhere (e.g. on your phone) disappear from the list after this check
+### Polski
+- 📋 **Lista czatów od razu w całości** — ChatKit Pro zapamiętuje listę Twoich czatów (tytuły i daty, lokalnie, osobno dla każdego konta ChatGPT). Panel pokazuje je wszystkie od razu, a w tle spokojnie pobiera pełną listę z ChatGPT i ją uaktualnia — koniec z klikaniem „Wczytaj wszystkie” po każdym uruchomieniu przeglądarki. Czaty usunięte gdzie indziej (np. w telefonie) znikają z listy po tym sprawdzeniu
+
 ## v1.5.0 — 2026-11-22
 ### English
 - ⬇ **Follow the answer** — ChatGPT no longer scrolls down while it writes a long answer. ChatKit Pro keeps the newest line in view, right above the message box. Scroll up to read calmly and it pauses; scroll back to the end and it follows again; a new message starts following from scratch. Toggle: ⚙ Settings → “Follow the answer while ChatGPT is writing” (on by default)

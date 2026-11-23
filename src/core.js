@@ -34,6 +34,7 @@
     if (!j.accessToken) throw Object.assign(new Error(CK.t("err.noToken")), { code: "NOAUTH" });
     token = j.accessToken; tokenAt = Date.now();
     accountId = (j.account && (j.account.id || j.account.account_id)) || CK.cookie("_account") || null;
+    CK.acct = String((j.user && j.user.id) || "") + ":" + String(accountId || "");
     return token;
   };
 
