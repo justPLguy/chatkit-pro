@@ -3,7 +3,7 @@
 <h1 align="center">ChatKit Pro by JustPLGuy — Firefox</h1>
 
 <p align="center">
-<b>v1.5.0</b> · Firefox 140+ · MIT<br>
+<b>v1.5.1</b> · Firefox 140+ · MIT<br>
 Free, open-source power tools for ChatGPT.<br>
 <a href="#-english">🇬🇧 English</a> · <a href="#-polski">🇵🇱 Polski</a>
 </p>
@@ -19,7 +19,7 @@ Free, open-source power tools for ChatGPT.<br>
 **Recommended:** install from **Firefox Add-ons (addons.mozilla.org)** — it updates automatically. *(Link coming after Mozilla's review.)*
 
 **For testing (temporary, removed when Firefox restarts):**
-1. Download **`ChatKit-Pro-Firefox-v1.5.0.zip`** from **[Releases](../../releases)** and unzip it.
+1. Download **`ChatKit-Pro-Firefox-v1.5.1.zip`** from **[Releases](../../releases)** and unzip it.
 2. Open `about:debugging#/runtime/this-firefox`.
 3. Click **Load Temporary Add-on…** and pick `manifest.json` from the unzipped folder.
 4. Open [chatgpt.com](https://chatgpt.com) and click the round **🧰** button (or press Alt+Shift+K). The **CK icon** in the toolbar is the on/off switch: red = on, grey = off.
@@ -47,7 +47,7 @@ Bug reports, ideas, questions: **[GitHub Issues](../../issues)** or **[contact@j
 **Polecane:** zainstaluj z **Firefox Add-ons (addons.mozilla.org)** — aktualizuje się sama. *(Link pojawi się po recenzji Mozilli.)*
 
 **Do testów (tymczasowo, znika po restarcie Firefoksa):**
-1. Pobierz **`ChatKit-Pro-Firefox-v1.5.0.zip`** z **[Releases](../../releases)** i rozpakuj.
+1. Pobierz **`ChatKit-Pro-Firefox-v1.5.1.zip`** z **[Releases](../../releases)** i rozpakuj.
 2. Otwórz `about:debugging#/runtime/this-firefox`.
 3. Kliknij **Załaduj tymczasowy dodatek…** i wskaż `manifest.json` z rozpakowanego folderu.
 4. Otwórz [chatgpt.com](https://chatgpt.com) i kliknij okrągły przycisk **🧰** (albo Alt+Shift+K). **Ikona CK** na pasku to włącznik: czerwona = włączona, szara = wyłączona.
