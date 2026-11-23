@@ -83,12 +83,12 @@ Full guide: **[How it works](https://chatkit.justplguy.com/how-it-works/)** · h
 
 **Chrome, Edge, Brave, Opera** → **[Chrome Web Store](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh?utm_source=github&utm_medium=readme)** — one click, automatic updates.
 
-**Firefox 140+** → Firefox Add-ons listing is in review. Until then: download `ChatKit-Pro-Firefox-v1.5.0.zip` from **[Releases](../../releases)**, unzip, open `about:debugging#/runtime/this-firefox` → **Load Temporary Add-on…** → pick `manifest.json`.
+**Firefox 140+** → Firefox Add-ons listing is in review. Until then: download `ChatKit-Pro-Firefox-v1.5.1.zip` from **[Releases](../../releases)**, unzip, open `about:debugging#/runtime/this-firefox` → **Load Temporary Add-on…** → pick `manifest.json`.
 
 <details>
 <summary><b>Manual install in Chrome (from GitHub)</b></summary>
 
-1. Download **`ChatKit-Pro-Chrome-v1.5.0.zip`** from [Releases](../../releases) — not “Code → Download ZIP” — and unzip it.
+1. Download **`ChatKit-Pro-Chrome-v1.5.1.zip`** from [Releases](../../releases) — not “Code → Download ZIP” — and unzip it.
    Updating? Unzip into **the same folder** as before — your data is tied to that folder.
 2. Open `chrome://extensions` and switch on **Developer mode**.
 3. **Load unpacked** → choose the unzipped folder.
@@ -106,10 +106,10 @@ No servers, no analytics, no account. ChatKit Pro talks only to chatgpt.com with
 | Branch | What's inside |
 |---|---|
 | **`main`** *(you are here)* | this page, license, redirects from the old `justplguy.github.io/chatkit-pro` address |
-| **[`chrome`](../../tree/chrome)** | extension for Chrome, Edge, Brave, Opera — **v1.5.0** |
-| **[`firefox`](../../tree/firefox)** | extension for Firefox 140+ — **v1.5.0** |
+| **[`chrome`](../../tree/chrome)** | extension for Chrome, Edge, Brave, Opera — **v1.5.1** |
+| **[`firefox`](../../tree/firefox)** | extension for Firefox 140+ — **v1.5.1** |
 
-Downloads live in **[Releases](../../releases)** (`chrome-v1.5.0`, `firefox-v1.5.0`).
+Downloads live in **[Releases](../../releases)** (`chrome-v1.5.1`, `firefox-v1.5.1`).
 
 ## Support & contact
 
