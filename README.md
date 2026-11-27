@@ -4,19 +4,21 @@
 
 <p align="center">
 <b>v1.5.1</b> · Firefox 140+ · MIT<br>
+<a href="https://addons.mozilla.org/firefox/addon/chatkit-pro-by-justplguy/"><b>🦊 Add to Firefox (Firefox Add-ons)</b></a> · <a href="https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh">🛒 Chrome version</a><br>
 Free, open-source power tools for ChatGPT.<br>
 <a href="#-english">🇬🇧 English</a> · <a href="#-polski">🇵🇱 Polski</a>
 </p>
 
 > This is the **`firefox`** branch — the extension source code for Firefox.
 > Project overview: **[`main` branch](../../tree/main)** · Website: **https://chatkit.justplguy.com/**
+> Using Chrome, Edge, Brave or Opera? Install from the **[Chrome Web Store](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh)** — source in the **[`chrome` branch](../../tree/chrome)**.
 
 ---
 
 ## 🇬🇧 English
 
 ### Install
-**Recommended:** install from **Firefox Add-ons (addons.mozilla.org)** — it updates automatically. *(Link coming after Mozilla's review.)*
+**Recommended:** install from **[Firefox Add-ons](https://addons.mozilla.org/firefox/addon/chatkit-pro-by-justplguy/)** — it updates automatically.
 
 **For testing (temporary, removed when Firefox restarts):**
 1. Download **`ChatKit-Pro-Firefox-v1.5.1.zip`** from **[Releases](../../releases)** and unzip it.
@@ -44,7 +46,7 @@ Bug reports, ideas, questions: **[GitHub Issues](../../issues)** or **[contact@j
 ## 🇵🇱 Polski
 
 ### Instalacja
-**Polecane:** zainstaluj z **Firefox Add-ons (addons.mozilla.org)** — aktualizuje się sama. *(Link pojawi się po recenzji Mozilli.)*
+**Polecane:** zainstaluj z **[Firefox Add-ons](https://addons.mozilla.org/firefox/addon/chatkit-pro-by-justplguy/)** — aktualizuje się sama.
 
 **Do testów (tymczasowo, znika po restarcie Firefoksa):**
 1. Pobierz **`ChatKit-Pro-Firefox-v1.5.1.zip`** z **[Releases](../../releases)** i rozpakuj.
