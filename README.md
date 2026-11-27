@@ -14,6 +14,7 @@
   <a href="https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh?utm_source=github&utm_medium=readme"><img alt="Chrome Web Store version" src="https://img.shields.io/chrome-web-store/v/pehdgnogfmaeeldpjdmadfpankacofhh?label=Chrome%20Web%20Store&color=ef4444&style=flat-square"></a>
   <a href="https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh?utm_source=github&utm_medium=readme"><img alt="Users" src="https://img.shields.io/chrome-web-store/users/pehdgnogfmaeeldpjdmadfpankacofhh?color=ef4444&style=flat-square"></a>
   <a href="https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh/reviews"><img alt="Rating" src="https://img.shields.io/chrome-web-store/rating/pehdgnogfmaeeldpjdmadfpankacofhh?color=ef4444&style=flat-square"></a>
+  <a href="https://addons.mozilla.org/firefox/addon/chatkit-pro-by-justplguy/?utm_source=github&utm_medium=readme"><img alt="Firefox Add-ons version" src="https://img.shields.io/amo/v/chatkit-pro-by-justplguy?label=Firefox%20Add-ons&color=ff7139&style=flat-square"></a>
   <img alt="14 languages" src="https://img.shields.io/badge/languages-14-3a363e?style=flat-square">
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-3a363e?style=flat-square"></a>
 </p>
@@ -21,7 +22,7 @@
 <p align="center">
   <a href="https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh?utm_source=github&utm_medium=readme"><img alt="Add to Chrome — it's free" src="https://img.shields.io/badge/Add%20to%20Chrome-it's%20free-ef4444?style=for-the-badge&logo=googlechrome&logoColor=white"></a>
   &nbsp;
-  <a href="../../releases"><img alt="Firefox" src="https://img.shields.io/badge/Firefox-GitHub%20release-2a2a2a?style=for-the-badge&logo=firefoxbrowser&logoColor=white"></a>
+  <a href="https://addons.mozilla.org/firefox/addon/chatkit-pro-by-justplguy/?utm_source=github&utm_medium=readme"><img alt="Add to Firefox — it's free" src="https://img.shields.io/badge/Add%20to%20Firefox-it's%20free-ff7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white"></a>
   &nbsp;
   <a href="https://chatkit.justplguy.com/"><img alt="Website" src="https://img.shields.io/badge/Website-chatkit.justplguy.com-2a2a2a?style=for-the-badge"></a>
 </p>
@@ -83,7 +84,9 @@ Full guide: **[How it works](https://chatkit.justplguy.com/how-it-works/)** · h
 
 **Chrome, Edge, Brave, Opera** → **[Chrome Web Store](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh?utm_source=github&utm_medium=readme)** — one click, automatic updates.
 
-**Firefox 140+** → Firefox Add-ons listing is in review. Until then: download `ChatKit-Pro-Firefox-v1.5.1.zip` from **[Releases](../../releases)**, unzip, open `about:debugging#/runtime/this-firefox` → **Load Temporary Add-on…** → pick `manifest.json`.
+**Firefox 140+** → **[Firefox Add-ons](https://addons.mozilla.org/firefox/addon/chatkit-pro-by-justplguy/?utm_source=github&utm_medium=readme)** — one click, automatic updates.
+
+For testing you can also load `ChatKit-Pro-Firefox-v1.5.1.zip` from **[Releases](../../releases)** as a temporary add-on (`about:debugging#/runtime/this-firefox` → **Load Temporary Add-on…** → `manifest.json`).
 
 <details>
 <summary><b>Manual install in Chrome (from GitHub)</b></summary>
@@ -138,7 +141,7 @@ Hurtowe usuwanie czatów, czysta Biblioteka, foldery, eksport — i przewijanie,
 - 📚 **Biblioteka promptów** (`Alt+Shift+P` albo `//`) · 🗺️ **minimapa, znaczniki czasu, zakładki, notatki, „Zapisz” przy kodzie**
 - 🔍 **Wyszukiwanie w treści** wszystkich czatów · 🎨 6 motywów, szerokość czatu, 14 języków
 
-**Instalacja:** [Chrome Web Store](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh?utm_source=github&utm_medium=readme) (Chrome, Edge, Brave, Opera). Firefox: ZIP z [Releases](../../releases) jako dodatek tymczasowy, dopóki Firefox Add-ons nie zakończy recenzji.
+**Instalacja:** [Chrome Web Store](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh?utm_source=github&utm_medium=readme) (Chrome, Edge, Brave, Opera). Firefox 140+: [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/chatkit-pro-by-justplguy/?utm_source=github&utm_medium=readme) — jedno kliknięcie, automatyczne aktualizacje.
 
 **Prywatność:** bez serwerów, analityki i konta; dane zostają w Twojej przeglądarce. [Polityka prywatności](https://chatkit.justplguy.com/privacy/)
 
