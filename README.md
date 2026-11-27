@@ -4,20 +4,21 @@
 
 <p align="center">
 <b>v1.5.1</b> · Chrome / Edge / Brave / Opera · MIT<br>
-<a href="https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh"><b>🛒 Add to Chrome (Chrome Web Store)</b></a><br>
+<a href="https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh"><b>🛒 Add to Chrome (Chrome Web Store)</b></a> · <a href="https://addons.mozilla.org/firefox/addon/chatkit-pro-by-justplguy/">🦊 Firefox version</a><br>
 Free, open-source power tools for ChatGPT.<br>
 <a href="#-english">🇬🇧 English</a> · <a href="#-polski">🇵🇱 Polski</a>
 </p>
 
 > This is the **`chrome`** branch — the extension source code.
-> Project overview and website: **[`main` branch](../../tree/main)**.
+> Project overview and website: **[`main` branch](../../tree/main)** · Website: **https://chatkit.justplguy.com/**
+> Using Firefox? Install from **[Firefox Add-ons](https://addons.mozilla.org/firefox/addon/chatkit-pro-by-justplguy/)** — source in the **[`firefox` branch](../../tree/firefox)**.
 
 ---
 
 ## 🇬🇧 English
 
 ### Install
-**Recommended:** [**Add to Chrome — Chrome Web Store**](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh) — one click, automatic updates. Works in Chrome, Edge, Brave and Opera.
+**Recommended:** [**Add to Chrome — Chrome Web Store**](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh) — one click, automatic updates. Works in Chrome, Edge, Brave and Opera. Using Firefox? → [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/chatkit-pro-by-justplguy/).
 
 **Manual install from GitHub (2 minutes):**
 1. Download **`ChatKit-Pro-Chrome-v1.5.1.zip`** from **[Releases](../../releases)** (not “Code → Download ZIP”) and unzip it.
@@ -110,7 +111,7 @@ Bug reports, ideas, questions: **[GitHub Issues](../../issues)** or **[contact@j
 ## 🇵🇱 Polski
 
 ### Instalacja
-**Polecane:** [**Dodaj do Chrome — Chrome Web Store**](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh) — jedno kliknięcie, aktualizacje automatyczne. Działa w Chrome, Edge, Brave i Operze.
+**Polecane:** [**Dodaj do Chrome — Chrome Web Store**](https://chromewebstore.google.com/detail/chatkit-pro-by-justplguy/pehdgnogfmaeeldpjdmadfpankacofhh) — jedno kliknięcie, aktualizacje automatyczne. Działa w Chrome, Edge, Brave i Operze. Masz Firefoksa? → [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/chatkit-pro-by-justplguy/).
 
 **Instalacja ręczna z GitHuba (2 minuty):**
 1. Pobierz **`ChatKit-Pro-Chrome-v1.5.1.zip`** z **[Releases](../../releases)** (nie „Code → Download ZIP”) i rozpakuj.
